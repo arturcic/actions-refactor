@@ -48,6 +48,7 @@ export default (mode: string, tool: 'gitversion' | 'gitreleasemanager') => {
         plugins: [/*dts()*/],
         resolve: {
             alias: {
+                '@agents/common': resolve(__dirname, 'agents/common'),
                 '@agents/azure': resolve(__dirname, 'agents/azure'),
                 '@agents/github': resolve(__dirname, 'agents/github'),
             }

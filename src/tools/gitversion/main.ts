@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 import { parseArgs } from 'node:util';
-
+import { Agent, getAgent } from '@agents/common';
 
 const {
     values: { name, cool },
@@ -11,16 +11,7 @@ const {
     },
 });
 
-const mode = import.meta.env.MODE;
-
-let agent: typeof import('@agents/azure') | typeof import('@agents/github');
-if (mode === 'azure') {
-    agent = await import('@agents/azure');
-} else /*if (mode === 'github')*/ {
-    agent = await import('@agents/github');
-}
-
-console.log('Mode: ' + mode);
+let agent: Agent = await getAgent();
 
 console.log(`${name} is ${cool ? 'cool' : 'not cool'}`);
 console.log('[GitVersion] Hello from agent: ' + agent.BuildAgent.name);

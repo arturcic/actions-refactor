@@ -24,8 +24,9 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "paths": {
-            "@agents/azure": ["./agents/azure/index.ts"],
-            "@agents/github": ["./agents/github/index.ts"]
+            "@agents/common": ["./agents/common"],
+            "@agents/azure": ["./agents/azure"],
+            "@agents/github": ["./agents/github"]
         }
     },
     "include": [
