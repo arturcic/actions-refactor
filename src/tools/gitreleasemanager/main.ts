@@ -23,6 +23,6 @@ if (mode === 'azure') {
 console.log('Mode: ' + mode);
 
 console.log(`${name} is ${cool ? 'cool' : 'not cool'}`);
-console.log('[GitVersion] Hello from agent: ' + agent.BuildAgent.name);
+console.log('[GitReleaseManager] Hello from agent: ' + agent.BuildAgent.name);
 
 export {};

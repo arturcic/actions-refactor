@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { defineConfig, loadEnv, UserConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
 // import dts from 'vite-plugin-dts';
 // https://vitejs.dev/guide/build.html#library-mode
@@ -29,10 +29,10 @@ const rollupOptions = {
     },
 };
 
-export default ({ mode }: Partial<UserConfig>) => {
-    console.log(`Building for mode: ${mode}`);
+export default (mode: string, tool: 'gitversion' | 'gitreleasemanager') => {
+    console.log(`Building for mode: ${mode}, for tool: ${tool}`);
 
-    process.env = { ...process.env, ...loadEnv(mode as string, process.cwd()) };
+    process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
     return defineConfig({
         build: {
@@ -40,8 +40,8 @@ export default ({ mode }: Partial<UserConfig>) => {
             target: 'esnext',
             lib: {
                 formats: ['es'],
-                entry: resolve(__dirname, 'tools/gitversion/main.ts'),
-                fileName: `${mode}/gitversion`,
+                entry: resolve(__dirname, `tools/${tool}/main.ts`),
+                fileName: `${mode}/${tool}`,
             },
             emptyOutDir: false,
         },
