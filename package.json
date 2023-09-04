@@ -7,10 +7,8 @@
         "node": ">=18.0.0"
     },
     "scripts": {
-        "build:azure:gitversion": "vite build -c src/tools/gitversion/vite.config.ts --mode azure",
-        "build:azure:gitreleasemanager": "vite build -c src/tools/gitreleasemanager/vite.config.ts --mode azure",
-        "build:github:gitversion": "vite build -c src/tools/gitversion/vite.config.ts --mode github",
-        "build:github:gitreleasemanager": "vite build -c src/tools/gitreleasemanager/vite.config.ts --mode github",
+        "build:azure": "vite build -c src/vite.config.ts --mode azure",
+        "build:github": "vite build -c src/vite.config.ts --mode github",
 
         "run:azure:gitversion": "node dist/azure/gitversion.js -n Artur -c",
         "run:azure:gitreleasemanager": "node dist/azure/gitreleasemanager.js -n Artur -c",

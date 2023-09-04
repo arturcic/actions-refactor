@@ -1,4 +1,3 @@
-/// <reference types="vite/client" />
 import { parseArgs } from 'node:util';
 import { Agent, getAgent } from '@agents/common';
 

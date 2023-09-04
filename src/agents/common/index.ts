@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 export type Agent = typeof import('@agents/azure') | typeof import('@agents/github');
 
 export async function getAgent(): Promise<Agent> {
