@@ -1,24 +1,33 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "es2022",
-    "moduleResolution": "bundler",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020"],
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    /*"moduleResolution": "bundler",*/
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src/**/*"]
+    "compilerOptions": {
+        "baseUrl" : "./src",
+        "target": "ES2022",
+        "module": "es2022",
+        "moduleResolution": "bundler",
+        "useDefineForClassFields": true,
+        "lib": [
+            "ES2020"
+        ],
+        "skipLibCheck": true,
+        /* Bundler mode */
+        /*"moduleResolution": "bundler",*/
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "paths": {
+            "@agents/azure": [
+                "./agents/azure/index.ts"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": ["node_modules", "dist"]
 }
