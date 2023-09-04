@@ -1,23 +1,28 @@
-import {parseArgs} from "node:util";
+/// <reference types="vite/client" />
+import { parseArgs } from 'node:util';
+
 
 const {
-    values: {name, cool},
+    values: { name, cool },
 } = parseArgs({
     options: {
-        name: {
-            type: "string",
-            short: "n",
-        },
-        cool: {
-            type: "boolean",
-            short: "c",
-        },
+        name: { type: 'string', short: 'n' },
+        cool: { type: 'boolean', short: 'c' },
     },
 });
 
-const agent = await import('@agents/azure')
+const mode = import.meta.env.MODE;
 
-console.log(`${name} is ${cool ? "cool" : "not cool"}`);
-console.log('Hello from agent: ' + agent.BuildAgent.name)
+let agent: typeof import('@agents/azure') | typeof import('@agents/github');
+if (mode === 'azure') {
+    agent = await import('@agents/azure');
+} else /*if (mode === 'github')*/ {
+    agent = await import('@agents/github');
+}
 
-export {}
+console.log('Mode: ' + mode);
+
+console.log(`${name} is ${cool ? 'cool' : 'not cool'}`);
+console.log('Hello from agent: ' + agent.BuildAgent.name);
+
+export {};

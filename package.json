@@ -7,8 +7,10 @@
         "node": ">=18.0.0"
     },
     "scripts": {
-        "build": "vite build -c src/vite.config.ts",
-        "run": "node dist/gitversion.js -n Artur -c"
+        "build:azure": "vite build -c src/vite.config.ts --mode azure",
+        "build:github": "vite build -c src/vite.config.ts --mode github",
+        "run:azure": "node dist/azure/gitversion.js -n Artur -c",
+        "run:github": "node dist/github/gitversion.js -n Artur -c"
     },
     "devDependencies": {
         "@types/node": "^20.5.9",

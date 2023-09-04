@@ -8,6 +8,9 @@
         "lib": [
             "ES2020"
         ],
+        "types": [
+            "node", "vite/client"
+        ],
         "skipLibCheck": true,
         /* Bundler mode */
         /*"moduleResolution": "bundler",*/
@@ -21,9 +24,8 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "paths": {
-            "@agents/azure": [
-                "./agents/azure/index.ts"
-            ]
+            "@agents/azure": ["./agents/azure/index.ts"],
+            "@agents/github": ["./agents/github/index.ts"]
         }
     },
     "include": [
