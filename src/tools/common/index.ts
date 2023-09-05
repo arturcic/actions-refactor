@@ -1,4 +1,6 @@
 import { parseArgs } from 'node:util';
+import { randomUUID } from 'node:crypto';
+import * as semver from 'semver';
 
 export interface CliArgs {
     command: string | undefined;

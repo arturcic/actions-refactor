@@ -4,4 +4,4 @@ import { parseCliArgs } from '@tools/common';
 const { BuildAgent: { name: agentName } } = await getAgent();
 const { command } = parseCliArgs();
 
-console.log(`[GitVersion] runs ${command} on ${agentName}`);
+console.log(`[GitReleaseManager] runs ${command} on ${agentName}`);

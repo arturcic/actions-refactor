@@ -2,13 +2,13 @@
     "name": "actions2",
     "version": "0.0.0",
     "type": "module",
-    "module": "es2022",
+    "module": "ES2022",
     "engines": {
         "node": ">=18.0.0"
     },
     "scripts": {
-        "build:azure": "vite build -c src/vite.config.ts --mode azure",
-        "build:github": "vite build -c src/vite.config.ts --mode github",
+        "build:azure": "vite build --config src/vite.config.ts --mode azure",
+        "build:github": "vite build --config src/vite.config.ts --mode github",
 
         "run:azure:gitversion": "node dist/azure/gitversion.js",
         "run:azure:gitreleasemanager": "node dist/azure/gitreleasemanager.js",
@@ -17,10 +17,14 @@
     },
     "devDependencies": {
         "@types/node": "^20.5.9",
+        "@types/semver": "^7.5.1",
         "typescript": "^5.0.2",
         "vite": "^4.4.5",
         "vite-node": "^0.34.3",
         "vite-plugin-dts": "^3.5.3",
         "vitest": "^0.34.3"
+    },
+    "dependencies": {
+        "semver": "^7.5.4"
     }
 }

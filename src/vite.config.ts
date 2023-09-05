@@ -9,6 +9,7 @@ const rollupOptions: RollupOptions = {
     external: [
         'console',
         'node:util',
+        'node:crypto',
         'node:buffer',
         'node:stream',
         'node:net',
@@ -50,7 +51,7 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
                     manualChunks(id: string) {
                         console.log(`id: ${id}`);
                         if (id.includes('node_modules')) {
-                            return 'vendor';
+                            return `${agent}/vendor`;
                         }
                         if (id.includes('agents/')) {
                             return `${agent}/agent`;
@@ -70,6 +71,7 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
             },
             emptyOutDir: false,
             sourcemap: true,
+            minify: true,
         },
         plugins: [
             // dts()

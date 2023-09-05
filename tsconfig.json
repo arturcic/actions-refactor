@@ -2,11 +2,13 @@
     "compilerOptions": {
         "baseUrl" : "./src",
         "target": "ES2022",
-        "module": "es2022",
+        "module": "ES2022",
         "moduleResolution": "bundler",
         "useDefineForClassFields": true,
         "lib": [
-            "ES2020"
+            "ES2020",
+            "dom"
+            /*TODO check is ts 5.3 has fetch API types defined, and then remove*/
         ],
         "types": [
             "node", "vite/client"
