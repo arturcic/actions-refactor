@@ -1,8 +1,6 @@
 /// <reference types="vite/client" />
+import { IBuildAgent } from '@tools/common';
 
-export interface IBuildAgent {
-    agentName: string;
-}
 export type Agent = typeof import('@agents/azure') | typeof import('@agents/github');
 
 export async function getAgent(): Promise<IBuildAgent> {
@@ -14,5 +12,5 @@ export async function getAgent(): Promise<IBuildAgent> {
     } else /*if (mode === 'github')*/ {
         agent = await import('@agents/github');
     }
-    return agent.BuildAgent;
+    return new agent.BuildAgent();
 }

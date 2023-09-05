@@ -1,10 +1,12 @@
 import { parseArgs } from 'node:util';
-import { randomUUID } from 'node:crypto';
-import * as semver from 'semver';
+import { CliArgs } from './models.ts';
 
-export interface CliArgs {
-    command: string | undefined;
-}
+export * from './models.ts';
+export * from './dotnet-tool.ts';
+
+//import { randomUUID } from 'node:crypto';
+//import * as semver from 'semver';
+
 
 export function parseCliArgs(): CliArgs {
     return parseArgs({
@@ -14,6 +16,7 @@ export function parseCliArgs(): CliArgs {
     }).values as CliArgs;
 }
 
+/*
 export function isExplicitVersion(versionSpec: string): boolean {
     let uuid = randomUUID();
     console.log(uuid);
@@ -25,4 +28,4 @@ export function isExplicitVersion(versionSpec: string): boolean {
     console.log('explicit? ' + valid);
 
     return valid;
-}
+}*/
