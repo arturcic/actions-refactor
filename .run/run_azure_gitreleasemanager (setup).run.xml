@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run:azure:gitreleasemanager (setup)" type="js.build_tools.npm" folderName="run" activateToolWindowBeforeRun="false">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="run:azure:gitreleasemanager" />
+    </scripts>
+    <arguments value="-- --command setup" />
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>
