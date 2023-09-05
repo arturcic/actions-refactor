@@ -4,7 +4,6 @@ import { RollupOptions } from 'rollup';
 import * as console from 'console';
 
 // import dts from 'vite-plugin-dts';
-// https://vitejs.dev/guide/build.html#library-mode
 
 const rollupOptions: RollupOptions = {
     external: [
@@ -70,9 +69,11 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
                 }
             },
             emptyOutDir: false,
-            // sourcemap: true,
+            sourcemap: true,
         },
-        plugins: [/*dts()*/],
+        plugins: [
+            // dts()
+        ],
         resolve: {
             alias: {
                 '@agents/common': resolve(dirname, 'agents/common'),
