@@ -1,3 +1,5 @@
-export const BuildAgent = {
-    name: 'GitHub Actions',
-}
+import { IBuildAgent } from '@agents/common';
+
+export const BuildAgent: IBuildAgent = {
+    agentName: 'GitHub Actions',
+};
