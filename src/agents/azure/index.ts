@@ -1,5 +1,4 @@
 import { IBuildAgent } from '@tools/common';
-import * as console from 'console';
 
 export class BuildAgent implements IBuildAgent {
     public get agentName(): string {

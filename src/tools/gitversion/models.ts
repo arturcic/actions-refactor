@@ -1,5 +1,3 @@
-import { ISettingsProvider } from '@tools/common';
-
 export enum ExecuteFields {
     targetPath = 'targetPath',
     useConfigFile = 'useConfigFile',
@@ -20,9 +18,6 @@ export interface GitVersionSettings {
     [ExecuteFields.srcDir]: string;
 }
 
-export interface IGitVersionSettingsProvider extends ISettingsProvider {
-    getGitVersionSettings(): GitVersionSettings;
-}
 
 export interface GitVersionOutput {
     Major: number;

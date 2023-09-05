@@ -13,7 +13,8 @@
         "run:azure:gitversion": "node dist/azure/gitversion.js",
         "run:azure:gitreleasemanager": "node dist/azure/gitreleasemanager.js",
         "run:github:gitversion": "node dist/github/gitversion.js",
-        "run:github:gitreleasemanager": "node dist/github/gitreleasemanager.js"
+        "run:github:gitreleasemanager": "node dist/github/gitreleasemanager.js",
+        "test": "vitest --config src/vite.config.ts"
     },
     "devDependencies": {
         "@types/node": "^20.5.9",

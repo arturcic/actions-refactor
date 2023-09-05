@@ -1,6 +1,10 @@
-import { ExecuteFields, GitVersionSettings, IGitVersionSettingsProvider } from './models';
+import { ExecuteFields, GitVersionSettings } from './models';
 import { SettingsProvider } from '../common/settings';
-import { IBuildAgent } from '@tools/common';
+import { IBuildAgent, ISettingsProvider } from '@tools/common';
+
+export interface IGitVersionSettingsProvider extends ISettingsProvider {
+    getGitVersionSettings(): GitVersionSettings;
+}
 
 export class GitVersionSettingsProvider extends SettingsProvider implements IGitVersionSettingsProvider {
     constructor(buildAgent: IBuildAgent) {

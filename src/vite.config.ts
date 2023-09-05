@@ -1,9 +1,6 @@
 import { resolve } from 'path';
 import { defineConfig, loadEnv, UserConfig } from 'vite';
 import { RollupOptions } from 'rollup';
-import * as console from 'console';
-
-// import dts from 'vite-plugin-dts';
 
 const rollupOptions: RollupOptions = {
     external: [
@@ -43,6 +40,15 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
         })).reduce((acc, cur) => ({ ...acc, ...cur }), {});
 
     return defineConfig({
+        resolve: {
+            alias: {
+                '@agents/common': resolve(dirname, 'agents/common'),
+                '@agents/azure': resolve(dirname, 'agents/azure'),
+                '@agents/github': resolve(dirname, 'agents/github'),
+
+                '@tools/common': resolve(dirname, 'tools/common'),
+            }
+        },
         build: {
             rollupOptions: {
                 ...rollupOptions,
@@ -71,20 +77,12 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
             },
             emptyOutDir: false,
             sourcemap: true,
-            minify: true,
+            minify: 'esbuild',
         },
-        plugins: [
-            // dts()
-        ],
-        resolve: {
-            alias: {
-                '@agents/common': resolve(dirname, 'agents/common'),
-                '@agents/azure': resolve(dirname, 'agents/azure'),
-                '@agents/github': resolve(dirname, 'agents/github'),
-
-                '@tools/common': resolve(dirname, 'tools/common'),
-            }
-        },
-    });
+        test: {
+            globals: true,
+            include: ['**/*.test.ts'],
+        }
+    } as UserConfig);
 };
 

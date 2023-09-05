@@ -1,12 +1,17 @@
-import { DotnetTool, IBuildAgent } from '@tools/common';
+import { DotnetTool, IBuildAgent, ISettingsProvider } from '@tools/common';
+import { GitVersionSettingsProvider } from './settings.ts';
 
 export class GitVersionTool extends DotnetTool {
+
+    constructor(buildAgent: IBuildAgent) {
+        super(buildAgent);
+    }
 
     public get toolName(): string {
         return 'GitVersion.Tool';
     }
 
-    constructor(buildAgent: IBuildAgent) {
-        super(buildAgent);
+    get settingsProvider(): ISettingsProvider {
+        return new GitVersionSettingsProvider(this.buildAgent);
     }
 }
