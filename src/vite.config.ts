@@ -36,9 +36,10 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
 
     process.env = { ...process.env, ...loadEnv(agent!, process.cwd()) };
 
+    const dirname = __dirname;
     const tools =
         ['gitversion', 'gitreleasemanager'].map(tool => ({
-            [`${agent}/${tool}`]: resolve(__dirname, `tools/${tool}/main.ts`)
+            [`${agent}/${tool}`]: resolve(dirname, `tools/${tool}/main.ts`)
         })).reduce((acc, cur) => ({ ...acc, ...cur }), {});
 
     return defineConfig({
@@ -54,6 +55,9 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
                         }
                         if (id.includes('agents/')) {
                             return `${agent}/agent`;
+                        }
+                        if (id.includes('tools/common')) {
+                            return `tools`;
                         }
                     }
                 }
@@ -71,9 +75,11 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
         plugins: [/*dts()*/],
         resolve: {
             alias: {
-                '@agents/common': resolve(__dirname, 'agents/common'),
-                '@agents/azure': resolve(__dirname, 'agents/azure'),
-                '@agents/github': resolve(__dirname, 'agents/github'),
+                '@agents/common': resolve(dirname, 'agents/common'),
+                '@agents/azure': resolve(dirname, 'agents/azure'),
+                '@agents/github': resolve(dirname, 'agents/github'),
+
+                '@tools/common': resolve(dirname, 'tools/common'),
             }
         },
     });

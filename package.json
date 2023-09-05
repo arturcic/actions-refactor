@@ -10,10 +10,10 @@
         "build:azure": "vite build -c src/vite.config.ts --mode azure",
         "build:github": "vite build -c src/vite.config.ts --mode github",
 
-        "run:azure:gitversion": "node dist/azure/gitversion.js -n Artur -c",
-        "run:azure:gitreleasemanager": "node dist/azure/gitreleasemanager.js -n Artur -c",
-        "run:github:gitversion": "node dist/github/gitversion.js -n Artur -c",
-        "run:github:gitreleasemanager": "node dist/github/gitreleasemanager.js -n Artur -c"
+        "run:azure:gitversion": "node dist/azure/gitversion.js",
+        "run:azure:gitreleasemanager": "node dist/azure/gitreleasemanager.js",
+        "run:github:gitversion": "node dist/github/gitversion.js",
+        "run:github:gitreleasemanager": "node dist/github/gitreleasemanager.js"
     },
     "devDependencies": {
         "@types/node": "^20.5.9",
