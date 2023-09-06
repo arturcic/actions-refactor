@@ -1,5 +1,5 @@
-import { DotnetTool, IBuildAgent, ISettingsProvider } from '@tools/common';
-import { GitVersionSettingsProvider } from './settings.ts';
+import { DotnetTool, IBuildAgent } from '@tools/common';
+import { GitVersionSettingsProvider, IGitVersionSettingsProvider } from './settings.ts';
 
 export class GitVersionTool extends DotnetTool {
 
@@ -11,7 +11,12 @@ export class GitVersionTool extends DotnetTool {
         return 'GitVersion.Tool';
     }
 
-    get settingsProvider(): ISettingsProvider {
+    get settingsProvider(): IGitVersionSettingsProvider {
         return new GitVersionSettingsProvider(this.buildAgent);
+    }
+
+    async run() {
+        const setupSettings = this.settingsProvider.getGitVersionSettings();
+        this.buildAgent.debug('toolRun' + ' ' + this.toolName + ' ' + setupSettings.targetPath);
     }
 }

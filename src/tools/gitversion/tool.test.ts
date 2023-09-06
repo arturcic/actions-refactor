@@ -29,7 +29,7 @@ describe('purchasing flow', () => {
     it('some test', async () => {
 
         const settings: ISetupSettings = {
-            versionSpec: '5.7.0',
+            versionSpec: '5.x',
             includePrerelease: false,
             ignoreFailedSources: true,
             preferLatestVersion: false
@@ -37,23 +37,27 @@ describe('purchasing flow', () => {
 
         let buildAgent = {
             debug: (message: string) => console.log(message),
+            info: (message: string) => console.log(message),
+
+            find:(toolName: string, versionSpec: string, arch?: string): string => '',
+
             getInput: (input: keyof ISetupSettings, _?: boolean) => settings[input],
             getBooleanInput: (input: keyof ISetupSettings, _?: boolean): boolean => (settings[input] as string || '').toString().toUpperCase() == 'TRUE',
         } as IBuildAgent;
 
-        expect(buildAgent.getInput('versionSpec')).toBe('5.7.0');
-        expect(buildAgent.getBooleanInput('includePrerelease')).toBe(false);
-        expect(buildAgent.getBooleanInput('ignoreFailedSources')).toBe(true);
-        expect(buildAgent.getBooleanInput('preferLatestVersion')).toBe(false);
+        expect(buildAgent.getInput('versionSpec')).toBe(settings.versionSpec);
+        expect(buildAgent.getBooleanInput('includePrerelease')).toBe(settings.includePrerelease);
+        expect(buildAgent.getBooleanInput('ignoreFailedSources')).toBe(settings.ignoreFailedSources);
+        expect(buildAgent.getBooleanInput('preferLatestVersion')).toBe(settings.preferLatestVersion);
 
         const provider = new GitVersionSettingsProvider(buildAgent);
 
         const setupSettings = provider.getSetupSettings();
 
-        expect(setupSettings.versionSpec).toBe('5.7.0');
-        expect(setupSettings.includePrerelease).toBe(false);
-        expect(setupSettings.ignoreFailedSources).toBe(true);
-        expect(setupSettings.preferLatestVersion).toBe(false);
+        expect(setupSettings.versionSpec).toBe(settings.versionSpec);
+        expect(setupSettings.includePrerelease).toBe(settings.includePrerelease);
+        expect(setupSettings.ignoreFailedSources).toBe(settings.ignoreFailedSources);
+        expect(setupSettings.preferLatestVersion).toBe(settings.preferLatestVersion);
 
         const tool = new GitVersionTool(buildAgent);
         const result = await tool.install();
