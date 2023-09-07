@@ -5,8 +5,64 @@ export class BuildAgent implements IBuildAgent {
         return 'GitHub Actions';
     }
 
+    addPath(inputPath: string): void {
+        console.log(`addPath - ${inputPath}`);
+    }
+
     debug(message: string): void {
-        console.log(`[${this.agentName}] ${message}`);
+        console.log(`[debug] ${message}`);
+    }
+
+    info(message: string): void {
+        console.log(`[info] - ${message}`);
+    }
+
+    warn(message: string): void {
+        console.warn(`[warn] - ${message}`);
+    }
+
+    error(message: string): void {
+        console.error(`[error] - ${message}`);
+    }
+
+    exec(exec: string, args: string[]): Promise<IExecResult> {
+        console.log(`exec - ${exec} - ${args}`);
+        return Promise.resolve({} as IExecResult);
+    }
+
+    cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string> {
+        console.log(`cacheDir - ${sourceDir} - ${tool} - ${version} - ${arch}`);
+        return Promise.resolve('');
+    }
+
+    createTempDir(): Promise<string> {
+        console.log(`createTempDir`);
+        return Promise.resolve('');
+    }
+
+    dirExists(file: string): boolean {
+        console.log(`directoryExists - ${file}`);
+        return false;
+    }
+
+    fileExists(file: string): boolean {
+        console.log(`fileExists - ${file}`);
+        return false;
+    }
+
+    findLocalTool(toolName: string, versionSpec: string, arch?: string): string | null {
+        console.log(`find - ${toolName} - ${versionSpec} - ${arch}`);
+        return '';
+    }
+
+    getSourceDir(): string {
+        console.log('getSourceDir');
+        return 'getSourceDir';
+    }
+
+    getCacheRootDir(): string {
+        console.log('getCacheRoot');
+        return 'getCacheRoot';
     }
 
     getBooleanInput(input: string, required?: boolean): boolean {
@@ -22,62 +78,6 @@ export class BuildAgent implements IBuildAgent {
     getListInput(input: string, required?: boolean): string[] {
         console.log(`getListInput - ${input} - ${required}`);
         return ['getInput'];
-    }
-
-    getSourceDir(): string {
-        console.log('getSourceDir');
-        return 'getSourceDir';
-    }
-
-    setVariable(name: string, val: string): void {
-        console.log(`setVariable - ${name} - ${val}`);
-    }
-
-    addPath(inputPath: string): void {
-        console.log(`addPath - ${inputPath}`);
-    }
-
-    cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string> {
-        console.log(`cacheDir - ${sourceDir} - ${tool} - ${version} - ${arch}`);
-        return Promise.resolve('');
-    }
-
-    createTempDir(): Promise<string> {
-        console.log(`createTempDir`);
-        return Promise.resolve('');
-    }
-
-    directoryExists(file: string): boolean {
-        console.log(`directoryExists - ${file}`);
-        return false;
-    }
-
-    error(message: string): void {
-        console.error(`error - ${message}`);
-    }
-
-    exec(exec: string, args: string[]): Promise<IExecResult> {
-        console.log(`exec - ${exec} - ${args}`);
-        return Promise.resolve({} as IExecResult);
-    }
-
-    fileExists(file: string): boolean {
-        console.log(`fileExists - ${file}`);
-        return false;
-    }
-
-    find(toolName: string, versionSpec: string, arch?: string): string {
-        console.log(`find - ${toolName} - ${versionSpec} - ${arch}`);
-        return '';
-    }
-
-    getVariable(name: string): string {
-        console.log(`getVariable - ${name}`);
-        return '';
-    }
-
-    info(message: string): void {
-        console.log(`info - ${message}`);
     }
 
     isValidInputFile(input: string, file: string): boolean {
@@ -97,8 +97,13 @@ export class BuildAgent implements IBuildAgent {
         console.log(`setSucceeded - ${message} - ${done}`);
     }
 
-    warn(message: string): void {
-        console.warn(`warn - ${message}`);
+    getVariable(name: string): string {
+        console.log(`getVariable - ${name}`);
+        return '';
+    }
+
+    setVariable(name: string, val: string): void {
+        console.log(`setVariable - ${name} - ${val}`);
     }
 
     which(tool: string, check?: boolean): Promise<string> {

@@ -9,8 +9,10 @@ export async function getAgent(): Promise<IBuildAgent> {
     let agent: Agent;
     if (agentType === 'azure') {
         agent = await import('@agents/azure');
-    } else /*if (mode === 'github')*/ {
+    } else if (agentType === 'github') {
         agent = await import('@agents/github');
+    } else {
+        agent = await import('@agents/fake');
     }
     return new agent.BuildAgent();
 }

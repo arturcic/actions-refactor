@@ -39,10 +39,10 @@ describe('purchasing flow', () => {
             debug: (message: string) => console.log(message),
             info: (message: string) => console.log(message),
 
-            find:(toolName: string, versionSpec: string, arch?: string): string => '',
+            findLocalTool: (_toolName: string, _versionSpec: string, _arch?: string): string | null => null,
 
-            getInput: (input: keyof ISetupSettings, _?: boolean) => settings[input],
-            getBooleanInput: (input: keyof ISetupSettings, _?: boolean): boolean => (settings[input] as string || '').toString().toUpperCase() == 'TRUE',
+            getInput: (input: keyof ISetupSettings, _required?: boolean) => settings[input],
+            getBooleanInput: (input: keyof ISetupSettings, _required?: boolean): boolean => (settings[input] as string || '').toString().toUpperCase() == 'TRUE',
         } as IBuildAgent;
 
         expect(buildAgent.getInput('versionSpec')).toBe(settings.versionSpec);

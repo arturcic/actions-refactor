@@ -5,6 +5,7 @@ import { RollupOptions } from 'rollup';
 const rollupOptions: RollupOptions = {
     external: [
         'console',
+        'node:os',
         'node:util',
         'node:crypto',
         'node:buffer',
@@ -43,6 +44,7 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
         resolve: {
             alias: {
                 '@agents/common': resolve(dirname, 'agents/common'),
+                '@agents/fake': resolve(dirname, 'agents/fake'),
                 '@agents/azure': resolve(dirname, 'agents/azure'),
                 '@agents/github': resolve(dirname, 'agents/github'),
 

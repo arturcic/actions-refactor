@@ -1,8 +1,10 @@
 import { IBuildAgent, IExecResult } from '@tools/common';
+import os from 'node:os';
+import path from 'node:path';
 
 export class BuildAgent implements IBuildAgent {
     public get agentName(): string {
-        return 'Azure Pipelines';
+        return 'Local';
     }
 
     addPath(inputPath: string): void {
@@ -51,8 +53,28 @@ export class BuildAgent implements IBuildAgent {
     }
 
     findLocalTool(toolName: string, versionSpec: string, arch?: string): string | null {
-        console.log(`find - ${toolName} - ${versionSpec} - ${arch}`);
-        return '';
+        arch = arch || os.arch();
+        if (!toolName) {
+            throw new Error('toolName is a required parameter');
+        }
+        if (!versionSpec) {
+            throw new Error('versionSpec is a required parameter');
+        }
+
+        let cacheRoot = this.getCacheRootDir();
+        if (!cacheRoot) {
+            this.debug('cache root not set');
+            return null;
+        }
+
+        this.info(`looking for local tool ${toolName}@${versionSpec} (${arch})`);
+        let toolPath = path.join(cacheRoot, toolName, versionSpec, arch);
+        if (!this.dirExists(toolPath)) {
+            this.debug(`directory ${toolPath} not found`);
+            return null;
+        }
+
+        return toolPath;
     }
 
     getSourceDir(): string {
@@ -66,18 +88,29 @@ export class BuildAgent implements IBuildAgent {
     }
 
     getBooleanInput(input: string, required?: boolean): boolean {
-        console.log(`getBooleanInput - ${input} - ${required}`);
-        return false;
+        const trueValue = ['true', 'True', 'TRUE'];
+        const falseValue = ['false', 'False', 'FALSE'];
+        const val = this.getInput(input, required);
+        if (trueValue.includes(val))
+            return true;
+        if (falseValue.includes(val))
+            return false;
+        throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${input}\n` +
+            `Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
 
     getInput(input: string, required?: boolean): string {
-        console.log(`getInput - ${input} - ${required}`);
-        return 'getInput';
+        const val = process.env[`INPUT_${input.replace(/ /g, '_').toUpperCase()}`] || '';
+        if (required && !val) {
+            throw new Error(`Input required and not supplied: ${input}`);
+        }
+        return val.trim();
     }
 
     getListInput(input: string, required?: boolean): string[] {
-        console.log(`getListInput - ${input} - ${required}`);
-        return ['getInput'];
+        return this.getInput(input, required)
+            .split('\n')
+            .filter(x => x !== '');
     }
 
     isValidInputFile(input: string, file: string): boolean {

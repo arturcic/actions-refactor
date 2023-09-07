@@ -17,11 +17,8 @@ switch (command) {
 
 async function setup() {
     try {
-        agent.debug(`Agent: '${agent.agentName}'`);
-        agent.debug('Disabling telemetry');
+        agent.info(`Running on: '${agent.agentName}'`);
         gitVersionTool.disableTelemetry();
-
-        agent.debug('Installing GitVersion');
         await gitVersionTool.install();
     } catch (error) {
         console.log(error);

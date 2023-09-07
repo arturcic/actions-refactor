@@ -7,12 +7,14 @@
         "node": ">=18.0.0"
     },
     "scripts": {
+        "build:fake": "vite build --config src/vite.config.ts --mode fake",
         "build:azure": "vite build --config src/vite.config.ts --mode azure",
         "build:github": "vite build --config src/vite.config.ts --mode github",
-
+        "run:fake:gitversion": "node dist/fake/gitversion.js",
         "run:azure:gitversion": "node dist/azure/gitversion.js",
-        "run:azure:gitreleasemanager": "node dist/azure/gitreleasemanager.js",
         "run:github:gitversion": "node dist/github/gitversion.js",
+        "run:fake:gitreleasemanager": "node dist/fake/gitreleasemanager.js",
+        "run:azure:gitreleasemanager": "node dist/azure/gitreleasemanager.js",
         "run:github:gitreleasemanager": "node dist/github/gitreleasemanager.js",
         "test": "vitest --config src/vite.config.ts"
     },
