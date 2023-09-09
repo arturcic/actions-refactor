@@ -60,6 +60,11 @@ export class BuildAgent implements IBuildAgent {
         return 'getSourceDir';
     }
 
+    getTempRootDir(): string {
+        console.log('getTempDir');
+        return 'getTempDir';
+    }
+
     getCacheRootDir(): string {
         console.log('getCacheRoot');
         return 'getCacheRoot';

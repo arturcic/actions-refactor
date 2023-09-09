@@ -32,6 +32,8 @@ export interface IBuildAgent {
 
     getSourceDir(): string;
 
+    getTempRootDir(): string;
+
     getCacheRootDir(): string;
 
     getBooleanInput(input: string, required?: boolean): boolean;

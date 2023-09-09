@@ -1,14 +1,22 @@
 import { IBuildAgent, IExecResult } from '@tools/common';
-import os from 'node:os';
-import path from 'node:path';
+import * as os from 'node:os';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as crypto from 'node:crypto';
+import * as process from 'node:process';
+import { lookPath } from './internal/lookPath.ts';
+import { execSync } from 'node:child_process';
 
 export class BuildAgent implements IBuildAgent {
     public get agentName(): string {
         return 'Local';
     }
 
-    addPath(inputPath: string): void {
-        console.log(`addPath - ${inputPath}`);
+    addPath(toolPath: string): void {
+        let newPath = toolPath + path.delimiter + process.env['PATH'];
+        this.debug('new Path: ' + newPath);
+        process.env['PATH'] = newPath;
+        console.log(`addPath - ${toolPath}`);
     }
 
     debug(message: string): void {
@@ -28,28 +36,31 @@ export class BuildAgent implements IBuildAgent {
     }
 
     exec(exec: string, args: string[]): Promise<IExecResult> {
-        console.log(`exec - ${exec} - ${args}`);
+        execSync(`${exec} ${args.join(' ')}`, { stdio: 'inherit' });
         return Promise.resolve({} as IExecResult);
     }
 
     cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string> {
-        console.log(`cacheDir - ${sourceDir} - ${tool} - ${version} - ${arch}`);
+        arch = arch || os.arch();
+        this.debug(`Caching ${tool}@${version} (${arch}) from ${sourceDir}`);
         return Promise.resolve('');
     }
 
     createTempDir(): Promise<string> {
-        console.log(`createTempDir`);
-        return Promise.resolve('');
+        let tempRootDir = this.getTempRootDir();
+        let uuid = crypto.randomUUID();
+        let tempPath = path.join(tempRootDir, uuid);
+        this.debug(`Creating temp directory ${tempPath}`);
+        fs.mkdirSync(tempPath);
+        return Promise.resolve(tempPath);
     }
 
     dirExists(file: string): boolean {
-        console.log(`directoryExists - ${file}`);
-        return false;
+        return fs.existsSync(file) && fs.statSync(file).isDirectory();
     }
 
     fileExists(file: string): boolean {
-        console.log(`fileExists - ${file}`);
-        return false;
+        return fs.existsSync(file) && fs.statSync(file).isFile();
     }
 
     findLocalTool(toolName: string, versionSpec: string, arch?: string): string | null {
@@ -67,10 +78,10 @@ export class BuildAgent implements IBuildAgent {
             return null;
         }
 
-        this.info(`looking for local tool ${toolName}@${versionSpec} (${arch})`);
+        this.info(`Looking for local tool ${toolName}@${versionSpec} (${arch})`);
         let toolPath = path.join(cacheRoot, toolName, versionSpec, arch);
         if (!this.dirExists(toolPath)) {
-            this.debug(`directory ${toolPath} not found`);
+            this.info(`Directory ${toolPath} not found`);
             return null;
         }
 
@@ -78,13 +89,18 @@ export class BuildAgent implements IBuildAgent {
     }
 
     getSourceDir(): string {
-        console.log('getSourceDir');
-        return 'getSourceDir';
+        const val = process.env['AGENT_SOURCE_DIR'] || '';
+        return val.trim();
+    }
+
+    getTempRootDir(): string {
+        const val = process.env['AGENT_TEMP_DIR'] || '';
+        return val.trim();
     }
 
     getCacheRootDir(): string {
-        console.log('getCacheRoot');
-        return 'getCacheRoot';
+        const val = process.env['AGENT_TOOLS_DIR'] || '';
+        return val.trim();
     }
 
     getBooleanInput(input: string, required?: boolean): boolean {
@@ -131,16 +147,22 @@ export class BuildAgent implements IBuildAgent {
     }
 
     getVariable(name: string): string {
-        console.log(`getVariable - ${name}`);
-        return '';
+        this.debug(`getVariable - ${name}`);
+        return process.env[name] || '';
     }
 
     setVariable(name: string, val: string): void {
-        console.log(`setVariable - ${name} - ${val}`);
+        this.debug(`setVariable - ${name} - ${val}`);
+        process.env[name] = val;
     }
 
-    which(tool: string, check?: boolean): Promise<string> {
-        console.log(`which - ${tool} - ${check}`);
-        return Promise.resolve('');
+    async which(tool: string, _check?: boolean): Promise<string> {
+        this.debug(`looking for tool '${tool}' in PATH`);
+        let toolPath = await lookPath(tool);
+        if (toolPath) {
+            this.debug(`found tool '${tool}' in PATH: ${toolPath}`);
+            return Promise.resolve(toolPath);
+        }
+        throw new Error(`Unable to locate executable file: ${tool}`);
     }
 }

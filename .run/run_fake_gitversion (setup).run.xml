@@ -1,22 +1,22 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="run:fake:gitversion (setup)" type="js.build_tools.npm" folderName="run"
-                   activateToolWindowBeforeRun="false">
-        <package-json value="$PROJECT_DIR$/package.json"/>
-        <command value="run"/>
-        <scripts>
-            <script value="run:fake:gitversion"/>
-        </scripts>
-        <arguments value="-- --command setup"/>
-        <node-interpreter value="project"/>
-        <envs>
-            <env name="INPUT_INCLUDEPRERELEASE" value="false"/>
-            <env name="INPUT_PREFERLATESTVERSION" value="false"/>
-            <env name="INPUT_VERSIONSPEC" value="5.x"/>
-            <env name="INPUT_IGNOREFAILEDSOURCES" value="true"/>
-        </envs>
-        <method v="2">
-            <option name="RunConfigurationTask" enabled="true" run_configuration_name="build:fake"
-                    run_configuration_type="js.build_tools.npm"/>
-        </method>
-    </configuration>
+  <configuration default="false" name="run:fake:gitversion (setup)" type="js.build_tools.npm" folderName="run" activateToolWindowBeforeRun="false">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="run:fake:gitversion" />
+    </scripts>
+    <arguments value="-- --command setup" />
+    <node-interpreter value="project" />
+    <envs>
+      <env name="AGENT_TOOLS_DIR" value="D:\projects\poc\actions\tools" />
+      <env name="INPUT_IGNOREFAILEDSOURCES" value="true" />
+      <env name="INPUT_INCLUDEPRERELEASE" value="false" />
+      <env name="INPUT_PREFERLATESTVERSION" value="false" />
+      <env name="INPUT_VERSIONSPEC" value="5.x" />
+      <env name="AGENT_TEMP_DIR" value="D:\projects\poc\actions\temp" />
+    </envs>
+    <method v="2">
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="build:fake" run_configuration_type="js.build_tools.npm" />
+    </method>
+  </configuration>
 </component>

@@ -5,6 +5,8 @@ import { RollupOptions } from 'rollup';
 const rollupOptions: RollupOptions = {
     external: [
         'console',
+        'node:process',
+        'node:child_process',
         'node:os',
         'node:util',
         'node:crypto',
@@ -57,7 +59,7 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
                 output: {
                     ...rollupOptions.output,
                     manualChunks(id: string) {
-                        console.log(`id: ${id}`);
+                        // console.log(`id: ${id}`);
                         if (id.includes('node_modules')) {
                             return `${agent}/vendor`;
                         }
@@ -79,7 +81,7 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
             },
             emptyOutDir: false,
             sourcemap: true,
-            minify: 'esbuild',
+            // minify: 'esbuild',
         },
         test: {
             globals: true,

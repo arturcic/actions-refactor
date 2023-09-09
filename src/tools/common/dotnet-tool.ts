@@ -36,6 +36,8 @@ export abstract class DotnetTool implements IDotnetTool {
     }
 
     public async install(): Promise<string> {
+        let whichPath = await this.buildAgent.which('dotnet', true);
+        this.buildAgent.debug(`whichPath: ${whichPath}`);
         const setupSettings = this.settingsProvider.getSetupSettings();
 
         let version: string | null = semver.clean(setupSettings.versionSpec) || setupSettings.versionSpec;
@@ -66,6 +68,7 @@ export abstract class DotnetTool implements IDotnetTool {
 
         // Prepend the tool's path. This prepends the PATH for the current process and
         // instructs the agent to prepend for each task that follows.
+        this.buildAgent.info(`Prepending ${toolPath} to PATH`);
         this.buildAgent.debug(`toolPath: ${toolPath}`);
 
         if (os.platform() !== 'win32' && !this.buildAgent.getVariable('DOTNET_ROOT')) {
