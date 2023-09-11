@@ -18,7 +18,10 @@ switch (command) {
 async function setup() {
     try {
         agent.info(`Running on: '${agent.agentName}'`);
+        agent.debug('Disabling telemetry');
         gitVersionTool.disableTelemetry();
+
+        agent.debug('Installing GitVersion');
         await gitVersionTool.install();
     } catch (error) {
         console.log(error);
@@ -32,8 +35,33 @@ async function run() {
         gitVersionTool.disableTelemetry();
 
         agent.debug('Executing GitVersion');
-        await gitVersionTool.run();
+        const result = await gitVersionTool.run();
+
+        if (result.code === 0) {
+            agent.debug('GitVersion executed successfully');
+            const { stdout } = result;
+
+            if (stdout.lastIndexOf('{') === -1 || stdout.lastIndexOf('}') === -1) {
+                agent.debug('GitVersion output is not valid JSON');
+                agent.setFailed('GitVersion output is not valid JSON', true);
+                return;
+            } else {
+                const jsonOutput = stdout.substring(stdout.lastIndexOf('{'), stdout.lastIndexOf('}') + 1);
+
+                const gitVersionOutput = JSON.parse(jsonOutput);
+                gitVersionTool.writeGitVersionToAgent(gitVersionOutput);
+                agent.setSucceeded('GitVersion executed successfully', true);
+            }
+        } else {
+            agent.debug('GitVersion failed');
+            let error = result.error;
+            if (error instanceof Error) {
+                agent.setFailed(error?.message, true);
+            }
+        }
     } catch (error) {
-        console.log(error);
+        if (error instanceof Error) {
+            agent.setFailed(error?.message, true);
+        }
     }
 }

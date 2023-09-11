@@ -84,7 +84,7 @@ export abstract class DotnetTool implements IDotnetTool {
 
     private async queryLatestMatch(toolName: string, versionSpec: string, includePrerelease: boolean): Promise<string | null> {
         this.buildAgent.info(
-            `querying tool versions for ${toolName}${versionSpec ? `@${versionSpec}` : ''} ${includePrerelease ? 'including pre-releases' : ''}`
+            `Querying tool versions for ${toolName}${versionSpec ? `@${versionSpec}` : ''} ${includePrerelease ? 'including pre-releases' : ''}`
         );
 
         const toolNameParam = encodeURIComponent(toolName.toLowerCase());
@@ -118,7 +118,7 @@ export abstract class DotnetTool implements IDotnetTool {
     }
 
     private async installTool(toolName: string, version: string, ignoreFailedSources: boolean): Promise<string> {
-        let semverVersion = this.cleanVersion(version);
+        let semverVersion = semver.clean(version);
         if (!semverVersion) {
             throw new Error(`Invalid version spec: ${version}`);
         }
@@ -133,25 +133,20 @@ export abstract class DotnetTool implements IDotnetTool {
         const status = result.code === 0 ? 'success' : 'failure';
         const message = result.code === 0 ? result.stdout : result.stderr;
 
-        this.buildAgent.debug(`tool install result: ${status} ${message}`);
-
-        if (result.code) {
-            throw new Error('Error installing tool');
+        this.buildAgent.debug(`Tool install result: ${status} ${message}`);
+        if (result.code !== 0) {
+            throw new Error(message);
         }
+        this.buildAgent.info(message);
 
         return await this.buildAgent.cacheDir(tempDirectory, toolName, semverVersion);
     }
 
     private isExplicitVersion(versionSpec: string): boolean {
-        const cleanedVersionSpec = this.cleanVersion(versionSpec);
+        const cleanedVersionSpec = semver.clean(versionSpec);
         const valid = semver.valid(cleanedVersionSpec) != null;
         this.buildAgent.debug(`Is version explicit? ${valid}`);
 
         return valid;
-    }
-
-    private cleanVersion(version: string): string | null {
-        this.buildAgent.debug('cleaning: ' + version);
-        return semver.clean(version);
     }
 }

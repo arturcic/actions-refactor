@@ -1,11 +1,13 @@
-import { IBuildAgent, IExecResult } from '@tools/common';
 import * as os from 'node:os';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as crypto from 'node:crypto';
 import * as process from 'node:process';
+import * as util from 'node:util';
+
+import { IBuildAgent, IExecResult } from '@tools/common';
+import { exec as execNonPromise } from 'node:child_process';
 import { lookPath } from './internal/lookPath.ts';
-import { execSync } from 'node:child_process';
 
 export class BuildAgent implements IBuildAgent {
     public get agentName(): string {
@@ -16,7 +18,7 @@ export class BuildAgent implements IBuildAgent {
         let newPath = toolPath + path.delimiter + process.env['PATH'];
         this.debug('new Path: ' + newPath);
         process.env['PATH'] = newPath;
-        console.log(`addPath - ${toolPath}`);
+        this.info(`Updated PATH: ${process.env['PATH']}`);
     }
 
     debug(message: string): void {
@@ -35,15 +37,57 @@ export class BuildAgent implements IBuildAgent {
         console.error(`[error] - ${message}`);
     }
 
-    exec(exec: string, args: string[]): Promise<IExecResult> {
-        execSync(`${exec} ${args.join(' ')}`, { stdio: 'inherit' });
-        return Promise.resolve({} as IExecResult);
+    async exec(cmd: string, args: string[]): Promise<IExecResult> {
+        const exec = util.promisify(execNonPromise);
+
+        try {
+            const { stdout, stderr } = await exec(`${cmd} ${args.join(' ')}`);
+            return Promise.resolve({
+                code: 0,
+                error: null,
+                stderr,
+                stdout
+            });
+        } catch (err: any) {
+            return Promise.resolve({
+                code: err.code,
+                error: err,
+                stderr: err.stderr,
+                stdout: err.stdout
+            });
+        }
     }
 
     cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string> {
         arch = arch || os.arch();
+        if (!tool) {
+            throw new Error('tool is a required parameter');
+        }
+        if (!version) {
+            throw new Error('version is a required parameter');
+        }
+        if (!sourceDir) {
+            throw new Error('sourceDir is a required parameter');
+        }
+
+        let cacheRoot = this.getCacheRootDir();
+        if (!cacheRoot) {
+            this.debug('cache root not set');
+            return Promise.resolve('');
+        }
+
+        let destPath = path.join(cacheRoot, tool, version, arch);
+        if (this.dirExists(destPath)) {
+            this.debug(`Destination directory ${destPath} already exists, removing`);
+            fs.rmSync(destPath, { recursive: true, force: true, maxRetries: 3, retryDelay: 1000 });
+        }
+
+        this.debug(`Copying ${sourceDir} to ${destPath}`);
+        fs.mkdirSync(destPath, { recursive: true });
+        fs.cpSync(sourceDir, destPath, { recursive: true, force: true });
+
         this.debug(`Caching ${tool}@${version} (${arch}) from ${sourceDir}`);
-        return Promise.resolve('');
+        return Promise.resolve(destPath);
     }
 
     createTempDir(): Promise<string> {
@@ -107,6 +151,13 @@ export class BuildAgent implements IBuildAgent {
         const trueValue = ['true', 'True', 'TRUE'];
         const falseValue = ['false', 'False', 'FALSE'];
         const val = this.getInput(input, required);
+
+        if (!val) {
+            if (required)
+                throw new Error(`Input required and not supplied: ${input}`);
+            return false;
+        }
+
         if (trueValue.includes(val))
             return true;
         if (falseValue.includes(val))

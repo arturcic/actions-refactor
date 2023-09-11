@@ -61,7 +61,7 @@ export interface IExecResult {
     stdout: string;
     stderr: string;
     code: number;
-    error: Error;
+    error?: Error | null;
 }
 
 export interface CliArgs {

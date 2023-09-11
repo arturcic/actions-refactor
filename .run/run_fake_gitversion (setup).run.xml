@@ -8,12 +8,12 @@
     <arguments value="-- --command setup" />
     <node-interpreter value="project" />
     <envs>
+      <env name="AGENT_TEMP_DIR" value="D:\projects\poc\actions\temp" />
       <env name="AGENT_TOOLS_DIR" value="D:\projects\poc\actions\tools" />
       <env name="INPUT_IGNOREFAILEDSOURCES" value="true" />
       <env name="INPUT_INCLUDEPRERELEASE" value="false" />
       <env name="INPUT_PREFERLATESTVERSION" value="false" />
       <env name="INPUT_VERSIONSPEC" value="5.x" />
-      <env name="AGENT_TEMP_DIR" value="D:\projects\poc\actions\temp" />
     </envs>
     <method v="2">
       <option name="RunConfigurationTask" enabled="true" run_configuration_name="build:fake" run_configuration_type="js.build_tools.npm" />
