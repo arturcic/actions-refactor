@@ -22,19 +22,17 @@ export interface IBuildAgent {
 
     cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string>
 
-    createTempDir(): Promise<string>
-
     dirExists(file: string): boolean
 
     fileExists(file: string): boolean
 
     findLocalTool(toolName: string, versionSpec: string, arch?: string): string | null
 
-    getSourceDir(): string
+    getSourceDir(): string | undefined
 
-    getTempRootDir(): string
+    getTempRootDir(): string | undefined
 
-    getCacheRootDir(): string
+    getCacheRootDir(): string | undefined
 
     getBooleanInput(input: string, required?: boolean): boolean
 
@@ -50,9 +48,9 @@ export interface IBuildAgent {
 
     setSucceeded(message: string, done?: boolean): void
 
-    getVariable(name: string): string
+    getVariable(name: string): string | undefined
 
-    setVariable(name: string, val: string): void
+    setVariable(name: string, value: string): void
 
     which(tool: string, check?: boolean): Promise<string>
 }

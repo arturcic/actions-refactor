@@ -40,6 +40,8 @@
         "vitest": "^0.34.3"
     },
     "dependencies": {
+        "azure-pipelines-task-lib": "^5.0.0-preview.0",
+        "azure-pipelines-tool-lib": "^2.0.4",
         "semver": "^7.5.4"
     }
 }

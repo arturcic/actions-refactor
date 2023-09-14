@@ -1,7 +1,8 @@
 import { IBuildAgent, IExecResult, ISettingsProvider } from './models'
-import os from 'node:os'
-import fs from 'node:fs'
-import path from 'node:path'
+import os from 'os'
+import fs from 'fs'
+import path from 'path'
+import crypto from 'crypto'
 
 import * as semver from 'semver'
 
@@ -126,7 +127,12 @@ export abstract class DotnetTool implements IDotnetTool {
             throw new Error(`Invalid version spec: ${version}`)
         }
 
-        const tempDirectory = await this.buildAgent.createTempDir()
+        const tempDirectory = await this.createTempDir()
+
+        if (!tempDirectory) {
+            throw new Error('Unable to create temp directory')
+        }
+
         const args = ['tool', 'install', toolName, '--tool-path', tempDirectory, '--version', semverVersion]
         if (ignoreFailedSources) {
             args.push('--ignore-failed-sources')
@@ -143,6 +149,19 @@ export abstract class DotnetTool implements IDotnetTool {
         this.buildAgent.info(message)
 
         return await this.buildAgent.cacheDir(tempDirectory, toolName, semverVersion)
+    }
+
+    async createTempDir(): Promise<string> {
+        const tempRootDir = this.buildAgent.getTempRootDir()
+        if (!tempRootDir) {
+            throw new Error('Temp directory not set')
+        }
+
+        const uuid = crypto.randomUUID()
+        const tempPath = path.join(tempRootDir, uuid)
+        this.buildAgent.debug(`Creating temp directory ${tempPath}`)
+        fs.mkdirSync(tempPath)
+        return Promise.resolve(tempPath)
     }
 
     private isExplicitVersion(versionSpec: string): boolean {

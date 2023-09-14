@@ -1,12 +1,11 @@
-import * as os from 'node:os'
-import * as fs from 'node:fs'
-import * as path from 'node:path'
-import * as crypto from 'node:crypto'
-import * as process from 'node:process'
-import * as util from 'node:util'
+import * as os from 'os'
+import * as fs from 'fs'
+import * as path from 'path'
+import * as process from 'process'
+import * as util from 'util'
+import { exec as execNonPromise } from 'child_process'
 
 import { IBuildAgent, IExecResult } from '@tools/common'
-import { exec as execNonPromise } from 'node:child_process'
 import { lookPath } from './internal/lookPath'
 
 export class BuildAgent implements IBuildAgent {
@@ -91,15 +90,6 @@ export class BuildAgent implements IBuildAgent {
         return Promise.resolve(destPath)
     }
 
-    async createTempDir(): Promise<string> {
-        const tempRootDir = this.getTempRootDir()
-        const uuid = crypto.randomUUID()
-        const tempPath = path.join(tempRootDir, uuid)
-        this.debug(`Creating temp directory ${tempPath}`)
-        fs.mkdirSync(tempPath)
-        return Promise.resolve(tempPath)
-    }
-
     dirExists(file: string): boolean {
         return fs.existsSync(file) && fs.statSync(file).isDirectory()
     }
@@ -128,6 +118,8 @@ export class BuildAgent implements IBuildAgent {
         if (!this.dirExists(toolPath)) {
             this.info(`Directory ${toolPath} not found`)
             return null
+        } else {
+            this.info(`Found tool ${toolName}@${versionSpec} (${arch})`)
         }
 
         return toolPath
@@ -202,9 +194,9 @@ export class BuildAgent implements IBuildAgent {
         return process.env[name] || ''
     }
 
-    setVariable(name: string, val: string): void {
-        this.debug(`setVariable - ${name} - ${val}`)
-        process.env[name] = val
+    setVariable(name: string, value: string): void {
+        this.debug(`setVariable - ${name} - ${value}`)
+        process.env[name] = value
     }
 
     async which(tool: string, _check?: boolean): Promise<string> {

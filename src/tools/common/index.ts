@@ -1,4 +1,4 @@
-import { parseArgs } from 'node:util'
+import { parseArgs } from 'util'
 import { CliArgs } from './models'
 
 export * from './models'
