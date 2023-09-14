@@ -135,17 +135,17 @@ export class BuildAgent implements IBuildAgent {
 
     getSourceDir(): string {
         const val = process.env['AGENT_SOURCE_DIR'] || ''
-        return val.trim()
+        return path.normalize(val.trim())
     }
 
     getTempRootDir(): string {
         const val = process.env['AGENT_TEMP_DIR'] || ''
-        return val.trim()
+        return path.normalize(val.trim())
     }
 
     getCacheRootDir(): string {
         const val = process.env['AGENT_TOOLS_DIR'] || ''
-        return val.trim()
+        return path.normalize(val.trim())
     }
 
     getBooleanInput(input: string, required?: boolean): boolean {

@@ -13,16 +13,12 @@ export class GitVersionTool extends DotnetTool {
 
     async run(): Promise<IExecResult> {
         const settings = this.settingsProvider.getGitVersionSettings()
-
         const workDir = this.getRepoDir(settings.targetPath)
-
         const args = this.getArguments(workDir, settings)
 
         await this.setDotnetRoot()
 
         const toolPath = await this.buildAgent.which('dotnet-gitversion', true)
-
-        // const toolPath = path.join('D:/projects/poc/actions/tools/GitVersion.Tool/5.12.0/x64', 'dotnet-gitversion');
         return this.execute(toolPath, args)
     }
 
@@ -31,11 +27,15 @@ export class GitVersionTool extends DotnetTool {
         const keys = keysFn<GitVersionOutput>(output)
         for (const property of keys) {
             const name = this.toCamelCase(property)
-            const value = output[property]
-            this.buildAgent.setOutput(name, value.toString())
-            this.buildAgent.setOutput(`GitVersion_${name}`, value.toString())
-            this.buildAgent.setVariable(name, value.toString())
-            this.buildAgent.setVariable(`GitVersion_${name}`, value.toString())
+            try {
+                const value = output[property]?.toString()
+                this.buildAgent.setOutput(name, value)
+                this.buildAgent.setOutput(`GitVersion_${name}`, value)
+                this.buildAgent.setVariable(name, value)
+                this.buildAgent.setVariable(`GitVersion_${name}`, value)
+            } catch (error) {
+                this.buildAgent.error(`Unable to set output/variable for ${name}`)
+            }
         }
     }
 

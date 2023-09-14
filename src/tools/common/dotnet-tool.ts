@@ -34,10 +34,10 @@ export abstract class DotnetTool implements IDotnetTool {
     }
 
     async install(): Promise<string> {
-        const whichPath = await this.buildAgent.which('dotnet', true)
+        const dotnetExePath = await this.buildAgent.which('dotnet', true)
+        this.buildAgent.debug(`whichPath: ${dotnetExePath}`)
         await this.setDotnetRoot()
 
-        this.buildAgent.debug(`whichPath: ${whichPath}`)
         const setupSettings = this.settingsProvider.getSetupSettings()
 
         let version: string | null = semver.clean(setupSettings.versionSpec) || setupSettings.versionSpec

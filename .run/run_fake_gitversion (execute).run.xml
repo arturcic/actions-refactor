@@ -9,10 +9,11 @@
         <arguments value="-- --command execute"/>
         <node-interpreter value="project"/>
         <envs>
-            <env name="AGENT_SOURCE_DIR" value="D:\projects\oss\gittools\actions"/>
-            <env name="AGENT_TEMP_DIR" value="D:\projects\poc\actions\temp"/>
-            <env name="AGENT_TOOLS_DIR" value="D:\projects\poc\actions\tools"/>
+            <env name="AGENT_SOURCE_DIR" value="."/>
+            <env name="AGENT_TEMP_DIR" value="./.debug/temp"/>
+            <env name="AGENT_TOOLS_DIR" value="./.debug/tools"/>
             <env name="DOTNET_ROOT" value="C:\Program Files\dotnet"/>
+            <env name="PATH" value="./.debug/tools/GitVersion.Tool/5.12.0/x64"/>
         </envs>
         <method v="2">
             <option name="RunConfigurationTask" enabled="true" run_configuration_name="build:fake"
