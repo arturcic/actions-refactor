@@ -37,6 +37,8 @@ export abstract class DotnetTool implements IDotnetTool {
 
     public async install(): Promise<string> {
         let whichPath = await this.buildAgent.which('dotnet', true);
+        await this.setDotnetRoot();
+
         this.buildAgent.debug(`whichPath: ${whichPath}`);
         const setupSettings = this.settingsProvider.getSetupSettings();
 
@@ -71,15 +73,18 @@ export abstract class DotnetTool implements IDotnetTool {
         this.buildAgent.info(`Prepending ${toolPath} to PATH`);
         this.buildAgent.debug(`toolPath: ${toolPath}`);
 
+        this.buildAgent.addPath(toolPath);
+
+        return toolPath;
+    }
+
+    protected async setDotnetRoot() {
         if (os.platform() !== 'win32' && !this.buildAgent.getVariable('DOTNET_ROOT')) {
-            let dotnetPath = await this.buildAgent.which('dotnet');
+            let dotnetPath = await this.buildAgent.which('dotnet', true);
             dotnetPath = fs.readlinkSync(dotnetPath) || dotnetPath;
             const dotnetRoot = path.dirname(dotnetPath);
             this.buildAgent.setVariable('DOTNET_ROOT', dotnetRoot);
         }
-        this.buildAgent.addPath(toolPath);
-
-        return toolPath;
     }
 
     private async queryLatestMatch(toolName: string, versionSpec: string, includePrerelease: boolean): Promise<string | null> {
@@ -98,9 +103,9 @@ export abstract class DotnetTool implements IDotnetTool {
             return null;
         }
 
-        const { data } = await response.json();
+        const { data }: { data: { versions: { version: string }[] }[] } = await response.json();
 
-        const versions = (data[0].versions as { version: string }[]).map(x => x.version);
+        const versions = data[0].versions.map(x => x.version);
         if (!versions || !versions.length) {
             return null;
         }
