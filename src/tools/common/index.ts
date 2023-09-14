@@ -1,19 +1,18 @@
-import { parseArgs } from 'node:util';
-import { CliArgs } from './models.ts';
+import { parseArgs } from 'node:util'
+import { CliArgs } from './models'
 
-export * from './models.ts';
-export * from './dotnet-tool.ts';
+export * from './models'
+export * from './dotnet-tool'
 
 //import { randomUUID } from 'node:crypto';
 //import * as semver from 'semver';
-
 
 export function parseCliArgs(): CliArgs {
     return parseArgs({
         options: {
             command: { type: 'string', short: 'c' }
         }
-    }).values as CliArgs;
+    }).values as CliArgs
 }
 
 /*

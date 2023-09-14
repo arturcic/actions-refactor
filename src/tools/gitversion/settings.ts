@@ -1,28 +1,24 @@
-import { ExecuteFields, GitVersionSettings } from './models';
-import { SettingsProvider } from '../common/settings';
-import { IBuildAgent, ISettingsProvider } from '@tools/common';
+import { ExecuteFields, GitVersionSettings } from './models'
+import { SettingsProvider } from '../common/settings'
+import { ISettingsProvider } from '@tools/common'
 
 export interface IGitVersionSettingsProvider extends ISettingsProvider {
-    getGitVersionSettings(): GitVersionSettings;
+    getGitVersionSettings(): GitVersionSettings
 }
 
 export class GitVersionSettingsProvider extends SettingsProvider implements IGitVersionSettingsProvider {
-    constructor(buildAgent: IBuildAgent) {
-        super(buildAgent);
-    }
+    getGitVersionSettings(): GitVersionSettings {
+        const targetPath = this.buildAgent.getInput(ExecuteFields.targetPath)
 
-    public getGitVersionSettings(): GitVersionSettings {
-        const targetPath = this.buildAgent.getInput(ExecuteFields.targetPath);
+        const useConfigFile = this.buildAgent.getBooleanInput(ExecuteFields.useConfigFile)
+        const configFilePath = this.buildAgent.getInput(ExecuteFields.configFilePath)
 
-        const useConfigFile = this.buildAgent.getBooleanInput(ExecuteFields.useConfigFile);
-        const configFilePath = this.buildAgent.getInput(ExecuteFields.configFilePath);
+        const updateAssemblyInfo = this.buildAgent.getBooleanInput(ExecuteFields.updateAssemblyInfo)
+        const updateAssemblyInfoFilename = this.buildAgent.getInput(ExecuteFields.updateAssemblyInfoFilename)
 
-        const updateAssemblyInfo = this.buildAgent.getBooleanInput(ExecuteFields.updateAssemblyInfo);
-        const updateAssemblyInfoFilename = this.buildAgent.getInput(ExecuteFields.updateAssemblyInfoFilename);
+        const additionalArguments = this.buildAgent.getInput(ExecuteFields.additionalArguments)
 
-        const additionalArguments = this.buildAgent.getInput(ExecuteFields.additionalArguments);
-
-        const srcDir = this.buildAgent.getSourceDir()?.replace(/\\/g, '/');
+        const srcDir = this.buildAgent.getSourceDir()?.replace(/\\/g, '/')
 
         return {
             targetPath,
@@ -32,6 +28,6 @@ export class GitVersionSettingsProvider extends SettingsProvider implements IGit
             updateAssemblyInfoFilename,
             additionalArguments,
             srcDir
-        };
+        }
     }
 }

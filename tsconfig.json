@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "baseUrl" : "./src",
+        "baseUrl": "./src",
         "target": "ES2022",
         "module": "ES2022",
         "moduleResolution": "bundler",
@@ -11,7 +11,8 @@
             "dom"
         ],
         "types": [
-            "node", "vite/client"
+            "node",
+            "vite/client"
         ],
         "skipLibCheck": true,
         /* Bundler mode */
@@ -26,17 +27,28 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "paths": {
-            "@agents/common": ["./agents/common"],
+            "@agents/common": [
+                "./agents/common"
+            ],
             "@agents/fake": [
                 "./agents/fake"
             ],
-            "@agents/azure": ["./agents/azure"],
-            "@agents/github": ["./agents/github"],
-            "@tools/common": ["./tools/common"]
+            "@agents/azure": [
+                "./agents/azure"
+            ],
+            "@agents/github": [
+                "./agents/github"
+            ],
+            "@tools/common": [
+                "./tools/common"
+            ]
         }
     },
     "include": [
         "src/**/*.ts"
     ],
-    "exclude": ["node_modules", "dist"]
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }

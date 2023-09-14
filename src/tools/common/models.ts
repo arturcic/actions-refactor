@@ -6,75 +6,75 @@ export enum SetupFields {
 }
 
 export interface IBuildAgent {
-    agentName: string;
+    agentName: string
 
-    addPath(inputPath: string): void;
+    addPath(inputPath: string): void
 
-    debug(message: string): void;
+    debug(message: string): void
 
-    info(message: string): void;
+    info(message: string): void
 
-    warn(message: string): void;
+    warn(message: string): void
 
-    error(message: string): void;
+    error(message: string): void
 
-    exec(exec: string, args: string[]): Promise<IExecResult>;
+    exec(exec: string, args: string[]): Promise<IExecResult>
 
-    cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string>;
+    cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string>
 
-    createTempDir(): Promise<string>;
+    createTempDir(): Promise<string>
 
-    dirExists(file: string): boolean;
+    dirExists(file: string): boolean
 
-    fileExists(file: string): boolean;
+    fileExists(file: string): boolean
 
-    findLocalTool(toolName: string, versionSpec: string, arch?: string): string | null;
+    findLocalTool(toolName: string, versionSpec: string, arch?: string): string | null
 
-    getSourceDir(): string;
+    getSourceDir(): string
 
-    getTempRootDir(): string;
+    getTempRootDir(): string
 
-    getCacheRootDir(): string;
+    getCacheRootDir(): string
 
-    getBooleanInput(input: string, required?: boolean): boolean;
+    getBooleanInput(input: string, required?: boolean): boolean
 
-    getInput(input: string, required?: boolean): string;
+    getInput(input: string, required?: boolean): string
 
-    getListInput(input: string, required?: boolean): string[];
+    getListInput(input: string, required?: boolean): string[]
 
-    isValidInputFile(input: string, file: string): boolean;
+    isValidInputFile(input: string, file: string): boolean
 
-    setFailed(message: string, done?: boolean): void;
+    setFailed(message: string, done?: boolean): void
 
-    setOutput(name: string, value: string): void;
+    setOutput(name: string, value: string): void
 
-    setSucceeded(message: string, done?: boolean): void;
+    setSucceeded(message: string, done?: boolean): void
 
-    getVariable(name: string): string;
+    getVariable(name: string): string
 
-    setVariable(name: string, val: string): void;
+    setVariable(name: string, val: string): void
 
-    which(tool: string, check?: boolean): Promise<string>;
+    which(tool: string, check?: boolean): Promise<string>
 }
 
 export interface IExecResult {
-    stdout: string;
-    stderr: string;
-    code: number;
-    error?: Error | null;
+    stdout: string
+    stderr: string
+    code: number
+    error?: Error | null
 }
 
 export interface CliArgs {
-    command: string | undefined;
+    command: string | undefined
 }
 
 export interface ISetupSettings {
-    [SetupFields.versionSpec]: string;
-    [SetupFields.includePrerelease]: boolean;
-    [SetupFields.ignoreFailedSources]: boolean;
-    [SetupFields.preferLatestVersion]: boolean;
+    [SetupFields.versionSpec]: string
+    [SetupFields.includePrerelease]: boolean
+    [SetupFields.ignoreFailedSources]: boolean
+    [SetupFields.preferLatestVersion]: boolean
 }
 
 export interface ISettingsProvider {
-    getSetupSettings(): ISetupSettings;
+    getSetupSettings(): ISetupSettings
 }

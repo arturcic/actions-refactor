@@ -1,6 +1,6 @@
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import * as process from 'node:process';
+import * as fs from 'node:fs'
+import * as path from 'node:path'
+import * as process from 'node:process'
 
 /**
  * Sometimes, people want to look for local executable files
@@ -10,7 +10,7 @@ import * as process from 'node:process';
  * @return {string} An absolute path of given command, or undefined.
  */
 const isFilePath = (cmd: string): string | undefined => {
-    return cmd.includes(path.sep) ? path.resolve(cmd) : undefined;
+    return cmd.includes(path.sep) ? path.resolve(cmd) : undefined
 }
 
 /**
@@ -19,9 +19,9 @@ const isFilePath = (cmd: string): string | undefined => {
  * @param {string} filePath An absolute file path with an applicable extension appended.
  * @return {Promise<string>} Resolves absolute path or empty string.
  */
-const access = (filePath: string): Promise<string | undefined> => {
-    return new Promise(resolve => fs.access(filePath, fs.constants.X_OK, err => resolve(err ? undefined : filePath)));
-};
+const access = async (filePath: string): Promise<string | undefined> => {
+    return new Promise(resolve => fs.access(filePath, fs.constants.X_OK, err => resolve(err ? undefined : filePath)))
+}
 
 /**
  * Resolves if the given file is executable or not, regarding "PATHEXT" to be applied.
@@ -31,11 +31,11 @@ const access = (filePath: string): Promise<string | undefined> => {
  * @return {Promise<string>} Resolves the absolute file path just checked, or undefined.
  */
 const isExecutable = async (absPath: string, options: LookPathOption = {}): Promise<string | undefined> => {
-    const envVars = options.env || process.env;
-    const extension = (envVars.PATHEXT || '').split(path.delimiter).concat('');
-    const bins = await Promise.all(extension.map(ext => access(absPath + ext)));
-    return bins.find(bin => !!bin);
-};
+    const envVars = options.env || process.env
+    const extension = (envVars.PATHEXT || '').split(path.delimiter).concat('')
+    const bins = await Promise.all(extension.map(async ext => access(absPath + ext)))
+    return bins.find(bin => !!bin)
+}
 
 /**
  * Returns a list of directories on which the target command should be looked for.
@@ -45,11 +45,14 @@ const isExecutable = async (absPath: string, options: LookPathOption = {}): Prom
  * @return {string[]} Directories to dig into.
  */
 const getDirsToWalkThrough = (options: LookPathOption): string[] => {
-    const envVars = options.env || process.env;
-    const envName = process.platform === 'win32' ? 'Path' : 'PATH';
-    const envPath = envVars[envName] || '';
-    return envPath.split(path.delimiter).concat(options.include || []).filter(p => !(options.exclude || []).includes(p));
-};
+    const envVars = options.env || process.env
+    const envName = process.platform === 'win32' ? 'Path' : 'PATH'
+    const envPath = envVars[envName] || ''
+    return envPath
+        .split(path.delimiter)
+        .concat(options.include || [])
+        .filter(p => !(options.exclude || []).includes(p))
+}
 
 /**
  * Returns async promise with absolute file path of given command,
@@ -59,13 +62,12 @@ const getDirsToWalkThrough = (options: LookPathOption): string[] => {
  * @return {Promise<string|undefined>} Resolves absolute file path, or undefined if not found.
  */
 export async function lookPath(command: string, opt: LookPathOption = {}): Promise<string | undefined> {
+    const directPath = isFilePath(command)
+    if (directPath) return isExecutable(directPath, opt)
 
-    const directPath = isFilePath(command);
-    if (directPath) return isExecutable(directPath, opt);
-
-    const dirs = getDirsToWalkThrough(opt);
-    const bins = await Promise.all(dirs.map(dir => isExecutable(path.join(dir, command), opt)));
-    return bins.find(bin => !!bin);
+    const dirs = getDirsToWalkThrough(opt)
+    const bins = await Promise.all(dirs.map(async dir => isExecutable(path.join(dir, command), opt)))
+    return bins.find(bin => !!bin)
 }
 
 /**
@@ -76,15 +78,15 @@ export interface LookPathOption {
      * Additional paths to look for, would be dealt same as PATH env.
      * Example: ['/tmp/bin', 'usr/local/bin']
      */
-    include?: string[];
+    include?: string[]
     /**
      * Paths to exclude to look for.
      * Example: ['/mnt']
      */
-    exclude?: string[];
+    exclude?: string[]
     /**
      * Set of env var to be used ON BEHALF OF the existing env of your runtime.
      * If `include` or `exclude` are given, they will be applied to this env set.
      */
-    env?: NodeJS.ProcessEnv;
+    env?: NodeJS.ProcessEnv
 }

@@ -1,6 +1,6 @@
-import { resolve } from 'path';
-import { defineConfig, loadEnv, UserConfig } from 'vite';
-import { RollupOptions } from 'rollup';
+import { resolve } from 'path'
+import { defineConfig, loadEnv, UserConfig } from 'vite'
+import { RollupOptions } from 'rollup'
 
 const rollupOptions: RollupOptions = {
     external: [
@@ -16,7 +16,7 @@ const rollupOptions: RollupOptions = {
         'node:url',
         'node:fs',
         'node:path',
-        'perf_hooks',
+        'perf_hooks'
     ],
     output: {
         globals: {
@@ -25,22 +25,25 @@ const rollupOptions: RollupOptions = {
             'node:util': 'util',
             'node:net': 'net',
             'node:url': 'url',
-            perf_hooks: 'perf_hooks',
-        },
+            perf_hooks: 'perf_hooks'
+        }
         // inlineDynamicImports: true,
-    },
-};
+    }
+}
 
-export default ({ mode: agent }: Partial<UserConfig>) => {
-    console.log(`Building for mode: ${agent}`);
+const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
+    console.log(`Building for mode: ${agent}`)
 
-    process.env = { ...process.env, ...loadEnv(agent!, process.cwd()) };
+    if (agent != null) {
+        process.env = { ...process.env, ...loadEnv(agent, process.cwd()) }
+    }
 
-    const dirname = __dirname;
-    const tools =
-        ['gitversion', 'gitreleasemanager'].map(tool => ({
+    const dirname = __dirname
+    const tools = ['gitversion', 'gitreleasemanager']
+        .map(tool => ({
             [`${agent}/${tool}`]: resolve(dirname, `tools/${tool}/main.ts`)
-        })).reduce((acc, cur) => ({ ...acc, ...cur }), {});
+        }))
+        .reduce((acc, cur) => ({ ...acc, ...cur }), {})
 
     return defineConfig({
         resolve: {
@@ -50,7 +53,7 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
                 '@agents/azure': resolve(dirname, 'agents/azure'),
                 '@agents/github': resolve(dirname, 'agents/github'),
 
-                '@tools/common': resolve(dirname, 'tools/common'),
+                '@tools/common': resolve(dirname, 'tools/common')
             }
         },
         build: {
@@ -61,13 +64,13 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
                     manualChunks(id: string) {
                         // console.log(`id: ${id}`);
                         if (id.includes('node_modules')) {
-                            return `${agent}/vendor`;
+                            return `${agent}/vendor`
                         }
                         if (id.includes('agents/')) {
-                            return `${agent}/agent`;
+                            return `${agent}/agent`
                         }
                         if (id.includes('tools/common')) {
-                            return `tools`;
+                            return `tools`
                         }
                     }
                 }
@@ -80,13 +83,13 @@ export default ({ mode: agent }: Partial<UserConfig>) => {
                 }
             },
             emptyOutDir: false,
-            sourcemap: true,
+            sourcemap: true
             // minify: 'esbuild',
         },
         test: {
             globals: true,
-            include: ['**/*.test.ts'],
+            include: ['**/*.test.ts']
         }
-    } as UserConfig);
-};
-
+    } as UserConfig)
+}
+export default config
