@@ -141,21 +141,8 @@ export class BuildAgent implements IBuildAgent {
     }
 
     getBooleanInput(input: string, required?: boolean): boolean {
-        const trueValue = ['true', 'True', 'TRUE']
-        const falseValue = ['false', 'False', 'FALSE']
-        const val = this.getInput(input, required)
-
-        if (!val) {
-            if (required) throw new Error(`Input required and not supplied: ${input}`)
-            return false
-        }
-
-        if (trueValue.includes(val)) return true
-        if (falseValue.includes(val)) return false
-        throw new TypeError(
-            `Input does not meet YAML 1.2 "Core Schema" specification: ${input}\n` +
-                `Support boolean input list: \`true | True | TRUE | false | False | FALSE\``
-        )
+        const inputValue = this.getInput(input, required)
+        return (inputValue || 'false').toLowerCase() === 'true'
     }
 
     getInput(input: string, required?: boolean): string {
@@ -170,11 +157,6 @@ export class BuildAgent implements IBuildAgent {
         return this.getInput(input, required)
             .split('\n')
             .filter(x => x !== '')
-    }
-
-    isValidInputFile(input: string, file: string): boolean {
-        console.log(`isValidInputFile - ${input} - ${file}`)
-        return false
     }
 
     setFailed(message: string, done?: boolean): void {

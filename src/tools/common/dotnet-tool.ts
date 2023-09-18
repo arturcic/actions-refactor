@@ -86,6 +86,16 @@ export abstract class DotnetTool implements IDotnetTool {
         }
     }
 
+    protected isValidInputFile(input: string, file: string): boolean {
+        return this.filePathSupplied(input) && this.buildAgent.fileExists(file)
+    }
+
+    protected filePathSupplied(file: string): boolean {
+        const pathValue = path.resolve(this.buildAgent.getInput(file) || '')
+        const repoRoot = this.buildAgent.getSourceDir()
+        return pathValue !== repoRoot
+    }
+
     private async queryLatestMatch(toolName: string, versionSpec: string, includePrerelease: boolean): Promise<string | null> {
         this.buildAgent.info(
             `Querying tool versions for ${toolName}${versionSpec ? `@${versionSpec}` : ''} ${includePrerelease ? 'including pre-releases' : ''}`

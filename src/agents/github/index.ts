@@ -1,118 +1,111 @@
 import { IBuildAgent, IExecResult } from '@tools/common'
 
+import * as core from '@actions/core'
+import * as exe from '@actions/exec'
+import * as io from '@actions/io'
+import * as toolCache from '@actions/tool-cache'
+import fs from 'fs'
+
 export class BuildAgent implements IBuildAgent {
     get agentName(): string {
         return 'GitHub Actions'
     }
 
     addPath(inputPath: string): void {
-        console.log(`addPath - ${inputPath}`)
+        core.addPath(inputPath)
     }
 
     debug(message: string): void {
-        console.log(`[debug] ${message}`)
+        core.debug(message)
     }
 
     info(message: string): void {
-        console.log(`[info] - ${message}`)
+        core.info(message)
     }
 
     warn(message: string): void {
-        console.warn(`[warn] - ${message}`)
+        core.warning(message)
     }
 
     error(message: string): void {
-        console.error(`[error] - ${message}`)
+        core.error(message)
     }
 
     async exec(exec: string, args: string[]): Promise<IExecResult> {
-        console.log(`exec - ${exec} - ${args}`)
-        return Promise.resolve({} as IExecResult)
+        const dotnetPath = await io.which(exec, true)
+        const { exitCode, stdout, stderr } = await exe.getExecOutput(`"${dotnetPath}"`, args)
+        return {
+            code: exitCode,
+            error: null,
+            stderr,
+            stdout
+        }
     }
 
     async cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string> {
-        console.log(`cacheDir - ${sourceDir} - ${tool} - ${version} - ${arch}`)
-        return Promise.resolve('')
-    }
-
-    async createTempDir(): Promise<string> {
-        console.log(`createTempDir`)
-        return Promise.resolve('')
+        return toolCache.cacheDir(sourceDir, tool, version, arch)
     }
 
     dirExists(file: string): boolean {
-        console.log(`directoryExists - ${file}`)
-        return false
+        return fs.existsSync(file) && fs.statSync(file).isDirectory()
     }
 
     fileExists(file: string): boolean {
-        console.log(`fileExists - ${file}`)
-        return false
+        return fs.existsSync(file) && fs.statSync(file).isFile()
     }
 
     findLocalTool(toolName: string, versionSpec: string, arch?: string): string | null {
-        console.log(`find - ${toolName} - ${versionSpec} - ${arch}`)
-        return ''
+        return toolCache.find(toolName, versionSpec, arch)
     }
 
     getSourceDir(): string {
-        console.log('getSourceDir')
-        return 'getSourceDir'
+        return this.getVariable('GITHUB_WORKSPACE')
     }
 
     getTempRootDir(): string {
-        console.log('getTempDir')
-        return 'getTempDir'
+        return this.getVariable('RUNNER_TEMP')
     }
 
     getCacheRootDir(): string {
-        console.log('getCacheRoot')
-        return 'getCacheRoot'
+        return this.getVariable('RUNNER_TOOL_CACHE')
     }
 
     getBooleanInput(input: string, required?: boolean): boolean {
-        console.log(`getBooleanInput - ${input} - ${required}`)
-        return false
+        const inputValue = this.getInput(input, required)
+        return (inputValue || 'false').toLowerCase() === 'true'
     }
 
     getInput(input: string, required?: boolean): string {
-        console.log(`getInput - ${input} - ${required}`)
-        return 'getInput'
+        return core.getInput(input, { required } as core.InputOptions)?.trim()
     }
 
     getListInput(input: string, required?: boolean): string[] {
-        console.log(`getListInput - ${input} - ${required}`)
-        return ['getInput']
+        return this.getInput(input, required)
+            .split('\n')
+            .filter(x => x !== '')
     }
 
-    isValidInputFile(input: string, file: string): boolean {
-        console.log(`isValidInputFile - ${input} - ${file}`)
-        return false
-    }
-
-    setFailed(message: string, done?: boolean): void {
-        console.log(`setFailed - ${message} - ${done}`)
+    setFailed(message: string, _: boolean): void {
+        core.setFailed(message)
     }
 
     setOutput(name: string, value: string): void {
-        console.log(`setOutput - ${name} - ${value}`)
+        core.setOutput(name, value)
     }
 
-    setSucceeded(message: string, done?: boolean): void {
-        console.log(`setSucceeded - ${message} - ${done}`)
+    setSucceeded(_message: string, _done?: boolean): void {
+        //
     }
 
     getVariable(name: string): string {
-        console.log(`getVariable - ${name}`)
-        return ''
+        return process.env[name] || ''
     }
 
-    setVariable(name: string, val: string): void {
-        console.log(`setVariable - ${name} - ${val}`)
+    setVariable(name: string, value: string): void {
+        core.exportVariable(name, value)
     }
 
     async which(tool: string, check?: boolean): Promise<string> {
-        console.log(`which - ${tool} - ${check}`)
-        return Promise.resolve('')
+        return io.which(tool, check)
     }
 }

@@ -60,7 +60,7 @@ export class GitVersionTool extends DotnetTool {
         const { useConfigFile, configFilePath, updateAssemblyInfo, updateAssemblyInfoFilename, additionalArguments } = options
 
         if (useConfigFile) {
-            if (this.buildAgent.isValidInputFile('configFilePath', configFilePath)) {
+            if (this.isValidInputFile('configFilePath', configFilePath)) {
                 args.push('/config', configFilePath)
             } else {
                 throw new Error(`GitVersion configuration file not found at ${configFilePath}`)
@@ -71,7 +71,7 @@ export class GitVersionTool extends DotnetTool {
 
             // You can specify 'updateAssemblyInfo' without 'updateAssemblyInfoFilename'.
             if (updateAssemblyInfoFilename?.length > 0) {
-                if (this.buildAgent.isValidInputFile('updateAssemblyInfoFilename', updateAssemblyInfoFilename)) {
+                if (this.isValidInputFile('updateAssemblyInfoFilename', updateAssemblyInfoFilename)) {
                     args.push(updateAssemblyInfoFilename)
                 } else {
                     throw new Error(`AssemblyInfoFilename file not found at ${updateAssemblyInfoFilename}`)

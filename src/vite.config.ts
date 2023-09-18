@@ -3,7 +3,27 @@ import { defineConfig, loadEnv, UserConfig } from 'vite'
 import { RollupOptions } from 'rollup'
 
 const rollupOptions: RollupOptions = {
-    external: ['console', 'os', 'fs', 'path', 'process', 'child_process', 'util', 'crypto', 'buffer', 'stream', 'net', 'url'],
+    external: [
+        'console',
+        'os',
+        'fs',
+        'path',
+        'process',
+        'child_process',
+        'util',
+        'crypto',
+        'buffer',
+        'stream',
+        'net',
+        'http',
+        'https',
+        'url',
+        'events',
+        'perf_hooks',
+        'zlib',
+        'assert',
+        'tls'
+    ],
     output: {
         globals: {
             'node:stream': 'stream',

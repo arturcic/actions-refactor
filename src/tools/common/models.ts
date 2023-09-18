@@ -40,8 +40,6 @@ export interface IBuildAgent {
 
     getListInput(input: string, required?: boolean): string[]
 
-    isValidInputFile(input: string, file: string): boolean
-
     setFailed(message: string, done?: boolean): void
 
     setOutput(name: string, value: string): void
