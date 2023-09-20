@@ -116,7 +116,10 @@
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/unbound-method": "error"
     },
-    "ignorePatterns": "packages/glob/__tests__/_temp/**/",
+    "ignorePatterns": [
+        "packages/glob/__tests__/_temp/**/",
+        "dist/"
+    ],
     "env": {
         "node": true,
         "es6": true

@@ -36,6 +36,7 @@
         "typescript": "^5.2.2",
         "vite": "^4.4.5",
         "vite-node": "^0.34.3",
+        "vite-tsconfig-paths": "^4.2.1",
         "vitest": "^0.34.3"
     },
     "dependencies": {
@@ -45,6 +46,10 @@
         "@actions/tool-cache": "^2.0.1",
         "azure-pipelines-task-lib": "^5.0.0-preview.0",
         "azure-pipelines-tool-lib": "^2.0.4",
-        "semver": "^7.5.4"
+        "semver": "^7.5.4",
+        "shelljs": "Everspace/shelljs#b364c45"
+    },
+    "overrides": {
+        "shelljs": "$shelljs"
     }
 }

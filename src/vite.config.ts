@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import { defineConfig, loadEnv, UserConfig } from 'vite'
 import { RollupOptions } from 'rollup'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 const rollupOptions: RollupOptions = {
     external: [
@@ -22,6 +23,7 @@ const rollupOptions: RollupOptions = {
         'perf_hooks',
         'zlib',
         'assert',
+        'timers',
         'tls'
     ],
     output: {
@@ -53,30 +55,28 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
         .reduce((acc, cur) => ({ ...acc, ...cur }), {})
 
     return defineConfig({
-        resolve: {
-            alias: {
-                '@agents/common': resolve(dirname, 'agents/common'),
-                '@agents/fake': resolve(dirname, 'agents/fake'),
-                '@agents/azure': resolve(dirname, 'agents/azure'),
-                '@agents/github': resolve(dirname, 'agents/github'),
-
-                '@tools/common': resolve(dirname, 'tools/common')
-            }
-        },
+        plugins: [
+            tsconfigPaths({
+                root: '..'
+            })
+        ],
         build: {
             rollupOptions: {
                 ...rollupOptions,
                 output: {
                     ...rollupOptions.output,
+                    chunkFileNames: '[name].js',
                     manualChunks(id: string) {
                         // console.log(`id: ${id}`);
-                        if (id.includes('node_modules')) {
-                            return `${agent}/vendor`
-                        }
-                        if (id.includes('agents/')) {
-                            return `${agent}/agent`
-                        }
-                        if (id.includes('tools/common')) {
+                        if (id.includes('node_modules/azure-pipelines')) {
+                            return `azure/bundle`
+                        } else if (id.includes('node_modules/@actions')) {
+                            return `github/bundle`
+                        } else if (id.includes('node_modules')) {
+                            return `vendor`
+                        } else if (id.includes('agents/')) {
+                            return `${agent}/agent-wrapper`
+                        } else if (id.includes('tools/common')) {
                             return `tools`
                         }
                     }
@@ -90,8 +90,8 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
                 }
             },
             emptyOutDir: false,
-            sourcemap: true
-            // minify: 'esbuild',
+            sourcemap: true,
+            minify: false
         },
         test: {
             globals: true,
