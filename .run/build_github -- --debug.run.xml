@@ -1,10 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="build:fake" type="js.build_tools.npm" folderName="build" activateToolWindowBeforeRun="false">
+  <configuration default="false" name="build:github -- --debug" type="js.build_tools.npm" folderName="build" activateToolWindowBeforeRun="false" nameIsGenerated="true">
     <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>
-      <script value="build:fake" />
+      <script value="build:github" />
     </scripts>
+    <arguments value="-- --debug" />
     <node-interpreter value="project" />
     <envs />
     <method v="2" />

@@ -1,10 +1,11 @@
-import { IBuildAgent, IExecResult } from '@tools/common'
+
 
 import * as core from '@actions/core'
 import * as exe from '@actions/exec'
 import * as io from '@actions/io'
 import * as toolCache from '@actions/tool-cache'
 import fs from 'fs'
+import { IBuildAgent, IExecResult } from '@agents/common'
 
 export class BuildAgent implements IBuildAgent {
     get agentName(): string {

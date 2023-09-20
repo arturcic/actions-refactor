@@ -1,7 +1,7 @@
 import { getAgent } from '@agents/common'
 import { parseCliArgs } from '@tools/common'
 
-const { agentName } = await getAgent()
-const { command } = parseCliArgs()
+// const { agentName } = await getAgent()
+// const { command } = parseCliArgs()
 
-console.log(`[GitReleaseManager] runs ${command} on ${agentName}`)
+// console.log(`[GitReleaseManager] runs ${command} on ${agentName}`)

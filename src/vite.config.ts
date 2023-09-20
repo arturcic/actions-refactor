@@ -1,24 +1,19 @@
 import { resolve } from 'path'
 import { builtinModules } from 'node:module'
 import { defineConfig, loadEnv, UserConfig } from 'vite'
-import { RollupOptions } from 'rollup'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
-const rollupOptions: RollupOptions = {
-    external: [...builtinModules, ...builtinModules.map(module => `node:${module}`)],
-    output: {
-        globals: {
-            'node:stream': 'stream',
-            'node:buffer': 'buffer',
-            'node:util': 'util',
-            'node:net': 'net',
-            'node:url': 'url',
-            'node:os': 'os',
-            perf_hooks: 'perf_hooks'
-        }
+const output = {
+    globals: {
+        'node:stream': 'stream',
+        'node:buffer': 'buffer',
+        'node:util': 'util',
+        'node:net': 'net',
+        'node:url': 'url',
+        'node:os': 'os',
+        perf_hooks: 'perf_hooks'
     }
 }
-
 const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
     console.log(`Building for mode: ${agent}`)
 
@@ -29,7 +24,7 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
     const dirname = __dirname
     const tools = ['gitversion', 'gitreleasemanager']
         .map(tool => ({
-            [`${agent}/${tool}`]: resolve(dirname, `tools/${tool}/main.ts`)
+            [`tools/${tool}`]: resolve(dirname, `tools/${tool}/main.ts`)
         }))
         .reduce((acc, cur) => ({ ...acc, ...cur }), {})
 
@@ -41,33 +36,33 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
             })
         ],
         build: {
-            rollupOptions: {
-                ...rollupOptions,
-                output: {
-                    ...rollupOptions.output,
-                    chunkFileNames: '[name].js',
-                    manualChunks(id: string) {
-                        // console.log(`id: ${id}`);
-                        if (id.includes('node_modules/azure-pipelines')) {
-                            return `@agents/azure`
-                        } else if (id.includes('node_modules/@actions')) {
-                            return `@agents/github`
-                        } else if (id.includes('node_modules')) {
-                            return `vendor`
-                        } else if (id.includes('agents/')) {
-                            return `${agent}/agent-adapter`
-                        } else if (id.includes('tools/common')) {
-                            return `tools`
-                        }
-                    }
-                }
-            },
             target: 'esnext',
             lib: {
                 formats: ['es'],
                 entry: {
                     ...tools,
-                    [`@agents/${agent}`]: resolve(dirname, `agents/${agent}/index.ts`)
+                    [`agents/${agent}/agent`]: resolve(dirname, `agents/${agent}/index.ts`)
+                }
+            },
+            rollupOptions: {
+                external: [...builtinModules, ...builtinModules.map(module => `node:${module}`)],
+                output: {
+                    ...output,
+                    chunkFileNames: '[name].js',
+                    manualChunks(id: string) {
+                        // console.log(`id: ${id}`)
+                        if (id.includes('node_modules/azure-pipelines')) {
+                            return `agents/azure/toolkit`
+                        } else if (id.includes('node_modules/@actions')) {
+                            return `agents/github/toolkit`
+                        } else if (id.includes('node_modules')) {
+                            return `tools/vendor`
+                        } else if (id.includes('tools/common')) {
+                            return `tools/tools-common`
+                        } else if (id.includes('agents/common')) {
+                            return `agents/${agent}/adapter`
+                        }
+                    }
                 }
             },
             emptyOutDir: false,

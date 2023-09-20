@@ -1,7 +1,7 @@
 import * as taskLib from 'azure-pipelines-task-lib/task'
 import * as toolLib from 'azure-pipelines-tool-lib/tool'
 
-import { IBuildAgent, IExecResult } from '@tools/common'
+import { IBuildAgent, IExecResult } from '@agents/common'
 
 export class BuildAgent implements IBuildAgent {
     get agentName(): string {

@@ -10,7 +10,8 @@ export * from './dotnet-tool'
 export function parseCliArgs(): CliArgs {
     return parseArgs({
         options: {
-            command: { type: 'string', short: 'c' }
+            command: { type: 'string', short: 'c' },
+            buildAgent: { type: 'string', short: 'a' }
         }
     }).values as CliArgs
 }

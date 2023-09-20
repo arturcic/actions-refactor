@@ -1,18 +1,24 @@
-import { getAgent } from '@agents/common'
 import { parseCliArgs } from '@tools/common'
 import { GitVersionTool } from './tool'
+import { IBuildAgent } from '@agents/common'
+
+const { command, buildAgent } = parseCliArgs()
 
 const agent = await getAgent()
-
 const gitVersionTool = new GitVersionTool(agent)
 
-const { command } = parseCliArgs()
 switch (command) {
     case 'setup':
         await setup()
         break
     case 'execute':
         await run()
+}
+
+async function getAgent(): Promise<IBuildAgent> {
+    const agent = `../agents/${buildAgent}/agent.js`
+    const module: { BuildAgent: new () => IBuildAgent } = await import(agent)
+    return new module.BuildAgent()
 }
 
 async function setup(): Promise<void> {

@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { IBuildAgent, ISetupSettings } from '@tools/common'
+import { ISetupSettings } from '@tools/common'
 import { GitVersionTool } from './tool'
 import { GitVersionSettingsProvider } from './settings'
+import { IBuildAgent } from '@agents/common'
 
 const businessHours = [9, 17]
 

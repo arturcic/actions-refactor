@@ -5,8 +5,8 @@ import * as process from 'process'
 import * as util from 'util'
 import { exec as execNonPromise } from 'child_process'
 
-import { IBuildAgent, IExecResult } from '@tools/common'
 import { lookPath } from './internal/lookPath'
+import { IBuildAgent, IExecResult } from '@agents/common'
 
 export class BuildAgent implements IBuildAgent {
     get agentName(): string {

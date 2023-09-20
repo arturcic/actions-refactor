@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
-import { IBuildAgent } from '@tools/common'
+
+import { IBuildAgent } from './models'
 
 export async function getAgent(): Promise<IBuildAgent> {
     const agentType = import.meta.env.MODE
@@ -14,3 +15,5 @@ export async function getAgent(): Promise<IBuildAgent> {
     }
     return new agent.BuildAgent()
 }
+
+export type { IExecResult, IBuildAgent } from './models'

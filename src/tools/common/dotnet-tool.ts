@@ -1,10 +1,11 @@
-import { IBuildAgent, IExecResult, ISettingsProvider } from './models'
+import { ISettingsProvider } from './models'
 import os from 'os'
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
 
 import * as semver from 'semver'
+import { IBuildAgent, IExecResult } from '@agents/common'
 
 export interface IDotnetTool {
     get toolName(): string
