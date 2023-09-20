@@ -1,31 +1,11 @@
 import { resolve } from 'path'
+import { builtinModules } from 'node:module'
 import { defineConfig, loadEnv, UserConfig } from 'vite'
 import { RollupOptions } from 'rollup'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const rollupOptions: RollupOptions = {
-    external: [
-        'console',
-        'os',
-        'fs',
-        'path',
-        'process',
-        'child_process',
-        'util',
-        'crypto',
-        'buffer',
-        'stream',
-        'net',
-        'http',
-        'https',
-        'url',
-        'events',
-        'perf_hooks',
-        'zlib',
-        'assert',
-        'timers',
-        'tls'
-    ],
+    external: [...builtinModules, ...builtinModules.map(module => `node:${module}`)],
     output: {
         globals: {
             'node:stream': 'stream',
@@ -36,7 +16,6 @@ const rollupOptions: RollupOptions = {
             'node:os': 'os',
             perf_hooks: 'perf_hooks'
         }
-        // inlineDynamicImports: true,
     }
 }
 
@@ -55,6 +34,7 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
         .reduce((acc, cur) => ({ ...acc, ...cur }), {})
 
     return defineConfig({
+        root: resolve(dirname, '..'),
         plugins: [
             tsconfigPaths({
                 root: '..'
@@ -69,9 +49,9 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
                     manualChunks(id: string) {
                         // console.log(`id: ${id}`);
                         if (id.includes('node_modules/azure-pipelines')) {
-                            return `azure/bundle`
+                            return `@agents/azure`
                         } else if (id.includes('node_modules/@actions')) {
-                            return `github/bundle`
+                            return `@agents/github`
                         } else if (id.includes('node_modules')) {
                             return `vendor`
                         } else if (id.includes('agents/')) {
@@ -86,7 +66,8 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
             lib: {
                 formats: ['es'],
                 entry: {
-                    ...tools
+                    ...tools,
+                    [`@agents/${agent}`]: resolve(dirname, `agents/${agent}/index.ts`)
                 }
             },
             emptyOutDir: false,
@@ -99,4 +80,5 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
         }
     } as UserConfig)
 }
+
 export default config
