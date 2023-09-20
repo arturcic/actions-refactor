@@ -55,7 +55,7 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
                         } else if (id.includes('node_modules')) {
                             return `vendor`
                         } else if (id.includes('agents/')) {
-                            return `${agent}/agent-wrapper`
+                            return `${agent}/agent-adapter`
                         } else if (id.includes('tools/common')) {
                             return `tools`
                         }
