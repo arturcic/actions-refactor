@@ -1,21 +1,4 @@
 import { p as prependPath_1, t as task, c as cacheDir_1, f as findLocalTool_1 } from './vendor.js';
-import 'os';
-import 'fs';
-import 'path';
-import 'events';
-import 'assert';
-import 'util';
-import 'child_process';
-import 'stream';
-import 'crypto';
-import '../vendor.js';
-import 'url';
-import 'http';
-import 'https';
-import 'zlib';
-import 'net';
-import 'tls';
-import 'process';
 
 class BuildAgent {
   get agentName() {

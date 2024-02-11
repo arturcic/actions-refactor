@@ -1,11 +1,5 @@
 import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs } from './tools-common.js';
 import 'util';
-import 'node:os';
-import 'node:fs';
-import 'node:path';
-import 'node:crypto';
-import '../agents/vendor.js';
-import '../agents/fake/vendor.js';
 
 var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
   ExecuteFields2["targetPath"] = "targetPath";

@@ -1,20 +1,20 @@
-import require$$1$1 from 'os';
+import require$$0$2 from 'os';
 import require$$1 from 'fs';
 import require$$0$1 from 'path';
 import require$$2 from 'events';
 import require$$5 from 'assert';
-import require$$0$3 from 'util';
-import require$$1$2 from 'child_process';
-import require$$0$2 from 'stream';
+import require$$0$4 from 'util';
+import require$$1$1 from 'child_process';
+import require$$0$3 from 'stream';
 import require$$2$1 from 'crypto';
-import { s as semverExports, a as semverExports$1, b as semverExports$2, c as semverCompare } from '../vendor.js';
-import require$$1$3 from 'url';
+import require$$1$2 from 'url';
 import require$$2$2 from 'http';
 import require$$3$1 from 'https';
 import require$$3 from 'zlib';
 import 'net';
-import require$$1$4 from 'tls';
+import require$$1$3 from 'tls';
 import require$$3$2 from 'process';
+import { s as semverExports, a as semverExports$1, b as semverExports$2, c as semverCompare } from '../vendor.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -818,7 +818,7 @@ const forEachStep = (self, fn, node, thisp) => {
 
 var lruCache = LRUCache;
 
-var task$1 = {};
+var task = {};
 
 var shell = {};
 
@@ -849,7 +849,7 @@ var old$1 = {};
 
 var pathModule = require$$0$1;
 var isWindows$1 = process.platform === 'win32';
-var fs$9 = require$$1;
+var fs$7 = require$$1;
 
 // JavaScript implementation of realpath, ported from node pre-v6
 
@@ -944,7 +944,7 @@ old$1.realpathSync = function realpathSync(p, cache) {
 
     // On windows, check that the root exists. On unix there is no need.
     if (isWindows$1 && !knownHard[base]) {
-      fs$9.lstatSync(base);
+      fs$7.lstatSync(base);
       knownHard[base] = true;
     }
   }
@@ -971,7 +971,7 @@ old$1.realpathSync = function realpathSync(p, cache) {
       // some known symbolic link.  no need to stat again.
       resolvedLink = cache[base];
     } else {
-      var stat = fs$9.lstatSync(base);
+      var stat = fs$7.lstatSync(base);
       if (!stat.isSymbolicLink()) {
         knownHard[base] = true;
         if (cache) cache[base] = base;
@@ -988,8 +988,8 @@ old$1.realpathSync = function realpathSync(p, cache) {
         }
       }
       if (linkTarget === null) {
-        fs$9.statSync(base);
-        linkTarget = fs$9.readlinkSync(base);
+        fs$7.statSync(base);
+        linkTarget = fs$7.readlinkSync(base);
       }
       resolvedLink = pathModule.resolve(previous, linkTarget);
       // track this, if given a cache.
@@ -1046,7 +1046,7 @@ old$1.realpath = function realpath(p, cache, cb) {
 
     // On windows, check that the root exists. On unix there is no need.
     if (isWindows$1 && !knownHard[base]) {
-      fs$9.lstat(base, function(err) {
+      fs$7.lstat(base, function(err) {
         if (err) return cb(err);
         knownHard[base] = true;
         LOOP();
@@ -1083,7 +1083,7 @@ old$1.realpath = function realpath(p, cache, cb) {
       return gotResolvedLink(cache[base]);
     }
 
-    return fs$9.lstat(base, gotStat);
+    return fs$7.lstat(base, gotStat);
   }
 
   function gotStat(err, stat) {
@@ -1105,10 +1105,10 @@ old$1.realpath = function realpath(p, cache, cb) {
         return gotTarget(null, seenLinks[id], base);
       }
     }
-    fs$9.stat(base, function(err) {
+    fs$7.stat(base, function(err) {
       if (err) return cb(err);
 
-      fs$9.readlink(base, function(err, target) {
+      fs$7.readlink(base, function(err, target) {
         if (!isWindows$1) seenLinks[id] = target;
         gotTarget(err, target);
       });
@@ -1137,9 +1137,9 @@ realpath.realpathSync = realpathSync;
 realpath.monkeypatch = monkeypatch;
 realpath.unmonkeypatch = unmonkeypatch;
 
-var fs$8 = require$$1;
-var origRealpath = fs$8.realpath;
-var origRealpathSync = fs$8.realpathSync;
+var fs$6 = require$$1;
+var origRealpath = fs$6.realpath;
+var origRealpathSync = fs$6.realpathSync;
 
 var version = process.version;
 var ok = /^v[0-5]\./.test(version);
@@ -1188,16 +1188,16 @@ function realpathSync (p, cache) {
 }
 
 function monkeypatch () {
-  fs$8.realpath = realpath;
-  fs$8.realpathSync = realpathSync;
+  fs$6.realpath = realpath;
+  fs$6.realpathSync = realpathSync;
 }
 
 function unmonkeypatch () {
-  fs$8.realpath = origRealpath;
-  fs$8.realpathSync = origRealpathSync;
+  fs$6.realpath = origRealpath;
+  fs$6.realpathSync = origRealpathSync;
 }
 
-var concatMap$3 = function (xs, fn) {
+var concatMap$1 = function (xs, fn) {
     var res = [];
     for (var i = 0; i < xs.length; i++) {
         var x = fn(xs[i], i);
@@ -1211,8 +1211,8 @@ var isArray$4 = Array.isArray || function (xs) {
     return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-var balancedMatch = balanced$3;
-function balanced$3(a, b, str) {
+var balancedMatch = balanced$1;
+function balanced$1(a, b, str) {
   if (a instanceof RegExp) a = maybeMatch(a, str);
   if (b instanceof RegExp) b = maybeMatch(b, str);
 
@@ -1232,7 +1232,7 @@ function maybeMatch(reg, str) {
   return m ? m[0] : null;
 }
 
-balanced$3.range = range;
+balanced$1.range = range;
 function range(a, b, str) {
   var begs, beg, left, right, result;
   var ai = str.indexOf(a);
@@ -1273,49 +1273,49 @@ function range(a, b, str) {
   return result;
 }
 
-var concatMap$2 = concatMap$3;
-var balanced$2 = balancedMatch;
+var concatMap = concatMap$1;
+var balanced = balancedMatch;
 
-var braceExpansion$2 = expandTop$2;
+var braceExpansion = expandTop;
 
-var escSlash$2 = '\0SLASH'+Math.random()+'\0';
-var escOpen$2 = '\0OPEN'+Math.random()+'\0';
-var escClose$2 = '\0CLOSE'+Math.random()+'\0';
-var escComma$2 = '\0COMMA'+Math.random()+'\0';
-var escPeriod$2 = '\0PERIOD'+Math.random()+'\0';
+var escSlash = '\0SLASH'+Math.random()+'\0';
+var escOpen = '\0OPEN'+Math.random()+'\0';
+var escClose = '\0CLOSE'+Math.random()+'\0';
+var escComma = '\0COMMA'+Math.random()+'\0';
+var escPeriod = '\0PERIOD'+Math.random()+'\0';
 
-function numeric$2(str) {
+function numeric(str) {
   return parseInt(str, 10) == str
     ? parseInt(str, 10)
     : str.charCodeAt(0);
 }
 
-function escapeBraces$2(str) {
-  return str.split('\\\\').join(escSlash$2)
-            .split('\\{').join(escOpen$2)
-            .split('\\}').join(escClose$2)
-            .split('\\,').join(escComma$2)
-            .split('\\.').join(escPeriod$2);
+function escapeBraces(str) {
+  return str.split('\\\\').join(escSlash)
+            .split('\\{').join(escOpen)
+            .split('\\}').join(escClose)
+            .split('\\,').join(escComma)
+            .split('\\.').join(escPeriod);
 }
 
-function unescapeBraces$2(str) {
-  return str.split(escSlash$2).join('\\')
-            .split(escOpen$2).join('{')
-            .split(escClose$2).join('}')
-            .split(escComma$2).join(',')
-            .split(escPeriod$2).join('.');
+function unescapeBraces(str) {
+  return str.split(escSlash).join('\\')
+            .split(escOpen).join('{')
+            .split(escClose).join('}')
+            .split(escComma).join(',')
+            .split(escPeriod).join('.');
 }
 
 
 // Basically just str.split(","), but handling cases
 // where we have nested braced sections, which should be
 // treated as individual members, like {a,{b,c},d}
-function parseCommaParts$2(str) {
+function parseCommaParts(str) {
   if (!str)
     return [''];
 
   var parts = [];
-  var m = balanced$2('{', '}', str);
+  var m = balanced('{', '}', str);
 
   if (!m)
     return str.split(',');
@@ -1326,7 +1326,7 @@ function parseCommaParts$2(str) {
   var p = pre.split(',');
 
   p[p.length-1] += '{' + body + '}';
-  var postParts = parseCommaParts$2(post);
+  var postParts = parseCommaParts(post);
   if (post.length) {
     p[p.length-1] += postParts.shift();
     p.push.apply(p, postParts);
@@ -1337,7 +1337,7 @@ function parseCommaParts$2(str) {
   return parts;
 }
 
-function expandTop$2(str) {
+function expandTop(str) {
   if (!str)
     return [];
 
@@ -1351,27 +1351,27 @@ function expandTop$2(str) {
     str = '\\{\\}' + str.substr(2);
   }
 
-  return expand$5(escapeBraces$2(str), true).map(unescapeBraces$2);
+  return expand$2(escapeBraces(str), true).map(unescapeBraces);
 }
 
-function embrace$2(str) {
+function embrace(str) {
   return '{' + str + '}';
 }
-function isPadded$2(el) {
+function isPadded(el) {
   return /^-?0\d/.test(el);
 }
 
-function lte$2(i, y) {
+function lte(i, y) {
   return i <= y;
 }
-function gte$2(i, y) {
+function gte(i, y) {
   return i >= y;
 }
 
-function expand$5(str, isTop) {
+function expand$2(str, isTop) {
   var expansions = [];
 
-  var m = balanced$2('{', '}', str);
+  var m = balanced('{', '}', str);
   if (!m || /\$$/.test(m.pre)) return [str];
 
   var isNumericSequence = /^-?\d+\.\.-?\d+(?:\.\.-?\d+)?$/.test(m.body);
@@ -1381,8 +1381,8 @@ function expand$5(str, isTop) {
   if (!isSequence && !isOptions) {
     // {a},b}
     if (m.post.match(/,.*\}/)) {
-      str = m.pre + '{' + m.body + escClose$2 + m.post;
-      return expand$5(str);
+      str = m.pre + '{' + m.body + escClose + m.post;
+      return expand$2(str);
     }
     return [str];
   }
@@ -1391,13 +1391,13 @@ function expand$5(str, isTop) {
   if (isSequence) {
     n = m.body.split(/\.\./);
   } else {
-    n = parseCommaParts$2(m.body);
+    n = parseCommaParts(m.body);
     if (n.length === 1) {
       // x{{a,b}}y ==> x{a}y x{b}y
-      n = expand$5(n[0], false).map(embrace$2);
+      n = expand$2(n[0], false).map(embrace);
       if (n.length === 1) {
         var post = m.post.length
-          ? expand$5(m.post, false)
+          ? expand$2(m.post, false)
           : [''];
         return post.map(function(p) {
           return m.pre + n[0] + p;
@@ -1412,25 +1412,25 @@ function expand$5(str, isTop) {
   // no need to expand pre, since it is guaranteed to be free of brace-sets
   var pre = m.pre;
   var post = m.post.length
-    ? expand$5(m.post, false)
+    ? expand$2(m.post, false)
     : [''];
 
   var N;
 
   if (isSequence) {
-    var x = numeric$2(n[0]);
-    var y = numeric$2(n[1]);
+    var x = numeric(n[0]);
+    var y = numeric(n[1]);
     var width = Math.max(n[0].length, n[1].length);
     var incr = n.length == 3
-      ? Math.abs(numeric$2(n[2]))
+      ? Math.abs(numeric(n[2]))
       : 1;
-    var test = lte$2;
+    var test = lte;
     var reverse = y < x;
     if (reverse) {
       incr *= -1;
-      test = gte$2;
+      test = gte;
     }
-    var pad = n.some(isPadded$2);
+    var pad = n.some(isPadded);
 
     N = [];
 
@@ -1456,7 +1456,7 @@ function expand$5(str, isTop) {
       N.push(c);
     }
   } else {
-    N = concatMap$2(n, function(el) { return expand$5(el, false) });
+    N = concatMap(n, function(el) { return expand$2(el, false) });
   }
 
   for (var j = 0; j < N.length; j++) {
@@ -1470,18 +1470,18 @@ function expand$5(str, isTop) {
   return expansions;
 }
 
-var minimatch_1$2 = minimatch$3;
-minimatch$3.Minimatch = Minimatch$3;
+var minimatch_1$1 = minimatch$2;
+minimatch$2.Minimatch = Minimatch$2;
 
-var path$a = (function () { try { return require('path') } catch (e) {}}()) || {
+var path$8 = (function () { try { return require('path') } catch (e) {}}()) || {
   sep: '/'
 };
-minimatch$3.sep = path$a.sep;
+minimatch$2.sep = path$8.sep;
 
-var GLOBSTAR$2 = minimatch$3.GLOBSTAR = Minimatch$3.GLOBSTAR = {};
-var expand$4 = braceExpansion$2;
+var GLOBSTAR$1 = minimatch$2.GLOBSTAR = Minimatch$2.GLOBSTAR = {};
+var expand$1 = braceExpansion;
 
-var plTypes$2 = {
+var plTypes$1 = {
   '!': { open: '(?:(?!(?:', close: '))[^/]*?)'},
   '?': { open: '(?:', close: ')?' },
   '+': { open: '(?:', close: ')+' },
@@ -1491,25 +1491,25 @@ var plTypes$2 = {
 
 // any single thing other than /
 // don't need to escape / when using new RegExp()
-var qmark$2 = '[^/]';
+var qmark$1 = '[^/]';
 
 // * => any number of characters
-var star$2 = qmark$2 + '*?';
+var star$1 = qmark$1 + '*?';
 
 // ** when dots are allowed.  Anything goes, except .. and .
 // not (^ or / followed by one or two dots followed by $ or /),
 // followed by anything, any number of times.
-var twoStarDot$2 = '(?:(?!(?:\\\/|^)(?:\\.{1,2})($|\\\/)).)*?';
+var twoStarDot$1 = '(?:(?!(?:\\\/|^)(?:\\.{1,2})($|\\\/)).)*?';
 
 // not a ^ or / followed by a dot,
 // followed by anything, any number of times.
-var twoStarNoDot$2 = '(?:(?!(?:\\\/|^)\\.).)*?';
+var twoStarNoDot$1 = '(?:(?!(?:\\\/|^)\\.).)*?';
 
 // characters that need to be escaped in RegExp.
-var reSpecials$2 = charSet$2('().*{}+?[]^$\\!');
+var reSpecials$1 = charSet$1('().*{}+?[]^$\\!');
 
 // "abc" -> { a:true, b:true, c:true }
-function charSet$2 (s) {
+function charSet$1 (s) {
   return s.split('').reduce(function (set, c) {
     set[c] = true;
     return set
@@ -1517,17 +1517,17 @@ function charSet$2 (s) {
 }
 
 // normalizes slashes.
-var slashSplit$2 = /\/+/;
+var slashSplit$1 = /\/+/;
 
-minimatch$3.filter = filter$2;
-function filter$2 (pattern, options) {
+minimatch$2.filter = filter$1;
+function filter$1 (pattern, options) {
   options = options || {};
   return function (p, i, list) {
-    return minimatch$3(p, pattern, options)
+    return minimatch$2(p, pattern, options)
   }
 }
 
-function ext$2 (a, b) {
+function ext$1 (a, b) {
   b = b || {};
   var t = {};
   Object.keys(a).forEach(function (k) {
@@ -1539,53 +1539,53 @@ function ext$2 (a, b) {
   return t
 }
 
-minimatch$3.defaults = function (def) {
+minimatch$2.defaults = function (def) {
   if (!def || typeof def !== 'object' || !Object.keys(def).length) {
-    return minimatch$3
+    return minimatch$2
   }
 
-  var orig = minimatch$3;
+  var orig = minimatch$2;
 
   var m = function minimatch (p, pattern, options) {
-    return orig(p, pattern, ext$2(def, options))
+    return orig(p, pattern, ext$1(def, options))
   };
 
   m.Minimatch = function Minimatch (pattern, options) {
-    return new orig.Minimatch(pattern, ext$2(def, options))
+    return new orig.Minimatch(pattern, ext$1(def, options))
   };
   m.Minimatch.defaults = function defaults (options) {
-    return orig.defaults(ext$2(def, options)).Minimatch
+    return orig.defaults(ext$1(def, options)).Minimatch
   };
 
   m.filter = function filter (pattern, options) {
-    return orig.filter(pattern, ext$2(def, options))
+    return orig.filter(pattern, ext$1(def, options))
   };
 
   m.defaults = function defaults (options) {
-    return orig.defaults(ext$2(def, options))
+    return orig.defaults(ext$1(def, options))
   };
 
   m.makeRe = function makeRe (pattern, options) {
-    return orig.makeRe(pattern, ext$2(def, options))
+    return orig.makeRe(pattern, ext$1(def, options))
   };
 
   m.braceExpand = function braceExpand (pattern, options) {
-    return orig.braceExpand(pattern, ext$2(def, options))
+    return orig.braceExpand(pattern, ext$1(def, options))
   };
 
   m.match = function (list, pattern, options) {
-    return orig.match(list, pattern, ext$2(def, options))
+    return orig.match(list, pattern, ext$1(def, options))
   };
 
   return m
 };
 
-Minimatch$3.defaults = function (def) {
-  return minimatch$3.defaults(def).Minimatch
+Minimatch$2.defaults = function (def) {
+  return minimatch$2.defaults(def).Minimatch
 };
 
-function minimatch$3 (p, pattern, options) {
-  assertValidPattern$2(pattern);
+function minimatch$2 (p, pattern, options) {
+  assertValidPattern$1(pattern);
 
   if (!options) options = {};
 
@@ -1594,23 +1594,23 @@ function minimatch$3 (p, pattern, options) {
     return false
   }
 
-  return new Minimatch$3(pattern, options).match(p)
+  return new Minimatch$2(pattern, options).match(p)
 }
 
-function Minimatch$3 (pattern, options) {
-  if (!(this instanceof Minimatch$3)) {
-    return new Minimatch$3(pattern, options)
+function Minimatch$2 (pattern, options) {
+  if (!(this instanceof Minimatch$2)) {
+    return new Minimatch$2(pattern, options)
   }
 
-  assertValidPattern$2(pattern);
+  assertValidPattern$1(pattern);
 
   if (!options) options = {};
 
   pattern = pattern.trim();
 
   // windows support: need to use /, not \
-  if (!options.allowWindowsEscape && path$a.sep !== '/') {
-    pattern = pattern.split(path$a.sep).join('/');
+  if (!options.allowWindowsEscape && path$8.sep !== '/') {
+    pattern = pattern.split(path$8.sep).join('/');
   }
 
   this.options = options;
@@ -1626,10 +1626,10 @@ function Minimatch$3 (pattern, options) {
   this.make();
 }
 
-Minimatch$3.prototype.debug = function () {};
+Minimatch$2.prototype.debug = function () {};
 
-Minimatch$3.prototype.make = make$2;
-function make$2 () {
+Minimatch$2.prototype.make = make$1;
+function make$1 () {
   var pattern = this.pattern;
   var options = this.options;
 
@@ -1659,7 +1659,7 @@ function make$2 () {
   // set to the GLOBSTAR object for globstar behavior,
   // and will not contain any / characters
   set = this.globParts = set.map(function (s) {
-    return s.split(slashSplit$2)
+    return s.split(slashSplit$1)
   });
 
   this.debug(this.pattern, set);
@@ -1681,8 +1681,8 @@ function make$2 () {
   this.set = set;
 }
 
-Minimatch$3.prototype.parseNegate = parseNegate$2;
-function parseNegate$2 () {
+Minimatch$2.prototype.parseNegate = parseNegate$1;
+function parseNegate$1 () {
   var pattern = this.pattern;
   var negate = false;
   var options = this.options;
@@ -1711,15 +1711,15 @@ function parseNegate$2 () {
 // Invalid sets are not expanded.
 // a{2..}b -> a{2..}b
 // a{b}c -> a{b}c
-minimatch$3.braceExpand = function (pattern, options) {
-  return braceExpand$2(pattern, options)
+minimatch$2.braceExpand = function (pattern, options) {
+  return braceExpand$1(pattern, options)
 };
 
-Minimatch$3.prototype.braceExpand = braceExpand$2;
+Minimatch$2.prototype.braceExpand = braceExpand$1;
 
-function braceExpand$2 (pattern, options) {
+function braceExpand$1 (pattern, options) {
   if (!options) {
-    if (this instanceof Minimatch$3) {
+    if (this instanceof Minimatch$2) {
       options = this.options;
     } else {
       options = {};
@@ -1729,7 +1729,7 @@ function braceExpand$2 (pattern, options) {
   pattern = typeof pattern === 'undefined'
     ? this.pattern : pattern;
 
-  assertValidPattern$2(pattern);
+  assertValidPattern$1(pattern);
 
   // Thanks to Yeting Li <https://github.com/yetingli> for
   // improving this regexp to avoid a ReDOS vulnerability.
@@ -1738,16 +1738,16 @@ function braceExpand$2 (pattern, options) {
     return [pattern]
   }
 
-  return expand$4(pattern)
+  return expand$1(pattern)
 }
 
-var MAX_PATTERN_LENGTH$2 = 1024 * 64;
-var assertValidPattern$2 = function (pattern) {
+var MAX_PATTERN_LENGTH$1 = 1024 * 64;
+var assertValidPattern$1 = function (pattern) {
   if (typeof pattern !== 'string') {
     throw new TypeError('invalid pattern')
   }
 
-  if (pattern.length > MAX_PATTERN_LENGTH$2) {
+  if (pattern.length > MAX_PATTERN_LENGTH$1) {
     throw new TypeError('pattern is too long')
   }
 };
@@ -1763,17 +1763,17 @@ var assertValidPattern$2 = function (pattern) {
 // when it is the *only* thing in a path portion.  Otherwise, any series
 // of * is equivalent to a single *.  Globstar behavior is enabled by
 // default, and can be disabled by setting options.noglobstar.
-Minimatch$3.prototype.parse = parse$6;
-var SUBPARSE$2 = {};
-function parse$6 (pattern, isSub) {
-  assertValidPattern$2(pattern);
+Minimatch$2.prototype.parse = parse$5;
+var SUBPARSE$1 = {};
+function parse$5 (pattern, isSub) {
+  assertValidPattern$1(pattern);
 
   var options = this.options;
 
   // shortcuts
   if (pattern === '**') {
     if (!options.noglobstar)
-      return GLOBSTAR$2
+      return GLOBSTAR$1
     else
       pattern = '*';
   }
@@ -1803,11 +1803,11 @@ function parse$6 (pattern, isSub) {
       // that wasn't consumed by this pass.
       switch (stateChar) {
         case '*':
-          re += star$2;
+          re += star$1;
           hasMagic = true;
         break
         case '?':
-          re += qmark$2;
+          re += qmark$1;
           hasMagic = true;
         break
         default:
@@ -1825,7 +1825,7 @@ function parse$6 (pattern, isSub) {
     this.debug('%s\t%s %s %j', pattern, i, re, c);
 
     // skip over any that are escaped.
-    if (escaping && reSpecials$2[c]) {
+    if (escaping && reSpecials$1[c]) {
       re += '\\' + c;
       escaping = false;
       continue
@@ -1889,8 +1889,8 @@ function parse$6 (pattern, isSub) {
           type: stateChar,
           start: i - 1,
           reStart: re.length,
-          open: plTypes$2[stateChar].open,
-          close: plTypes$2[stateChar].close
+          open: plTypes$1[stateChar].open,
+          close: plTypes$1[stateChar].close
         });
         // negation is (?:(?!js)[^/]*)
         re += stateChar === '!' ? '(?:(?!(?:' : '(?:';
@@ -1968,7 +1968,7 @@ function parse$6 (pattern, isSub) {
           RegExp('[' + cs + ']');
         } catch (er) {
           // not a valid class!
-          var sp = this.parse(cs, SUBPARSE$2);
+          var sp = this.parse(cs, SUBPARSE$1);
           re = re.substr(0, reClassStart) + '\\[' + sp[0] + '\\]';
           hasMagic = hasMagic || sp[1];
           inClass = false;
@@ -1988,7 +1988,7 @@ function parse$6 (pattern, isSub) {
         if (escaping) {
           // no need
           escaping = false;
-        } else if (reSpecials$2[c]
+        } else if (reSpecials$1[c]
           && !(c === '^' && inClass)) {
           re += '\\';
         }
@@ -2006,7 +2006,7 @@ function parse$6 (pattern, isSub) {
     // the contents of the would-be class to re-translate
     // any characters that were passed through as-is
     cs = pattern.substr(classStart + 1);
-    sp = this.parse(cs, SUBPARSE$2);
+    sp = this.parse(cs, SUBPARSE$1);
     re = re.substr(0, reClassStart) + '\\[' + sp[0];
     hasMagic = hasMagic || sp[1];
   }
@@ -2037,8 +2037,8 @@ function parse$6 (pattern, isSub) {
     });
 
     this.debug('tail=%j\n   %s', tail, tail, pl, re);
-    var t = pl.type === '*' ? star$2
-      : pl.type === '?' ? qmark$2
+    var t = pl.type === '*' ? star$1
+      : pl.type === '?' ? qmark$1
       : '\\' + pl.type;
 
     hasMagic = true;
@@ -2085,7 +2085,7 @@ function parse$6 (pattern, isSub) {
     nlAfter = cleanAfter;
 
     var dollar = '';
-    if (nlAfter === '' && isSub !== SUBPARSE$2) {
+    if (nlAfter === '' && isSub !== SUBPARSE$1) {
       dollar = '$';
     }
     var newRe = nlBefore + nlFirst + nlAfter + dollar + nlLast;
@@ -2104,7 +2104,7 @@ function parse$6 (pattern, isSub) {
   }
 
   // parsing just a piece of a larger pattern.
-  if (isSub === SUBPARSE$2) {
+  if (isSub === SUBPARSE$1) {
     return [re, hasMagic]
   }
 
@@ -2112,7 +2112,7 @@ function parse$6 (pattern, isSub) {
   // unescape anything in it, though, so that it'll be
   // an exact match against a file etc.
   if (!hasMagic) {
-    return globUnescape$2(pattern)
+    return globUnescape$1(pattern)
   }
 
   var flags = options.nocase ? 'i' : '';
@@ -2132,12 +2132,12 @@ function parse$6 (pattern, isSub) {
   return regExp
 }
 
-minimatch$3.makeRe = function (pattern, options) {
-  return new Minimatch$3(pattern, options || {}).makeRe()
+minimatch$2.makeRe = function (pattern, options) {
+  return new Minimatch$2(pattern, options || {}).makeRe()
 };
 
-Minimatch$3.prototype.makeRe = makeRe$2;
-function makeRe$2 () {
+Minimatch$2.prototype.makeRe = makeRe$1;
+function makeRe$1 () {
   if (this.regexp || this.regexp === false) return this.regexp
 
   // at this point, this.set is a 2d array of partial
@@ -2154,15 +2154,15 @@ function makeRe$2 () {
   }
   var options = this.options;
 
-  var twoStar = options.noglobstar ? star$2
-    : options.dot ? twoStarDot$2
-    : twoStarNoDot$2;
+  var twoStar = options.noglobstar ? star$1
+    : options.dot ? twoStarDot$1
+    : twoStarNoDot$1;
   var flags = options.nocase ? 'i' : '';
 
   var re = set.map(function (pattern) {
     return pattern.map(function (p) {
-      return (p === GLOBSTAR$2) ? twoStar
-      : (typeof p === 'string') ? regExpEscape$2(p)
+      return (p === GLOBSTAR$1) ? twoStar
+      : (typeof p === 'string') ? regExpEscape$1(p)
       : p._src
     }).join('\\\/')
   }).join('|');
@@ -2182,9 +2182,9 @@ function makeRe$2 () {
   return this.regexp
 }
 
-minimatch$3.match = function (list, pattern, options) {
+minimatch$2.match = function (list, pattern, options) {
   options = options || {};
-  var mm = new Minimatch$3(pattern, options);
+  var mm = new Minimatch$2(pattern, options);
   list = list.filter(function (f) {
     return mm.match(f)
   });
@@ -2194,7 +2194,7 @@ minimatch$3.match = function (list, pattern, options) {
   return list
 };
 
-Minimatch$3.prototype.match = function match (f, partial) {
+Minimatch$2.prototype.match = function match (f, partial) {
   if (typeof partial === 'undefined') partial = this.partial;
   this.debug('match', f, this.pattern);
   // short-circuit in the case of busted things.
@@ -2207,12 +2207,12 @@ Minimatch$3.prototype.match = function match (f, partial) {
   var options = this.options;
 
   // windows: need to use /, not \
-  if (path$a.sep !== '/') {
-    f = f.split(path$a.sep).join('/');
+  if (path$8.sep !== '/') {
+    f = f.split(path$8.sep).join('/');
   }
 
   // treat the test path as a set of pathparts.
-  f = f.split(slashSplit$2);
+  f = f.split(slashSplit$1);
   this.debug(this.pattern, 'split', f);
 
   // just ONE of the pattern sets in this.set needs to match
@@ -2255,7 +2255,7 @@ Minimatch$3.prototype.match = function match (f, partial) {
 // Partial means, if you run out of file before you run
 // out of pattern, then that's fine, as long as all
 // the parts match.
-Minimatch$3.prototype.matchOne = function (file, pattern, partial) {
+Minimatch$2.prototype.matchOne = function (file, pattern, partial) {
   var options = this.options;
 
   this.debug('matchOne',
@@ -2280,7 +2280,7 @@ Minimatch$3.prototype.matchOne = function (file, pattern, partial) {
     /* istanbul ignore if */
     if (p === false) return false
 
-    if (p === GLOBSTAR$2) {
+    if (p === GLOBSTAR$1) {
       this.debug('GLOBSTAR', [pattern, p, f]);
 
       // "**"
@@ -2410,11 +2410,11 @@ Minimatch$3.prototype.matchOne = function (file, pattern, partial) {
 };
 
 // replace stuff like \* with *
-function globUnescape$2 (s) {
+function globUnescape$1 (s) {
   return s.replace(/\\(.)/g, '$1')
 }
 
-function regExpEscape$2 (s) {
+function regExpEscape$1 (s) {
   return s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 
@@ -2487,11 +2487,11 @@ function ownProp (obj, field) {
   return Object.prototype.hasOwnProperty.call(obj, field)
 }
 
-var fs$7 = require$$1;
-var path$9 = require$$0$1;
-var minimatch$2 = minimatch_1$2;
+var fs$5 = require$$1;
+var path$7 = require$$0$1;
+var minimatch$1 = minimatch_1$1;
 var isAbsolute = pathIsAbsoluteExports;
-var Minimatch$2 = minimatch$2.Minimatch;
+var Minimatch$1 = minimatch$1.Minimatch;
 
 function alphasort (a, b) {
   return a.localeCompare(b, 'en')
@@ -2513,11 +2513,11 @@ function ignoreMap (pattern) {
   var gmatcher = null;
   if (pattern.slice(-3) === '/**') {
     var gpattern = pattern.replace(/(\/\*\*)+$/, '');
-    gmatcher = new Minimatch$2(gpattern, { dot: true });
+    gmatcher = new Minimatch$1(gpattern, { dot: true });
   }
 
   return {
-    matcher: new Minimatch$2(pattern, { dot: true }),
+    matcher: new Minimatch$1(pattern, { dot: true }),
     gmatcher: gmatcher
   }
 }
@@ -2553,7 +2553,7 @@ function setopts (self, pattern, options) {
   self.stat = !!options.stat;
   self.noprocess = !!options.noprocess;
   self.absolute = !!options.absolute;
-  self.fs = options.fs || fs$7;
+  self.fs = options.fs || fs$5;
 
   self.maxLength = options.maxLength || Infinity;
   self.cache = options.cache || Object.create(null);
@@ -2567,12 +2567,12 @@ function setopts (self, pattern, options) {
   if (!ownProp(options, "cwd"))
     self.cwd = cwd;
   else {
-    self.cwd = path$9.resolve(options.cwd);
+    self.cwd = path$7.resolve(options.cwd);
     self.changedCwd = self.cwd !== cwd;
   }
 
-  self.root = options.root || path$9.resolve(self.cwd, "/");
-  self.root = path$9.resolve(self.root);
+  self.root = options.root || path$7.resolve(self.cwd, "/");
+  self.root = path$7.resolve(self.root);
   if (process.platform === "win32")
     self.root = self.root.replace(/\\/g, "/");
 
@@ -2590,7 +2590,7 @@ function setopts (self, pattern, options) {
   // always treat \ in patterns as escapes, not path separators
   options.allowWindowsEscape = false;
 
-  self.minimatch = new Minimatch$2(pattern, options);
+  self.minimatch = new Minimatch$1(pattern, options);
   self.options = self.minimatch.options;
 }
 
@@ -2678,13 +2678,13 @@ function mark (self, p) {
 function makeAbs (self, f) {
   var abs = f;
   if (f.charAt(0) === '/') {
-    abs = path$9.join(self.root, f);
+    abs = path$7.join(self.root, f);
   } else if (isAbsolute(f) || f === '') {
     abs = f;
   } else if (self.changedCwd) {
-    abs = path$9.resolve(self.cwd, f);
+    abs = path$7.resolve(self.cwd, f);
   } else {
-    abs = path$9.resolve(f);
+    abs = path$7.resolve(f);
   }
 
   if (process.platform === 'win32')
@@ -2724,7 +2724,7 @@ function requireSync () {
 	globSync.GlobSync = GlobSync;
 
 	var rp = fs_realpath;
-	var minimatch = minimatch_1$2;
+	var minimatch = minimatch_1$1;
 	minimatch.Minimatch;
 	requireGlob().Glob;
 	var path = require$$0$1;
@@ -3305,7 +3305,7 @@ function makeres (key) {
   return once$2(function RES () {
     var cbs = reqs[key];
     var len = cbs.length;
-    var args = slice$1(arguments);
+    var args = slice(arguments);
 
     // XXX It's somewhat ambiguous whether a new callback added in this
     // pass should be queued for later execution if something in the
@@ -3332,7 +3332,7 @@ function makeres (key) {
   })
 }
 
-function slice$1 (args) {
+function slice (args) {
   var length = args.length;
   var array = [];
 
@@ -3389,7 +3389,7 @@ function requireGlob () {
 	glob_1 = glob;
 
 	var rp = fs_realpath;
-	var minimatch = minimatch_1$2;
+	var minimatch = minimatch_1$1;
 	minimatch.Minimatch;
 	var inherits = inherits_browserExports;
 	var EE = require$$2.EventEmitter;
@@ -4141,7 +4141,7 @@ function requireCommon () {
 	if (hasRequiredCommon) return common$1;
 	hasRequiredCommon = 1;
 
-	var os = require$$1$1;
+	var os = require$$0$2;
 	var fs = require$$1;
 	var glob = requireGlob();
 	var shell = requireShell();
@@ -4725,7 +4725,7 @@ var hasRequiredCd;
 function requireCd () {
 	if (hasRequiredCd) return cd;
 	hasRequiredCd = 1;
-	var os = require$$1$1;
+	var os = require$$0$2;
 	var common = requireCommon();
 
 	common.register('cd', _cd, {});
@@ -5179,7 +5179,7 @@ var isWindows = process.platform === 'win32' ||
     process.env.OSTYPE === 'cygwin' ||
     process.env.OSTYPE === 'msys';
 
-var path$8 = require$$0$1;
+var path$6 = require$$0$1;
 var COLON = isWindows ? ';' : ':';
 var isexe = isexe_1;
 
@@ -5246,7 +5246,7 @@ function which$2 (cmd, opt, cb) {
     if (pathPart.charAt(0) === '"' && pathPart.slice(-1) === '"')
       pathPart = pathPart.slice(1, -1);
 
-    var p = path$8.join(pathPart, cmd);
+    var p = path$6.join(pathPart, cmd);
     if (!pathPart && (/^\.[\\\/]/).test(cmd)) {
       p = cmd.slice(0, 2) + p;
     }
@@ -5280,7 +5280,7 @@ function whichSync (cmd, opt) {
     if (pathPart.charAt(0) === '"' && pathPart.slice(-1) === '"')
       pathPart = pathPart.slice(1, -1);
 
-    var p = path$8.join(pathPart, cmd);
+    var p = path$6.join(pathPart, cmd);
     if (!pathPart && /^\.[\\\/]/.test(cmd)) {
       p = cmd.slice(0, 2) + p;
     }
@@ -5321,7 +5321,7 @@ var pathKey$1 = opts => {
 	return Object.keys(env).find(x => x.toUpperCase() === 'PATH') || 'Path';
 };
 
-const path$7 = require$$0$1;
+const path$5 = require$$0$1;
 const which$1 = which_1;
 const pathKey = pathKey$1();
 
@@ -5344,7 +5344,7 @@ function resolveCommandAttempt(parsed, withoutPathExt) {
     try {
         resolved = which$1.sync(parsed.command, {
             path: (parsed.options.env || process.env)[pathKey],
-            pathExt: withoutPathExt ? path$7.delimiter : undefined,
+            pathExt: withoutPathExt ? path$5.delimiter : undefined,
         });
     } catch (e) {
         /* Empty */
@@ -5355,7 +5355,7 @@ function resolveCommandAttempt(parsed, withoutPathExt) {
     // If we successfully resolved, ensure that an absolute path is returned
     // Note that when a custom `cwd` was used, we need to resolve to an absolute path based on it
     if (resolved) {
-        resolved = path$7.resolve(hasCustomCwd ? parsed.options.cwd : '', resolved);
+        resolved = path$5.resolve(hasCustomCwd ? parsed.options.cwd : '', resolved);
     }
 
     return resolved;
@@ -5434,7 +5434,7 @@ var shebangCommand$1 = function (str) {
 	);
 };
 
-const fs$6 = require$$1;
+const fs$4 = require$$1;
 const shebangCommand = shebangCommand$1;
 
 function readShebang$1(command) {
@@ -5454,9 +5454,9 @@ function readShebang$1(command) {
     let fd;
 
     try {
-        fd = fs$6.openSync(command, 'r');
-        fs$6.readSync(fd, buffer, 0, size, 0);
-        fs$6.closeSync(fd);
+        fd = fs$4.openSync(command, 'r');
+        fs$4.readSync(fd, buffer, 0, size, 0);
+        fs$4.closeSync(fd);
     } catch (e) { /* Empty */ }
 
     // Attempt to extract shebang (null is returned if not a shebang)
@@ -5465,10 +5465,10 @@ function readShebang$1(command) {
 
 var readShebang_1 = readShebang$1;
 
-const path$6 = require$$0$1;
+const path$4 = require$$0$1;
 const niceTry = src$1;
 const resolveCommand = resolveCommand_1;
-const escape$3 = _escape;
+const escape$2 = _escape;
 const readShebang = readShebang_1;
 const semver$1 = semverExports;
 
@@ -5516,11 +5516,11 @@ function parseNonShell(parsed) {
 
         // Normalize posix paths into OS compatible paths (e.g.: foo/bar -> foo\bar)
         // This is necessary otherwise it will always fail with ENOENT in those cases
-        parsed.command = path$6.normalize(parsed.command);
+        parsed.command = path$4.normalize(parsed.command);
 
         // Escape command & arguments
-        parsed.command = escape$3.command(parsed.command);
-        parsed.args = parsed.args.map((arg) => escape$3.argument(arg, needsDoubleEscapeMetaChars));
+        parsed.command = escape$2.command(parsed.command);
+        parsed.args = parsed.args.map((arg) => escape$2.argument(arg, needsDoubleEscapeMetaChars));
 
         const shellCommand = [parsed.command].concat(parsed.args).join(' ');
 
@@ -5561,7 +5561,7 @@ function parseShell(parsed) {
     return parsed;
 }
 
-function parse$5(command, args, options) {
+function parse$4(command, args, options) {
     // Normalize arguments, similar to nodejs
     if (args && !Array.isArray(args)) {
         options = args;
@@ -5587,7 +5587,7 @@ function parse$5(command, args, options) {
     return options.shell ? parseShell(parsed) : parseNonShell(parsed);
 }
 
-var parse_1 = parse$5;
+var parse_1 = parse$4;
 
 const isWin$1 = process.platform === 'win32';
 
@@ -5647,13 +5647,13 @@ var enoent$1 = {
     notFoundError,
 };
 
-const cp$1 = require$$1$2;
-const parse$4 = parse_1;
+const cp$1 = require$$1$1;
+const parse$3 = parse_1;
 const enoent = enoent$1;
 
 function spawn(command, args, options) {
     // Parse the arguments
-    const parsed = parse$4(command, args, options);
+    const parsed = parse$3(command, args, options);
 
     // Spawn the child process
     const spawned = cp$1.spawn(parsed.command, parsed.args, parsed.options);
@@ -5667,7 +5667,7 @@ function spawn(command, args, options) {
 
 function spawnSync(command, args, options) {
     // Parse the arguments
-    const parsed = parse$4(command, args, options);
+    const parsed = parse$3(command, args, options);
 
     // Spawn the child process
     const result = cp$1.spawnSync(parsed.command, parsed.args, parsed.options);
@@ -5682,7 +5682,7 @@ crossSpawn.exports = spawn;
 crossSpawn.exports.spawn = spawn;
 crossSpawn.exports.sync = spawnSync;
 
-crossSpawn.exports._parse = parse$4;
+crossSpawn.exports._parse = parse$3;
 crossSpawn.exports._enoent = enoent;
 
 var crossSpawnExports = crossSpawn.exports;
@@ -5872,7 +5872,7 @@ var endOfStream = eos$1;
 
 var once = onceExports;
 var eos = endOfStream;
-var fs$5 = require$$1; // we only need fs to get the ReadStream and WriteStream prototypes
+var fs$3 = require$$1; // we only need fs to get the ReadStream and WriteStream prototypes
 
 var noop = function () {};
 var ancient = /^v?\.0/.test(process.version);
@@ -5883,8 +5883,8 @@ var isFn = function (fn) {
 
 var isFS = function (stream) {
   if (!ancient) return false // newer node version do not need to care about fs is a special way
-  if (!fs$5) return false // browser
-  return (stream instanceof (fs$5.ReadStream || noop) || stream instanceof (fs$5.WriteStream || noop)) && isFn(stream.close)
+  if (!fs$3) return false // browser
+  return (stream instanceof (fs$3.ReadStream || noop) || stream instanceof (fs$3.WriteStream || noop)) && isFn(stream.close)
 };
 
 var isRequest = function (stream) {
@@ -5953,7 +5953,7 @@ var pump$1 = function () {
 
 var pump_1 = pump$1;
 
-const {PassThrough} = require$$0$2;
+const {PassThrough} = require$$0$3;
 
 var bufferStream$1 = options => {
 	options = Object.assign({}, options);
@@ -6347,7 +6347,7 @@ var errname$1 = {exports: {}};
 
 // Older verions of Node.js might not have `util.getSystemErrorName()`.
 // In that case, fall back to a deprecated internal.
-const util = require$$0$3;
+const util = require$$0$4;
 
 let uv;
 
@@ -6430,7 +6430,7 @@ execa.exports;
 
 (function (module) {
 	const path = require$$0$1;
-	const childProcess = require$$1$2;
+	const childProcess = require$$1$1;
 	const crossSpawn = crossSpawnExports;
 	const stripEof$1 = stripEof;
 	const npmRunPath = npmRunPathExports;
@@ -7439,7 +7439,7 @@ var hasRequiredEcho;
 function requireEcho () {
 	if (hasRequiredEcho) return echo;
 	hasRequiredEcho = 1;
-	var format = require$$0$3.format;
+	var format = require$$0$4.format;
 
 	var common = requireCommon();
 
@@ -7555,7 +7555,7 @@ function requireTempdir () {
 	if (hasRequiredTempdir) return tempdir;
 	hasRequiredTempdir = 1;
 	var common = requireCommon();
-	var os = require$$1$1;
+	var os = require$$0$2;
 	var fs = require$$1;
 
 	common.register('tempdir', _tempDir, {
@@ -7668,7 +7668,7 @@ function requireExec () {
 	var _pwd = requirePwd();
 	var path = require$$0$1;
 	var fs = require$$1;
-	var child = require$$1$2;
+	var child = require$$1$1;
 
 	var DEFAULT_MAXBUFFER_SIZE = 20 * 1024 * 1024;
 	var DEFAULT_ERROR_CODE = 1;
@@ -10008,215 +10008,18 @@ function requireShell () {
 	return shell;
 }
 
-var concatMap$1 = concatMap$3;
-var balanced$1 = balancedMatch;
+var minimatch_1 = minimatch;
+minimatch.Minimatch = Minimatch;
 
-var braceExpansion$1 = expandTop$1;
-
-var escSlash$1 = '\0SLASH'+Math.random()+'\0';
-var escOpen$1 = '\0OPEN'+Math.random()+'\0';
-var escClose$1 = '\0CLOSE'+Math.random()+'\0';
-var escComma$1 = '\0COMMA'+Math.random()+'\0';
-var escPeriod$1 = '\0PERIOD'+Math.random()+'\0';
-
-function numeric$1(str) {
-  return parseInt(str, 10) == str
-    ? parseInt(str, 10)
-    : str.charCodeAt(0);
-}
-
-function escapeBraces$1(str) {
-  return str.split('\\\\').join(escSlash$1)
-            .split('\\{').join(escOpen$1)
-            .split('\\}').join(escClose$1)
-            .split('\\,').join(escComma$1)
-            .split('\\.').join(escPeriod$1);
-}
-
-function unescapeBraces$1(str) {
-  return str.split(escSlash$1).join('\\')
-            .split(escOpen$1).join('{')
-            .split(escClose$1).join('}')
-            .split(escComma$1).join(',')
-            .split(escPeriod$1).join('.');
-}
-
-
-// Basically just str.split(","), but handling cases
-// where we have nested braced sections, which should be
-// treated as individual members, like {a,{b,c},d}
-function parseCommaParts$1(str) {
-  if (!str)
-    return [''];
-
-  var parts = [];
-  var m = balanced$1('{', '}', str);
-
-  if (!m)
-    return str.split(',');
-
-  var pre = m.pre;
-  var body = m.body;
-  var post = m.post;
-  var p = pre.split(',');
-
-  p[p.length-1] += '{' + body + '}';
-  var postParts = parseCommaParts$1(post);
-  if (post.length) {
-    p[p.length-1] += postParts.shift();
-    p.push.apply(p, postParts);
-  }
-
-  parts.push.apply(parts, p);
-
-  return parts;
-}
-
-function expandTop$1(str) {
-  if (!str)
-    return [];
-
-  // I don't know why Bash 4.3 does this, but it does.
-  // Anything starting with {} will have the first two bytes preserved
-  // but *only* at the top level, so {},a}b will not expand to anything,
-  // but a{},b}c will be expanded to [a}c,abc].
-  // One could argue that this is a bug in Bash, but since the goal of
-  // this module is to match Bash's rules, we escape a leading {}
-  if (str.substr(0, 2) === '{}') {
-    str = '\\{\\}' + str.substr(2);
-  }
-
-  return expand$3(escapeBraces$1(str), true).map(unescapeBraces$1);
-}
-
-function embrace$1(str) {
-  return '{' + str + '}';
-}
-function isPadded$1(el) {
-  return /^-?0\d/.test(el);
-}
-
-function lte$1(i, y) {
-  return i <= y;
-}
-function gte$1(i, y) {
-  return i >= y;
-}
-
-function expand$3(str, isTop) {
-  var expansions = [];
-
-  var m = balanced$1('{', '}', str);
-  if (!m || /\$$/.test(m.pre)) return [str];
-
-  var isNumericSequence = /^-?\d+\.\.-?\d+(?:\.\.-?\d+)?$/.test(m.body);
-  var isAlphaSequence = /^[a-zA-Z]\.\.[a-zA-Z](?:\.\.-?\d+)?$/.test(m.body);
-  var isSequence = isNumericSequence || isAlphaSequence;
-  var isOptions = m.body.indexOf(',') >= 0;
-  if (!isSequence && !isOptions) {
-    // {a},b}
-    if (m.post.match(/,.*\}/)) {
-      str = m.pre + '{' + m.body + escClose$1 + m.post;
-      return expand$3(str);
-    }
-    return [str];
-  }
-
-  var n;
-  if (isSequence) {
-    n = m.body.split(/\.\./);
-  } else {
-    n = parseCommaParts$1(m.body);
-    if (n.length === 1) {
-      // x{{a,b}}y ==> x{a}y x{b}y
-      n = expand$3(n[0], false).map(embrace$1);
-      if (n.length === 1) {
-        var post = m.post.length
-          ? expand$3(m.post, false)
-          : [''];
-        return post.map(function(p) {
-          return m.pre + n[0] + p;
-        });
-      }
-    }
-  }
-
-  // at this point, n is the parts, and we know it's not a comma set
-  // with a single entry.
-
-  // no need to expand pre, since it is guaranteed to be free of brace-sets
-  var pre = m.pre;
-  var post = m.post.length
-    ? expand$3(m.post, false)
-    : [''];
-
-  var N;
-
-  if (isSequence) {
-    var x = numeric$1(n[0]);
-    var y = numeric$1(n[1]);
-    var width = Math.max(n[0].length, n[1].length);
-    var incr = n.length == 3
-      ? Math.abs(numeric$1(n[2]))
-      : 1;
-    var test = lte$1;
-    var reverse = y < x;
-    if (reverse) {
-      incr *= -1;
-      test = gte$1;
-    }
-    var pad = n.some(isPadded$1);
-
-    N = [];
-
-    for (var i = x; test(i, y); i += incr) {
-      var c;
-      if (isAlphaSequence) {
-        c = String.fromCharCode(i);
-        if (c === '\\')
-          c = '';
-      } else {
-        c = String(i);
-        if (pad) {
-          var need = width - c.length;
-          if (need > 0) {
-            var z = new Array(need + 1).join('0');
-            if (i < 0)
-              c = '-' + z + c.slice(1);
-            else
-              c = z + c;
-          }
-        }
-      }
-      N.push(c);
-    }
-  } else {
-    N = concatMap$1(n, function(el) { return expand$3(el, false) });
-  }
-
-  for (var j = 0; j < N.length; j++) {
-    for (var k = 0; k < post.length; k++) {
-      var expansion = pre + N[j] + post[k];
-      if (!isTop || isSequence || expansion)
-        expansions.push(expansion);
-    }
-  }
-
-  return expansions;
-}
-
-var minimatch_1$1 = minimatch$1;
-minimatch$1.Minimatch = Minimatch$1;
-
-const path$5 = (() => { try { return require('path') } catch (e) {}})() || {
+const path$3 = (() => { try { return require('path') } catch (e) {}})() || {
   sep: '/'
 };
-minimatch$1.sep = path$5.sep;
+minimatch.sep = path$3.sep;
 
-const GLOBSTAR$1 = minimatch$1.GLOBSTAR = Minimatch$1.GLOBSTAR = {};
-const expand$2 = braceExpansion$1;
+const GLOBSTAR = minimatch.GLOBSTAR = Minimatch.GLOBSTAR = {};
+const expand = braceExpansion;
 
-const plTypes$1 = {
+const plTypes = {
   '!': { open: '(?:(?!(?:', close: '))[^/]*?)'},
   '?': { open: '(?:', close: ')?' },
   '+': { open: '(?:', close: ')+' },
@@ -10226,25 +10029,25 @@ const plTypes$1 = {
 
 // any single thing other than /
 // don't need to escape / when using new RegExp()
-const qmark$1 = '[^/]';
+const qmark = '[^/]';
 
 // * => any number of characters
-const star$1 = qmark$1 + '*?';
+const star = qmark + '*?';
 
 // ** when dots are allowed.  Anything goes, except .. and .
 // not (^ or / followed by one or two dots followed by $ or /),
 // followed by anything, any number of times.
-const twoStarDot$1 = '(?:(?!(?:\\\/|^)(?:\\.{1,2})($|\\\/)).)*?';
+const twoStarDot = '(?:(?!(?:\\\/|^)(?:\\.{1,2})($|\\\/)).)*?';
 
 // not a ^ or / followed by a dot,
 // followed by anything, any number of times.
-const twoStarNoDot$1 = '(?:(?!(?:\\\/|^)\\.).)*?';
+const twoStarNoDot = '(?:(?!(?:\\\/|^)\\.).)*?';
 
 // characters that need to be escaped in RegExp.
-const reSpecials$1 = charSet$1('().*{}+?[]^$\\!');
+const reSpecials = charSet('().*{}+?[]^$\\!');
 
 // "abc" -> { a:true, b:true, c:true }
-function charSet$1 (s) {
+function charSet (s) {
   return s.split('').reduce(function (set, c) {
     set[c] = true;
     return set
@@ -10252,17 +10055,17 @@ function charSet$1 (s) {
 }
 
 // normalizes slashes.
-const slashSplit$1 = /\/+/;
+const slashSplit = /\/+/;
 
-minimatch$1.filter = filter$1;
-function filter$1 (pattern, options) {
+minimatch.filter = filter;
+function filter (pattern, options) {
   options = options || {};
   return function (p, i, list) {
-    return minimatch$1(p, pattern, options)
+    return minimatch(p, pattern, options)
   }
 }
 
-function ext$1 (a, b) {
+function ext (a, b) {
   a = a || {};
   b = b || {};
   const t = {};
@@ -10275,53 +10078,53 @@ function ext$1 (a, b) {
   return t
 }
 
-minimatch$1.defaults = function (def) {
+minimatch.defaults = function (def) {
   if (!def || typeof def !== 'object' || !Object.keys(def).length) {
-    return minimatch$1
+    return minimatch
   }
 
-  const orig = minimatch$1;
+  const orig = minimatch;
 
   const m = function minimatch (p, pattern, options) {
-    return orig(p, pattern, ext$1(def, options))
+    return orig(p, pattern, ext(def, options))
   };
 
   m.Minimatch = function Minimatch (pattern, options) {
-    return new orig.Minimatch(pattern, ext$1(def, options))
+    return new orig.Minimatch(pattern, ext(def, options))
   };
   m.Minimatch.defaults = options => {
-    return orig.defaults(ext$1(def, options)).Minimatch
+    return orig.defaults(ext(def, options)).Minimatch
   };
 
   m.filter = function filter (pattern, options) {
-    return orig.filter(pattern, ext$1(def, options))
+    return orig.filter(pattern, ext(def, options))
   };
 
   m.defaults = function defaults (options) {
-    return orig.defaults(ext$1(def, options))
+    return orig.defaults(ext(def, options))
   };
 
   m.makeRe = function makeRe (pattern, options) {
-    return orig.makeRe(pattern, ext$1(def, options))
+    return orig.makeRe(pattern, ext(def, options))
   };
 
   m.braceExpand = function braceExpand (pattern, options) {
-    return orig.braceExpand(pattern, ext$1(def, options))
+    return orig.braceExpand(pattern, ext(def, options))
   };
 
   m.match = function (list, pattern, options) {
-    return orig.match(list, pattern, ext$1(def, options))
+    return orig.match(list, pattern, ext(def, options))
   };
 
   return m
 };
 
-Minimatch$1.defaults = function (def) {
-  return minimatch$1.defaults(def).Minimatch
+Minimatch.defaults = function (def) {
+  return minimatch.defaults(def).Minimatch
 };
 
-function minimatch$1 (p, pattern, options) {
-  assertValidPattern$1(pattern);
+function minimatch (p, pattern, options) {
+  assertValidPattern(pattern);
 
   if (!options) options = {};
 
@@ -10333,22 +10136,22 @@ function minimatch$1 (p, pattern, options) {
   // "" only matches ""
   if (pattern.trim() === '') return p === ''
 
-  return new Minimatch$1(pattern, options).match(p)
+  return new Minimatch(pattern, options).match(p)
 }
 
-function Minimatch$1 (pattern, options) {
-  if (!(this instanceof Minimatch$1)) {
-    return new Minimatch$1(pattern, options)
+function Minimatch (pattern, options) {
+  if (!(this instanceof Minimatch)) {
+    return new Minimatch(pattern, options)
   }
 
-  assertValidPattern$1(pattern);
+  assertValidPattern(pattern);
 
   if (!options) options = {};
   pattern = pattern.trim();
 
   // windows support: need to use /, not \
-  if (path$5.sep !== '/') {
-    pattern = pattern.split(path$5.sep).join('/');
+  if (path$3.sep !== '/') {
+    pattern = pattern.split(path$3.sep).join('/');
   }
 
   this.options = options;
@@ -10363,10 +10166,10 @@ function Minimatch$1 (pattern, options) {
   this.make();
 }
 
-Minimatch$1.prototype.debug = function () {};
+Minimatch.prototype.debug = function () {};
 
-Minimatch$1.prototype.make = make$1;
-function make$1 () {
+Minimatch.prototype.make = make;
+function make () {
   // don't do it more than once.
   if (this._made) return
 
@@ -10399,7 +10202,7 @@ function make$1 () {
   // set to the GLOBSTAR object for globstar behavior,
   // and will not contain any / characters
   set = this.globParts = set.map(function (s) {
-    return s.split(slashSplit$1)
+    return s.split(slashSplit)
   });
 
   this.debug(this.pattern, set);
@@ -10421,8 +10224,8 @@ function make$1 () {
   this.set = set;
 }
 
-Minimatch$1.prototype.parseNegate = parseNegate$1;
-function parseNegate$1 () {
+Minimatch.prototype.parseNegate = parseNegate;
+function parseNegate () {
   var pattern = this.pattern;
   var negate = false;
   var options = this.options;
@@ -10451,15 +10254,15 @@ function parseNegate$1 () {
 // Invalid sets are not expanded.
 // a{2..}b -> a{2..}b
 // a{b}c -> a{b}c
-minimatch$1.braceExpand = function (pattern, options) {
-  return braceExpand$1(pattern, options)
+minimatch.braceExpand = function (pattern, options) {
+  return braceExpand(pattern, options)
 };
 
-Minimatch$1.prototype.braceExpand = braceExpand$1;
+Minimatch.prototype.braceExpand = braceExpand;
 
-function braceExpand$1 (pattern, options) {
+function braceExpand (pattern, options) {
   if (!options) {
-    if (this instanceof Minimatch$1) {
+    if (this instanceof Minimatch) {
       options = this.options;
     } else {
       options = {};
@@ -10469,23 +10272,23 @@ function braceExpand$1 (pattern, options) {
   pattern = typeof pattern === 'undefined'
     ? this.pattern : pattern;
 
-  assertValidPattern$1(pattern);
+  assertValidPattern(pattern);
 
   if (options.nobrace || !/\{(?:(?!\{).)*\}/.test(pattern)) {
     // shortcut. no need to expand.
     return [pattern]
   }
 
-  return expand$2(pattern)
+  return expand(pattern)
 }
 
-const MAX_PATTERN_LENGTH$1 = 1024 * 64;
-const assertValidPattern$1 = pattern => {
+const MAX_PATTERN_LENGTH = 1024 * 64;
+const assertValidPattern = pattern => {
   if (typeof pattern !== 'string') {
     throw new TypeError('invalid pattern')
   }
 
-  if (pattern.length > MAX_PATTERN_LENGTH$1) {
+  if (pattern.length > MAX_PATTERN_LENGTH) {
     throw new TypeError('pattern is too long')
   }
 };
@@ -10501,15 +10304,15 @@ const assertValidPattern$1 = pattern => {
 // when it is the *only* thing in a path portion.  Otherwise, any series
 // of * is equivalent to a single *.  Globstar behavior is enabled by
 // default, and can be disabled by setting options.noglobstar.
-Minimatch$1.prototype.parse = parse$3;
-const SUBPARSE$1 = {};
-function parse$3 (pattern, isSub) {
-  assertValidPattern$1(pattern);
+Minimatch.prototype.parse = parse$2;
+const SUBPARSE = {};
+function parse$2 (pattern, isSub) {
+  assertValidPattern(pattern);
 
   var options = this.options;
 
   // shortcuts
-  if (!options.noglobstar && pattern === '**') return GLOBSTAR$1
+  if (!options.noglobstar && pattern === '**') return GLOBSTAR
   if (pattern === '') return ''
 
   var re = '';
@@ -10536,11 +10339,11 @@ function parse$3 (pattern, isSub) {
       // that wasn't consumed by this pass.
       switch (stateChar) {
         case '*':
-          re += star$1;
+          re += star;
           hasMagic = true;
         break
         case '?':
-          re += qmark$1;
+          re += qmark;
           hasMagic = true;
         break
         default:
@@ -10558,7 +10361,7 @@ function parse$3 (pattern, isSub) {
     this.debug('%s\t%s %s %j', pattern, i, re, c);
 
     // skip over any that are escaped.
-    if (escaping && reSpecials$1[c]) {
+    if (escaping && reSpecials[c]) {
       re += '\\' + c;
       escaping = false;
       continue
@@ -10621,8 +10424,8 @@ function parse$3 (pattern, isSub) {
           type: stateChar,
           start: i - 1,
           reStart: re.length,
-          open: plTypes$1[stateChar].open,
-          close: plTypes$1[stateChar].close
+          open: plTypes[stateChar].open,
+          close: plTypes[stateChar].close
         });
         // negation is (?:(?!js)[^/]*)
         re += stateChar === '!' ? '(?:(?!(?:' : '(?:';
@@ -10701,7 +10504,7 @@ function parse$3 (pattern, isSub) {
             RegExp('[' + cs + ']');
           } catch (er) {
             // not a valid class!
-            var sp = this.parse(cs, SUBPARSE$1);
+            var sp = this.parse(cs, SUBPARSE);
             re = re.substr(0, reClassStart) + '\\[' + sp[0] + '\\]';
             hasMagic = hasMagic || sp[1];
             inClass = false;
@@ -10722,7 +10525,7 @@ function parse$3 (pattern, isSub) {
         if (escaping) {
           // no need
           escaping = false;
-        } else if (reSpecials$1[c]
+        } else if (reSpecials[c]
           && !(c === '^' && inClass)) {
           re += '\\';
         }
@@ -10740,7 +10543,7 @@ function parse$3 (pattern, isSub) {
     // the contents of the would-be class to re-translate
     // any characters that were passed through as-is
     cs = pattern.substr(classStart + 1);
-    sp = this.parse(cs, SUBPARSE$1);
+    sp = this.parse(cs, SUBPARSE);
     re = re.substr(0, reClassStart) + '\\[' + sp[0];
     hasMagic = hasMagic || sp[1];
   }
@@ -10771,8 +10574,8 @@ function parse$3 (pattern, isSub) {
     });
 
     this.debug('tail=%j\n   %s', tail, tail, pl, re);
-    var t = pl.type === '*' ? star$1
-      : pl.type === '?' ? qmark$1
+    var t = pl.type === '*' ? star
+      : pl.type === '?' ? qmark
       : '\\' + pl.type;
 
     hasMagic = true;
@@ -10821,7 +10624,7 @@ function parse$3 (pattern, isSub) {
     nlAfter = cleanAfter;
 
     var dollar = '';
-    if (nlAfter === '' && isSub !== SUBPARSE$1) {
+    if (nlAfter === '' && isSub !== SUBPARSE) {
       dollar = '$';
     }
     var newRe = nlBefore + nlFirst + nlAfter + dollar + nlLast;
@@ -10840,7 +10643,7 @@ function parse$3 (pattern, isSub) {
   }
 
   // parsing just a piece of a larger pattern.
-  if (isSub === SUBPARSE$1) {
+  if (isSub === SUBPARSE) {
     return [re, hasMagic]
   }
 
@@ -10848,7 +10651,7 @@ function parse$3 (pattern, isSub) {
   // unescape anything in it, though, so that it'll be
   // an exact match against a file etc.
   if (!hasMagic) {
-    return globUnescape$1(pattern)
+    return globUnescape(pattern)
   }
 
   var flags = options.nocase ? 'i' : '';
@@ -10868,12 +10671,12 @@ function parse$3 (pattern, isSub) {
   return regExp
 }
 
-minimatch$1.makeRe = function (pattern, options) {
-  return new Minimatch$1(pattern, options || {}).makeRe()
+minimatch.makeRe = function (pattern, options) {
+  return new Minimatch(pattern, options || {}).makeRe()
 };
 
-Minimatch$1.prototype.makeRe = makeRe$1;
-function makeRe$1 () {
+Minimatch.prototype.makeRe = makeRe;
+function makeRe () {
   if (this.regexp || this.regexp === false) return this.regexp
 
   // at this point, this.set is a 2d array of partial
@@ -10890,15 +10693,15 @@ function makeRe$1 () {
   }
   var options = this.options;
 
-  var twoStar = options.noglobstar ? star$1
-    : options.dot ? twoStarDot$1
-    : twoStarNoDot$1;
+  var twoStar = options.noglobstar ? star
+    : options.dot ? twoStarDot
+    : twoStarNoDot;
   var flags = options.nocase ? 'i' : '';
 
   var re = set.map(function (pattern) {
     return pattern.map(function (p) {
-      return (p === GLOBSTAR$1) ? twoStar
-      : (typeof p === 'string') ? regExpEscape$1(p)
+      return (p === GLOBSTAR) ? twoStar
+      : (typeof p === 'string') ? regExpEscape(p)
       : p._src
     }).join('\\\/')
   }).join('|');
@@ -10918,9 +10721,9 @@ function makeRe$1 () {
   return this.regexp
 }
 
-minimatch$1.match = function (list, pattern, options) {
+minimatch.match = function (list, pattern, options) {
   options = options || {};
-  const mm = new Minimatch$1(pattern, options);
+  const mm = new Minimatch(pattern, options);
   list = list.filter(function (f) {
     return mm.match(f)
   });
@@ -10930,8 +10733,8 @@ minimatch$1.match = function (list, pattern, options) {
   return list
 };
 
-Minimatch$1.prototype.match = match$1;
-function match$1 (f, partial) {
+Minimatch.prototype.match = match;
+function match (f, partial) {
   this.debug('match', f, this.pattern);
   // short-circuit in the case of busted things.
   // comments, etc.
@@ -10943,12 +10746,12 @@ function match$1 (f, partial) {
   var options = this.options;
 
   // windows: need to use /, not \
-  if (path$5.sep !== '/') {
-    f = f.split(path$5.sep).join('/');
+  if (path$3.sep !== '/') {
+    f = f.split(path$3.sep).join('/');
   }
 
   // treat the test path as a set of pathparts.
-  f = f.split(slashSplit$1);
+  f = f.split(slashSplit);
   this.debug(this.pattern, 'split', f);
 
   // just ONE of the pattern sets in this.set needs to match
@@ -10991,7 +10794,7 @@ function match$1 (f, partial) {
 // Partial means, if you run out of file before you run
 // out of pattern, then that's fine, as long as all
 // the parts match.
-Minimatch$1.prototype.matchOne = function (file, pattern, partial) {
+Minimatch.prototype.matchOne = function (file, pattern, partial) {
   var options = this.options;
 
   this.debug('matchOne',
@@ -11016,7 +10819,7 @@ Minimatch$1.prototype.matchOne = function (file, pattern, partial) {
     /* istanbul ignore if */
     if (p === false) return false
 
-    if (p === GLOBSTAR$1) {
+    if (p === GLOBSTAR) {
       this.debug('GLOBSTAR', [pattern, p, f]);
 
       // "**"
@@ -11150,11 +10953,11 @@ Minimatch$1.prototype.matchOne = function (file, pattern, partial) {
 };
 
 // replace stuff like \* with *
-function globUnescape$1 (s) {
+function globUnescape (s) {
   return s.replace(/\\(.)/g, '$1')
 }
 
-function regExpEscape$1 (s) {
+function regExpEscape (s) {
   return s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 
@@ -11162,12 +10965,12 @@ function commonjsRequire(path) {
 	throw new Error('Could not dynamically require "' + path + '". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');
 }
 
-var internal$1 = {};
+var internal = {};
 
-var taskcommand$1 = {};
+var taskcommand = {};
 
-Object.defineProperty(taskcommand$1, "__esModule", { value: true });
-taskcommand$1.commandFromString = taskcommand$1.TaskCommand = void 0;
+Object.defineProperty(taskcommand, "__esModule", { value: true });
+taskcommand.commandFromString = taskcommand.TaskCommand = void 0;
 //
 // Command Format:
 //    ##vso[artifact.command key=value;key=value]user message
@@ -11176,8 +10979,8 @@ taskcommand$1.commandFromString = taskcommand$1.TaskCommand = void 0;
 //    ##vso[task.progress value=58]
 //    ##vso[task.issue type=warning;]This is the user warning message
 //
-var CMD_PREFIX$1 = '##vso[';
-var TaskCommand$1 = /** @class */ (function () {
+var CMD_PREFIX = '##vso[';
+var TaskCommand = /** @class */ (function () {
     function TaskCommand(command, properties, message) {
         if (!command) {
             command = 'missing.command';
@@ -11187,7 +10990,7 @@ var TaskCommand$1 = /** @class */ (function () {
         this.message = message;
     }
     TaskCommand.prototype.toString = function () {
-        var cmdStr = CMD_PREFIX$1 + this.command;
+        var cmdStr = CMD_PREFIX + this.command;
         if (this.properties && Object.keys(this.properties).length > 0) {
             cmdStr += ' ';
             for (var key in this.properties) {
@@ -11196,7 +10999,7 @@ var TaskCommand$1 = /** @class */ (function () {
                     if (val) {
                         // safely append the val - avoid blowing up when attempting to
                         // call .replace() if message is not a string for some reason
-                        cmdStr += key + '=' + escape$2('' + (val || '')) + ';';
+                        cmdStr += key + '=' + escape$1('' + (val || '')) + ';';
                     }
                 }
             }
@@ -11205,13 +11008,13 @@ var TaskCommand$1 = /** @class */ (function () {
         // safely append the message - avoid blowing up when attempting to
         // call .replace() if message is not a string for some reason
         var message = '' + (this.message || '');
-        cmdStr += escapedata$1(message);
+        cmdStr += escapedata(message);
         return cmdStr;
     };
     return TaskCommand;
 }());
-taskcommand$1.TaskCommand = TaskCommand$1;
-function commandFromString$1(commandLine) {
+taskcommand.TaskCommand = TaskCommand;
+function commandFromString(commandLine) {
     var lbPos = commandLine.indexOf('[');
     var rbPos = commandLine.indexOf(']');
     if (lbPos == -1 || rbPos == -1 || rbPos - lbPos < 3) {
@@ -11234,33 +11037,33 @@ function commandFromString$1(commandLine) {
                 }
                 var key = propLine.substring(0, eqIndex);
                 var val = propLine.substring(eqIndex + 1);
-                properties[key] = unescape$2(val);
+                properties[key] = unescape$1(val);
             }
         });
     }
-    var msg = unescapedata$1(commandLine.substring(rbPos + 1));
-    var cmd = new TaskCommand$1(command, properties, msg);
+    var msg = unescapedata(commandLine.substring(rbPos + 1));
+    var cmd = new TaskCommand(command, properties, msg);
     return cmd;
 }
-taskcommand$1.commandFromString = commandFromString$1;
-function escapedata$1(s) {
+taskcommand.commandFromString = commandFromString;
+function escapedata(s) {
     return s.replace(/%/g, '%AZP25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A');
 }
-function unescapedata$1(s) {
+function unescapedata(s) {
     return s.replace(/%0D/g, '\r')
         .replace(/%0A/g, '\n')
         .replace(/%AZP25/g, '%');
 }
-function escape$2(s) {
+function escape$1(s) {
     return s.replace(/%/g, '%AZP25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A')
         .replace(/]/g, '%5D')
         .replace(/;/g, '%3B');
 }
-function unescape$2(s) {
+function unescape$1(s) {
     return s.replace(/%0D/g, '\r')
         .replace(/%0A/g, '\n')
         .replace(/%5D/g, ']')
@@ -11268,7 +11071,7 @@ function unescape$2(s) {
         .replace(/%AZP25/g, '%');
 }
 
-var vault$1 = {};
+var vault = {};
 
 var rngBrowser = {exports: {}};
 
@@ -11367,15 +11170,15 @@ function v4(options, buf, offset) {
 
 var v4_1 = v4;
 
-Object.defineProperty(vault$1, "__esModule", { value: true });
-vault$1.Vault = void 0;
-var fs$4 = require$$1;
-var path$4 = require$$0$1;
-var crypto$2 = require$$2$1;
-var uuidV4$2 = v4_1;
-var algorithm$1 = "aes-256-ctr";
-var encryptEncoding$1 = 'hex';
-var unencryptedEncoding$1 = 'utf8';
+Object.defineProperty(vault, "__esModule", { value: true });
+vault.Vault = void 0;
+var fs$2 = require$$1;
+var path$2 = require$$0$1;
+var crypto$1 = require$$2$1;
+var uuidV4$1 = v4_1;
+var algorithm = "aes-256-ctr";
+var encryptEncoding = 'hex';
+var unencryptedEncoding = 'utf8';
 //
 // Store sensitive data in proc.
 // Main goal: Protects tasks which would dump envvars from leaking secrets inadvertently
@@ -11383,9 +11186,9 @@ var unencryptedEncoding$1 = 'utf8';
 // Also protects against a dump of a process getting the secrets
 // The secret is generated and stored externally for the lifetime of the task.
 //
-var Vault$1 = /** @class */ (function () {
+var Vault = /** @class */ (function () {
     function Vault(keyPath) {
-        this._keyFile = path$4.join(keyPath, '.taskkey');
+        this._keyFile = path$2.join(keyPath, '.taskkey');
         this._store = {};
         this.genKey();
     }
@@ -11403,11 +11206,11 @@ var Vault$1 = /** @class */ (function () {
             return false;
         }
         var key = this.getKey();
-        var iv = crypto$2.randomBytes(16);
-        var cipher = crypto$2.createCipheriv(algorithm$1, key, iv);
-        var crypted = cipher.update(data, unencryptedEncoding$1, encryptEncoding$1);
-        var cryptedFinal = cipher.final(encryptEncoding$1);
-        this._store[name] = iv.toString(encryptEncoding$1) + crypted + cryptedFinal;
+        var iv = crypto$1.randomBytes(16);
+        var cipher = crypto$1.createCipheriv(algorithm, key, iv);
+        var crypted = cipher.update(data, unencryptedEncoding, encryptEncoding);
+        var cryptedFinal = cipher.final(encryptEncoding);
+        this._store[name] = iv.toString(encryptEncoding) + crypted + cryptedFinal;
         return true;
     };
     Vault.prototype.retrieveSecret = function (name) {
@@ -11416,38 +11219,38 @@ var Vault$1 = /** @class */ (function () {
         if (this._store.hasOwnProperty(name)) {
             var key = this.getKey();
             var data = this._store[name];
-            var ivDataBuffer = Buffer.from(data, encryptEncoding$1);
+            var ivDataBuffer = Buffer.from(data, encryptEncoding);
             var iv = ivDataBuffer.slice(0, 16);
             var encryptedText = ivDataBuffer.slice(16);
-            var decipher = crypto$2.createDecipheriv(algorithm$1, key, iv);
+            var decipher = crypto$1.createDecipheriv(algorithm, key, iv);
             var dec = decipher.update(encryptedText);
-            var decFinal = decipher.final(unencryptedEncoding$1);
+            var decFinal = decipher.final(unencryptedEncoding);
             secret = dec + decFinal;
         }
         return secret;
     };
     Vault.prototype.getKey = function () {
-        var key = fs$4.readFileSync(this._keyFile).toString('utf8');
+        var key = fs$2.readFileSync(this._keyFile).toString('utf8');
         // Key needs to be hashed to correct length to match algorithm (aes-256-ctr)
-        return crypto$2.createHash('sha256').update(key).digest();
+        return crypto$1.createHash('sha256').update(key).digest();
     };
     Vault.prototype.genKey = function () {
-        fs$4.writeFileSync(this._keyFile, uuidV4$2(), { encoding: 'utf8' });
+        fs$2.writeFileSync(this._keyFile, uuidV4$1(), { encoding: 'utf8' });
     };
     return Vault;
 }());
-vault$1.Vault = Vault$1;
+vault.Vault = Vault;
 
 (function (exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports._exposeCertSettings = exports._exposeProxySettings = exports._normalizeSeparators = exports._isRooted = exports._getDirectoryName = exports._ensureRooted = exports._isUncPath = exports._loadData = exports._ensurePatternRooted = exports._getFindInfoFromPattern = exports._cloneMatchOptions = exports._legacyFindFiles_convertPatternToRegExp = exports._which = exports._checkPath = exports._exist = exports._debug = exports._error = exports._warning = exports._command = exports._getVariableKey = exports._getVariable = exports._loc = exports._setResourcePath = exports._setErrStream = exports._setStdStream = exports._writeLine = exports._endsWith = exports._startsWith = exports._vault = exports._knownVariableMap = void 0;
+	exports._exposeCertSettings = exports._exposeProxySettings = exports._normalizeSeparators = exports._isRooted = exports._getDirectoryName = exports._ensureRooted = exports._isUncPath = exports._loadData = exports._ensurePatternRooted = exports._getFindInfoFromPattern = exports._cloneMatchOptions = exports._legacyFindFiles_convertPatternToRegExp = exports._which = exports._checkPath = exports._exist = exports._debug = exports._error = exports._warning = exports._command = exports._getVariableKey = exports._getVariable = exports._loc = exports._setResourcePath = exports._setErrStream = exports._setStdStream = exports._writeLine = exports._endsWith = exports._startsWith = exports.IssueSource = exports._vault = exports._knownVariableMap = void 0;
 	var fs = require$$1;
 	var path = require$$0$1;
-	var os = require$$1$1;
-	var minimatch = minimatch_1$1;
-	var util = require$$0$3;
-	var tcm = taskcommand$1;
-	var vm = vault$1;
+	var os = require$$0$2;
+	var minimatch = minimatch_1;
+	var util = require$$0$4;
+	var tcm = taskcommand;
+	var vm = vault;
 	var semver = semverExports$1;
 	var crypto = require$$2$1;
 	/**
@@ -11461,11 +11264,19 @@ vault$1.Vault = Vault$1;
 	 */
 	exports._knownVariableMap = {};
 	//-----------------------------------------------------
+	// Enums
+	//-----------------------------------------------------
+	var IssueSource;
+	(function (IssueSource) {
+	    IssueSource["CustomerScript"] = "CustomerScript";
+	    IssueSource["TaskInternal"] = "TaskInternal";
+	})(IssueSource = exports.IssueSource || (exports.IssueSource = {}));
+	//-----------------------------------------------------
 	// Validation Checks
 	//-----------------------------------------------------
 	// async await needs generators in node 4.x+
 	if (semver.lt(process.versions.node, '4.2.0')) {
-	    _warning('Tasks require a new agent.  Upgrade your agent or node to 4.2.0 or later');
+	    _warning('Tasks require a new agent.  Upgrade your agent or node to 4.2.0 or later', IssueSource.TaskInternal);
 	}
 	//-----------------------------------------------------
 	// String convenience
@@ -11555,7 +11366,7 @@ vault$1.Vault = Vault$1;
 	        }
 	    }
 	    else {
-	        _warning('LIB_ResourceFile does not exist');
+	        _warning('LIB_ResourceFile does not exist', IssueSource.TaskInternal);
 	    }
 	    return locStrings;
 	}
@@ -11590,7 +11401,7 @@ vault$1.Vault = Vault$1;
 	            _debug(_loc('LIB_ResourceFileAlreadySet', path));
 	        }
 	        else {
-	            _warning(_loc('LIB_ResourceFileAlreadySet', path));
+	            _warning(_loc('LIB_ResourceFileAlreadySet', path), IssueSource.TaskInternal);
 	        }
 	    }
 	}
@@ -11623,7 +11434,7 @@ vault$1.Vault = Vault$1;
 	    }
 	    else {
 	        if (Object.keys(_resourceFiles).length <= 0) {
-	            _warning("Resource file haven't been set, can't find loc string for key: " + key);
+	            _warning("Resource file haven't been set, can't find loc string for key: " + key, IssueSource.TaskInternal);
 	        }
 	        else {
 	            _warning("Can't find loc string for key: " + key);
@@ -11686,12 +11497,12 @@ vault$1.Vault = Vault$1;
 	    _writeLine(taskCmd.toString());
 	}
 	exports._command = _command;
-	function _warning(message) {
-	    _command('task.issue', { 'type': 'warning' }, message);
+	function _warning(message, source) {
+	    _command('task.issue', { 'type': 'warning', 'source': source }, message);
 	}
 	exports._warning = _warning;
-	function _error(message) {
-	    _command('task.issue', { 'type': 'error' }, message);
+	function _error(message, source) {
+	    _command('task.issue', { 'type': 'error', 'source': source }, message);
 	}
 	exports._error = _error;
 	function _debug(message) {
@@ -12318,9 +12129,9 @@ vault$1.Vault = Vault$1;
 	        return new Buffer(storageFile).toString('base64') + ':' + new Buffer(encryptedContent).toString('base64');
 	    }
 	} 
-} (internal$1));
+} (internal));
 
-var toolrunner$1 = {};
+var toolrunner = {};
 
 var q = {exports: {}};
 
@@ -14372,7 +14183,7 @@ var q = {exports: {}};
 
 var qExports = q.exports;
 
-var __extends$1 = (commonjsGlobal && commonjsGlobal.__extends) || (function () {
+var __extends = (commonjsGlobal && commonjsGlobal.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -14385,23 +14196,23 @@ var __extends$1 = (commonjsGlobal && commonjsGlobal.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(toolrunner$1, "__esModule", { value: true });
-toolrunner$1.ToolRunner = void 0;
-var Q$1 = qExports;
-var os$2 = require$$1$1;
-var events$1 = require$$2;
-var child$1 = require$$1$2;
-var im$1 = internal$1;
-var fs$3 = require$$1;
-var ToolRunner$1 = /** @class */ (function (_super) {
-    __extends$1(ToolRunner, _super);
+Object.defineProperty(toolrunner, "__esModule", { value: true });
+toolrunner.ToolRunner = void 0;
+var Q = qExports;
+var os$1 = require$$0$2;
+var events = require$$2;
+var child = require$$1$1;
+var im = internal;
+var fs$1 = require$$1;
+var ToolRunner = /** @class */ (function (_super) {
+    __extends(ToolRunner, _super);
     function ToolRunner(toolPath) {
         var _this = _super.call(this) || this;
         _this.cmdSpecialChars = [' ', '\t', '&', '(', ')', '[', ']', '{', '}', '^', '=', ';', '!', '\'', '+', ',', '`', '~', '|', '<', '>', '"'];
         if (!toolPath) {
             throw new Error('Parameter \'toolPath\' cannot be null or empty.');
         }
-        _this.toolPath = im$1._which(toolPath, true);
+        _this.toolPath = im._which(toolPath, true);
         _this.args = [];
         _this._debug('toolRunner toolPath: ' + toolPath);
         return _this;
@@ -14510,13 +14321,13 @@ var ToolRunner$1 = /** @class */ (function (_super) {
     ToolRunner.prototype._processLineBuffer = function (data, strBuffer, onLine) {
         try {
             var s = strBuffer + data.toString();
-            var n = s.indexOf(os$2.EOL);
+            var n = s.indexOf(os$1.EOL);
             while (n > -1) {
                 var line = s.substring(0, n);
                 onLine(line);
                 // the rest of the string ...
-                s = s.substring(n + os$2.EOL.length);
-                n = s.indexOf(os$2.EOL);
+                s = s.substring(n + os$1.EOL.length);
+                n = s.indexOf(os$1.EOL);
             }
             strBuffer = s;
         }
@@ -14670,7 +14481,7 @@ var ToolRunner$1 = /** @class */ (function (_super) {
     };
     ToolRunner.prototype._isCmdFile = function () {
         var upperToolPath = this.toolPath.toUpperCase();
-        return im$1._endsWith(upperToolPath, '.CMD') || im$1._endsWith(upperToolPath, '.BAT');
+        return im._endsWith(upperToolPath, '.CMD') || im._endsWith(upperToolPath, '.BAT');
     };
     /**
      * Determine whether the cmd arg needs to be quoted. Returns true if arg contains any of special chars array.
@@ -14889,10 +14700,8 @@ var ToolRunner$1 = /** @class */ (function (_super) {
         result['windowsVerbatimArguments'] = options.windowsVerbatimArguments || this._isCmdFile();
         return result;
     };
-    ToolRunner.prototype.execWithPiping = function (pipeOutputToTool, options) {
+    ToolRunner.prototype.execWithPipingAsync = function (pipeOutputToTool, options) {
         var _this = this;
-        var _a, _b, _c, _d;
-        var defer = Q$1.defer();
         this._debug('exec tool: ' + this.toolPath);
         this._debug('arguments:');
         this.args.forEach(function (arg) {
@@ -14901,7 +14710,7 @@ var ToolRunner$1 = /** @class */ (function (_super) {
         var success = true;
         var optionsNonNull = this._cloneExecOptions(options);
         if (!optionsNonNull.silent) {
-            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os$2.EOL);
+            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os$1.EOL);
         }
         var cp;
         var toolPath = pipeOutputToTool.toolPath;
@@ -14917,10 +14726,190 @@ var ToolRunner$1 = /** @class */ (function (_super) {
         // https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
         //start the child process for both tools
         waitingEvents++;
-        var cpFirst = child$1.spawn(this._getSpawnFileName(optionsNonNull), this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(optionsNonNull));
+        var cpFirst = child.spawn(this._getSpawnFileName(optionsNonNull), this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(optionsNonNull));
         waitingEvents++;
-        cp = child$1.spawn(pipeOutputToTool._getSpawnFileName(optionsNonNull), pipeOutputToTool._getSpawnArgs(optionsNonNull), pipeOutputToTool._getSpawnOptions(optionsNonNull));
-        fileStream = this.pipeOutputToFile ? fs$3.createWriteStream(this.pipeOutputToFile) : null;
+        cp = child.spawn(pipeOutputToTool._getSpawnFileName(optionsNonNull), pipeOutputToTool._getSpawnArgs(optionsNonNull), pipeOutputToTool._getSpawnOptions(optionsNonNull));
+        fileStream = this.pipeOutputToFile ? fs$1.createWriteStream(this.pipeOutputToFile) : null;
+        return new Promise(function (resolve, reject) {
+            var _a, _b, _c, _d;
+            if (fileStream) {
+                waitingEvents++;
+                fileStream.on('finish', function () {
+                    waitingEvents--; //file write is complete
+                    fileStream = null;
+                    if (waitingEvents == 0) {
+                        if (error) {
+                            reject(error);
+                        }
+                        else {
+                            resolve(returnCode);
+                        }
+                    }
+                });
+                fileStream.on('error', function (err) {
+                    waitingEvents--; //there were errors writing to the file, write is done
+                    _this._debug("Failed to pipe output of " + toolPathFirst + " to file " + _this.pipeOutputToFile + ". Error = " + err);
+                    fileStream = null;
+                    if (waitingEvents == 0) {
+                        if (error) {
+                            reject(error);
+                        }
+                        else {
+                            resolve(returnCode);
+                        }
+                    }
+                });
+            }
+            //pipe stdout of first tool to stdin of second tool
+            (_a = cpFirst.stdout) === null || _a === void 0 ? void 0 : _a.on('data', function (data) {
+                var _a;
+                try {
+                    if (fileStream) {
+                        fileStream.write(data);
+                    }
+                    (_a = cp.stdin) === null || _a === void 0 ? void 0 : _a.write(data);
+                }
+                catch (err) {
+                    _this._debug('Failed to pipe output of ' + toolPathFirst + ' to ' + toolPath);
+                    _this._debug(toolPath + ' might have exited due to errors prematurely. Verify the arguments passed are valid.');
+                }
+            });
+            (_b = cpFirst.stderr) === null || _b === void 0 ? void 0 : _b.on('data', function (data) {
+                if (fileStream) {
+                    fileStream.write(data);
+                }
+                successFirst = !optionsNonNull.failOnStdErr;
+                if (!optionsNonNull.silent) {
+                    var s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
+                    s.write(data);
+                }
+            });
+            cpFirst.on('error', function (err) {
+                var _a;
+                waitingEvents--; //first process is complete with errors
+                if (fileStream) {
+                    fileStream.end();
+                }
+                (_a = cp.stdin) === null || _a === void 0 ? void 0 : _a.end();
+                error = new Error(toolPathFirst + ' failed. ' + err.message);
+                if (waitingEvents == 0) {
+                    reject(error);
+                }
+            });
+            cpFirst.on('close', function (code, signal) {
+                var _a;
+                waitingEvents--; //first process is complete
+                if (code != 0 && !optionsNonNull.ignoreReturnCode) {
+                    successFirst = false;
+                    returnCodeFirst = code;
+                    returnCode = returnCodeFirst;
+                }
+                _this._debug('success of first tool:' + successFirst);
+                if (fileStream) {
+                    fileStream.end();
+                }
+                (_a = cp.stdin) === null || _a === void 0 ? void 0 : _a.end();
+                if (waitingEvents == 0) {
+                    if (error) {
+                        reject(error);
+                    }
+                    else {
+                        resolve(returnCode);
+                    }
+                }
+            });
+            var stdbuffer = '';
+            (_c = cp.stdout) === null || _c === void 0 ? void 0 : _c.on('data', function (data) {
+                _this.emit('stdout', data);
+                if (!optionsNonNull.silent) {
+                    optionsNonNull.outStream.write(data);
+                }
+                _this._processLineBuffer(data, stdbuffer, function (line) {
+                    _this.emit('stdline', line);
+                });
+            });
+            var errbuffer = '';
+            (_d = cp.stderr) === null || _d === void 0 ? void 0 : _d.on('data', function (data) {
+                _this.emit('stderr', data);
+                success = !optionsNonNull.failOnStdErr;
+                if (!optionsNonNull.silent) {
+                    var s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
+                    s.write(data);
+                }
+                _this._processLineBuffer(data, errbuffer, function (line) {
+                    _this.emit('errline', line);
+                });
+            });
+            cp.on('error', function (err) {
+                waitingEvents--; //process is done with errors
+                error = new Error(toolPath + ' failed. ' + err.message);
+                if (waitingEvents == 0) {
+                    reject(error);
+                }
+            });
+            cp.on('close', function (code, signal) {
+                waitingEvents--; //process is complete
+                _this._debug('rc:' + code);
+                returnCode = code;
+                if (stdbuffer.length > 0) {
+                    _this.emit('stdline', stdbuffer);
+                }
+                if (errbuffer.length > 0) {
+                    _this.emit('errline', errbuffer);
+                }
+                if (code != 0 && !optionsNonNull.ignoreReturnCode) {
+                    success = false;
+                }
+                _this._debug('success:' + success);
+                if (!successFirst) { //in the case output is piped to another tool, check exit code of both tools
+                    error = new Error(toolPathFirst + ' failed with return code: ' + returnCodeFirst);
+                }
+                else if (!success) {
+                    error = new Error(toolPath + ' failed with return code: ' + code);
+                }
+                if (waitingEvents == 0) {
+                    if (error) {
+                        reject(error);
+                    }
+                    else {
+                        resolve(returnCode);
+                    }
+                }
+            });
+        });
+    };
+    ToolRunner.prototype.execWithPiping = function (pipeOutputToTool, options) {
+        var _this = this;
+        var _a, _b, _c, _d;
+        var defer = Q.defer();
+        this._debug('exec tool: ' + this.toolPath);
+        this._debug('arguments:');
+        this.args.forEach(function (arg) {
+            _this._debug('   ' + arg);
+        });
+        var success = true;
+        var optionsNonNull = this._cloneExecOptions(options);
+        if (!optionsNonNull.silent) {
+            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os$1.EOL);
+        }
+        var cp;
+        var toolPath = pipeOutputToTool.toolPath;
+        var toolPathFirst;
+        var successFirst = true;
+        var returnCodeFirst;
+        var fileStream;
+        var waitingEvents = 0; // number of process or stream events we are waiting on to complete
+        var returnCode = 0;
+        var error;
+        toolPathFirst = this.toolPath;
+        // Following node documentation example from this link on how to pipe output of one process to another
+        // https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
+        //start the child process for both tools
+        waitingEvents++;
+        var cpFirst = child.spawn(this._getSpawnFileName(optionsNonNull), this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(optionsNonNull));
+        waitingEvents++;
+        cp = child.spawn(pipeOutputToTool._getSpawnFileName(optionsNonNull), pipeOutputToTool._getSpawnArgs(optionsNonNull), pipeOutputToTool._getSpawnOptions(optionsNonNull));
+        fileStream = this.pipeOutputToFile ? fs$1.createWriteStream(this.pipeOutputToFile) : null;
         if (fileStream) {
             waitingEvents++;
             fileStream.on('finish', function () {
@@ -15140,13 +15129,12 @@ var ToolRunner$1 = /** @class */ (function (_super) {
      * @param     options  optional exec options.  See IExecOptions
      * @returns   number
      */
-    ToolRunner.prototype.exec = function (options) {
+    ToolRunner.prototype.execAsync = function (options) {
         var _this = this;
         var _a, _b, _c;
         if (this.pipeOutputToTool) {
-            return this.execWithPiping(this.pipeOutputToTool, options);
+            return this.execWithPipingAsync(this.pipeOutputToTool, options);
         }
-        var defer = Q$1.defer();
         this._debug('exec tool: ' + this.toolPath);
         this._debug('arguments:');
         this.args.forEach(function (arg) {
@@ -15154,20 +15142,119 @@ var ToolRunner$1 = /** @class */ (function (_super) {
         });
         var optionsNonNull = this._cloneExecOptions(options);
         if (!optionsNonNull.silent) {
-            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os$2.EOL);
+            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os$1.EOL);
         }
-        var state = new ExecState$1(optionsNonNull, this.toolPath);
+        var state = new ExecState(optionsNonNull, this.toolPath);
         state.on('debug', function (message) {
             _this._debug(message);
         });
-        var cp = child$1.spawn(this._getSpawnFileName(options), this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(options));
+        var cp = child.spawn(this._getSpawnFileName(options), this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(options));
         this.childProcess = cp;
         // it is possible for the child process to end its last line without a new line.
         // because stdout is buffered, this causes the last line to not get sent to the parent
         // stream. Adding this event forces a flush before the child streams are closed.
         (_a = cp.stdout) === null || _a === void 0 ? void 0 : _a.on('finish', function () {
             if (!optionsNonNull.silent) {
-                optionsNonNull.outStream.write(os$2.EOL);
+                optionsNonNull.outStream.write(os$1.EOL);
+            }
+        });
+        var stdbuffer = '';
+        (_b = cp.stdout) === null || _b === void 0 ? void 0 : _b.on('data', function (data) {
+            _this.emit('stdout', data);
+            if (!optionsNonNull.silent) {
+                optionsNonNull.outStream.write(data);
+            }
+            _this._processLineBuffer(data, stdbuffer, function (line) {
+                _this.emit('stdline', line);
+            });
+        });
+        var errbuffer = '';
+        (_c = cp.stderr) === null || _c === void 0 ? void 0 : _c.on('data', function (data) {
+            state.processStderr = true;
+            _this.emit('stderr', data);
+            if (!optionsNonNull.silent) {
+                var s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
+                s.write(data);
+            }
+            _this._processLineBuffer(data, errbuffer, function (line) {
+                _this.emit('errline', line);
+            });
+        });
+        cp.on('error', function (err) {
+            state.processError = err.message;
+            state.processExited = true;
+            state.processClosed = true;
+            state.CheckComplete();
+        });
+        cp.on('exit', function (code, signal) {
+            state.processExitCode = code;
+            state.processExited = true;
+            _this._debug("Exit code " + code + " received from tool '" + _this.toolPath + "'");
+            state.CheckComplete();
+        });
+        cp.on('close', function (code, signal) {
+            state.processExitCode = code;
+            state.processExited = true;
+            state.processClosed = true;
+            _this._debug("STDIO streams have closed for tool '" + _this.toolPath + "'");
+            state.CheckComplete();
+        });
+        return new Promise(function (resolve, reject) {
+            state.on('done', function (error, exitCode) {
+                if (stdbuffer.length > 0) {
+                    _this.emit('stdline', stdbuffer);
+                }
+                if (errbuffer.length > 0) {
+                    _this.emit('errline', errbuffer);
+                }
+                cp.removeAllListeners();
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    resolve(exitCode);
+                }
+            });
+        });
+    };
+    /**
+     * Exec a tool.
+     * Output will be streamed to the live console.
+     * Returns promise with return code
+     *
+     * @deprecated Use the `execAsync` method that returns a native Javascript promise instead
+     * @param     tool     path to tool to exec
+     * @param     options  optional exec options.  See IExecOptions
+     * @returns   number
+     */
+    ToolRunner.prototype.exec = function (options) {
+        var _this = this;
+        var _a, _b, _c;
+        if (this.pipeOutputToTool) {
+            return this.execWithPiping(this.pipeOutputToTool, options);
+        }
+        var defer = Q.defer();
+        this._debug('exec tool: ' + this.toolPath);
+        this._debug('arguments:');
+        this.args.forEach(function (arg) {
+            _this._debug('   ' + arg);
+        });
+        var optionsNonNull = this._cloneExecOptions(options);
+        if (!optionsNonNull.silent) {
+            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os$1.EOL);
+        }
+        var state = new ExecState(optionsNonNull, this.toolPath);
+        state.on('debug', function (message) {
+            _this._debug(message);
+        });
+        var cp = child.spawn(this._getSpawnFileName(options), this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(options));
+        this.childProcess = cp;
+        // it is possible for the child process to end its last line without a new line.
+        // because stdout is buffered, this causes the last line to not get sent to the parent
+        // stream. Adding this event forces a flush before the child streams are closed.
+        (_a = cp.stdout) === null || _a === void 0 ? void 0 : _a.on('finish', function () {
+            if (!optionsNonNull.silent) {
+                optionsNonNull.outStream.write(os$1.EOL);
             }
         });
         var stdbuffer = '';
@@ -15247,9 +15334,9 @@ var ToolRunner$1 = /** @class */ (function (_super) {
         });
         options = this._cloneExecOptions(options);
         if (!options.silent) {
-            options.outStream.write(this._getCommandString(options) + os$2.EOL);
+            options.outStream.write(this._getCommandString(options) + os$1.EOL);
         }
-        var r = child$1.spawnSync(this._getSpawnFileName(options), this._getSpawnArgs(options), this._getSpawnSyncOptions(options));
+        var r = child.spawnSync(this._getSpawnFileName(options), this._getSpawnArgs(options), this._getSpawnSyncOptions(options));
         if (!options.silent && r.stdout && r.stdout.length > 0) {
             options.outStream.write(r.stdout);
         }
@@ -15271,10 +15358,10 @@ var ToolRunner$1 = /** @class */ (function (_super) {
         }
     };
     return ToolRunner;
-}(events$1.EventEmitter));
-toolrunner$1.ToolRunner = ToolRunner$1;
-var ExecState$1 = /** @class */ (function (_super) {
-    __extends$1(ExecState, _super);
+}(events.EventEmitter));
+toolrunner.ToolRunner = ToolRunner;
+var ExecState = /** @class */ (function (_super) {
+    __extends(ExecState, _super);
     function ExecState(options, toolPath) {
         var _this = _super.call(this) || this;
         _this.delay = 10000; // 10 seconds
@@ -15309,13 +15396,13 @@ var ExecState$1 = /** @class */ (function (_super) {
         var error;
         if (this.processExited) {
             if (this.processError) {
-                error = new Error(im$1._loc('LIB_ProcessError', this.toolPath, this.processError));
+                error = new Error(im._loc('LIB_ProcessError', this.toolPath, this.processError));
             }
             else if (this.processExitCode != 0 && !this.options.ignoreReturnCode) {
-                error = new Error(im$1._loc('LIB_ProcessExitCode', this.toolPath, this.processExitCode));
+                error = new Error(im._loc('LIB_ProcessExitCode', this.toolPath, this.processExitCode));
             }
             else if (this.processStderr && this.options.failOnStdErr) {
-                error = new Error(im$1._loc('LIB_ProcessStderr', this.toolPath));
+                error = new Error(im._loc('LIB_ProcessStderr', this.toolPath));
             }
         }
         // clear the timeout
@@ -15331,26 +15418,26 @@ var ExecState$1 = /** @class */ (function (_super) {
             return;
         }
         if (!state.processClosed && state.processExited) {
-            console.log(im$1._loc('LIB_StdioNotClosed', state.delay / 1000, state.toolPath));
-            state._debug(im$1._loc('LIB_StdioNotClosed', state.delay / 1000, state.toolPath));
+            console.log(im._loc('LIB_StdioNotClosed', state.delay / 1000, state.toolPath));
+            state._debug(im._loc('LIB_StdioNotClosed', state.delay / 1000, state.toolPath));
         }
         state._setResult();
     };
     return ExecState;
-}(events$1.EventEmitter));
+}(events.EventEmitter));
 
 (function (exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.updateReleaseName = exports.addBuildTag = exports.updateBuildNumber = exports.uploadBuildLog = exports.associateArtifact = exports.uploadArtifact = exports.logIssue = exports.logDetail = exports.setProgress = exports.setEndpoint = exports.addAttachment = exports.uploadSummary = exports.prependPath = exports.uploadFile = exports.CodeCoverageEnabler = exports.CodeCoveragePublisher = exports.TestPublisher = exports.getHttpCertConfiguration = exports.getHttpProxyConfiguration = exports.findMatch = exports.filter = exports.match = exports.tool = exports.execSync = exports.exec = exports.rmRF = exports.legacyFindFiles = exports.find = exports.retry = exports.mv = exports.cp = exports.ls = exports.which = exports.resolve = exports.mkdirP = exports.popd = exports.pushd = exports.cd = exports.checkPath = exports.cwd = exports.getAgentMode = exports.getPlatform = exports.osType = exports.writeFile = exports.exist = exports.stats = exports.debug = exports.error = exports.warning = exports.command = exports.setTaskVariable = exports.getTaskVariable = exports.getSecureFileTicket = exports.getSecureFileName = exports.getEndpointAuthorization = exports.getEndpointAuthorizationParameterRequired = exports.getEndpointAuthorizationParameter = exports.getEndpointAuthorizationSchemeRequired = exports.getEndpointAuthorizationScheme = exports.getEndpointDataParameterRequired = exports.getEndpointDataParameter = exports.getEndpointUrlRequired = exports.getEndpointUrl = exports.getPathInputRequired = exports.getPathInput = exports.filePathSupplied = exports.getDelimitedInput = exports.getBoolFeatureFlag = exports.getBoolInput = exports.getInputRequired = exports.getInput = exports.setSecret = exports.setVariable = exports.getVariables = exports.assertAgent = exports.getVariable = exports.loc = exports.setResourcePath = exports.setResult = exports.setErrStream = exports.setStdStream = exports.AgentHostedMode = exports.Platform = exports.FieldType = exports.ArtifactType = exports.IssueType = exports.TaskState = exports.TaskResult = void 0;
+	exports.updateReleaseName = exports.addBuildTag = exports.updateBuildNumber = exports.uploadBuildLog = exports.associateArtifact = exports.uploadArtifact = exports.logIssue = exports.logDetail = exports.setProgress = exports.setEndpoint = exports.addAttachment = exports.uploadSummary = exports.prependPath = exports.uploadFile = exports.CodeCoverageEnabler = exports.CodeCoveragePublisher = exports.TestPublisher = exports.getHttpCertConfiguration = exports.getHttpProxyConfiguration = exports.findMatch = exports.filter = exports.match = exports.tool = exports.execSync = exports.exec = exports.execAsync = exports.rmRF = exports.legacyFindFiles = exports.find = exports.retry = exports.mv = exports.cp = exports.ls = exports.which = exports.resolve = exports.mkdirP = exports.popd = exports.pushd = exports.cd = exports.checkPath = exports.cwd = exports.getAgentMode = exports.getNodeMajorVersion = exports.getPlatform = exports.osType = exports.writeFile = exports.exist = exports.stats = exports.debug = exports.error = exports.warning = exports.command = exports.setTaskVariable = exports.getTaskVariable = exports.getSecureFileTicket = exports.getSecureFileName = exports.getEndpointAuthorization = exports.getEndpointAuthorizationParameterRequired = exports.getEndpointAuthorizationParameter = exports.getEndpointAuthorizationSchemeRequired = exports.getEndpointAuthorizationScheme = exports.getEndpointDataParameterRequired = exports.getEndpointDataParameter = exports.getEndpointUrlRequired = exports.getEndpointUrl = exports.getPathInputRequired = exports.getPathInput = exports.filePathSupplied = exports.getDelimitedInput = exports.getPipelineFeature = exports.getBoolFeatureFlag = exports.getBoolInput = exports.getInputRequired = exports.getInput = exports.setSecret = exports.setVariable = exports.getVariables = exports.assertAgent = exports.getVariable = exports.loc = exports.setResourcePath = exports.setResult = exports.setErrStream = exports.setStdStream = exports.AgentHostedMode = exports.Platform = exports.IssueSource = exports.FieldType = exports.ArtifactType = exports.IssueType = exports.TaskState = exports.TaskResult = void 0;
 	var shell = requireShell();
-	var childProcess = require$$1$2;
+	var childProcess = require$$1$1;
 	var fs = require$$1;
 	var path = require$$0$1;
-	var os = require$$1$1;
-	var minimatch = minimatch_1$1;
-	var im = internal$1;
-	var tcm = taskcommand$1;
-	var trm = toolrunner$1;
+	var os = require$$0$2;
+	var minimatch = minimatch_1;
+	var im = internal;
+	var tcm = taskcommand;
+	var trm = toolrunner;
 	var semver = semverExports$1;
 	var TaskResult;
 	(function (TaskResult) {
@@ -15386,6 +15473,7 @@ var ExecState$1 = /** @class */ (function (_super) {
 	    FieldType[FieldType["DataParameter"] = 1] = "DataParameter";
 	    FieldType[FieldType["Url"] = 2] = "Url";
 	})(FieldType = exports.FieldType || (exports.FieldType = {}));
+	exports.IssueSource = im.IssueSource;
 	/** Platforms supported by our build agent */
 	var Platform;
 	(function (Platform) {
@@ -15408,10 +15496,10 @@ var ExecState$1 = /** @class */ (function (_super) {
 	    exports.debug('task result: ' + TaskResult[result]);
 	    // add an error issue
 	    if (result == TaskResult.Failed && message) {
-	        exports.error(message);
+	        exports.error(message, exports.IssueSource.TaskInternal);
 	    }
 	    else if (result == TaskResult.SucceededWithIssues && message) {
-	        exports.warning(message);
+	        exports.warning(message, exports.IssueSource.TaskInternal);
 	    }
 	    // task.complete
 	    var properties = { 'result': TaskResult[result] };
@@ -15426,7 +15514,7 @@ var ExecState$1 = /** @class */ (function (_super) {
 	//
 	process.on('uncaughtException', function (err) {
 	    setResult(TaskResult.Failed, exports.loc('LIB_UnhandledEx', err.message));
-	    exports.error(String(err.stack));
+	    exports.error(String(err.stack), im.IssueSource.TaskInternal);
 	});
 	//
 	// Catching unhandled rejections from promises and rethrowing them as exceptions
@@ -15580,10 +15668,11 @@ var ExecState$1 = /** @class */ (function (_super) {
 	exports.getBoolInput = getBoolInput;
 	/**
 	 * Gets the value of an feature flag and converts to a bool.
-	 *
+	 * @IMPORTANT This method is only for internal Microsoft development. Do not use it for external tasks.
 	 * @param     name     name of the feature flag to get.
 	 * @param     defaultValue default value of the feature flag in case it's not found in env. (optional. Default value = false)
 	 * @returns   boolean
+	 * @deprecated Don't use this for new development. Use getPipelineFeature instead.
 	 */
 	function getBoolFeatureFlag(ffName, defaultValue) {
 	    if (defaultValue === void 0) { defaultValue = false; }
@@ -15596,6 +15685,24 @@ var ExecState$1 = /** @class */ (function (_super) {
 	    return ffValue.toLowerCase() === "true";
 	}
 	exports.getBoolFeatureFlag = getBoolFeatureFlag;
+	/**
+	 * Gets the value of an task feature and converts to a bool.
+	 * @IMPORTANT This method is only for internal Microsoft development. Do not use it for external tasks.
+	 * @param     name     name of the feature to get.
+	 * @returns   boolean
+	 */
+	function getPipelineFeature(featureName) {
+	    var variableName = im._getVariableKey("DistributedTask.Tasks." + featureName);
+	    var featureValue = process.env[variableName];
+	    if (!featureValue) {
+	        exports.debug("Feature '" + featureName + "' not found. Returning false as default.");
+	        return false;
+	    }
+	    var boolValue = featureValue.toLowerCase() === "true";
+	    exports.debug("Feature '" + featureName + "' = '" + featureValue + "'. Processed as '" + boolValue + "'.");
+	    return boolValue;
+	}
+	exports.getPipelineFeature = getPipelineFeature;
 	/**
 	 * Gets the value of an input and splits the value using a delimiter (space, comma, etc).
 	 * Empty values are removed.  This function is useful for splitting an input containing a simple
@@ -15958,6 +16065,23 @@ var ExecState$1 = /** @class */ (function (_super) {
 	}
 	exports.getPlatform = getPlatform;
 	/**
+	 * Resolves major version of Node.js engine used by the agent.
+	 * @returns {Number} Node's major version.
+	 */
+	function getNodeMajorVersion() {
+	    var _a;
+	    var version = (_a = process === null || process === void 0 ? void 0 : process.versions) === null || _a === void 0 ? void 0 : _a.node;
+	    if (!version) {
+	        throw new Error(exports.loc('LIB_UndefinedNodeVersion'));
+	    }
+	    var parts = version.split('.').map(Number);
+	    if (parts.length < 1) {
+	        return NaN;
+	    }
+	    return parts[0];
+	}
+	exports.getNodeMajorVersion = getNodeMajorVersion;
+	/**
 	 * Return hosted type of Agent
 	 * @returns {AgentHostedMode}
 	 */
@@ -16031,7 +16155,7 @@ var ExecState$1 = /** @class */ (function (_super) {
 	    var testDir = p;
 	    while (true) {
 	        // validate the loop is not out of control
-	        if (stack.length >= (process.env['TASKLIB_TEST_MKDIRP_FAILSAFE'] || 1000)) {
+	        if (stack.length >= Number(process.env['TASKLIB_TEST_MKDIRP_FAILSAFE'] || 1000)) {
 	            // let the framework throw
 	            exports.debug('loop is out of control');
 	            fs.mkdirSync(p);
@@ -16138,7 +16262,7 @@ var ExecState$1 = /** @class */ (function (_super) {
 	        catch (e) {
 	            if (retryCount <= 0) {
 	                if (continueOnError) {
-	                    exports.warning(e);
+	                    exports.warning(e, exports.IssueSource.TaskInternal);
 	                    break;
 	                }
 	                else {
@@ -16188,7 +16312,7 @@ var ExecState$1 = /** @class */ (function (_super) {
 	        catch (e) {
 	            if (retryOptions.retryCount <= 0) {
 	                if (retryOptions.continueOnError) {
-	                    exports.warning(e);
+	                    exports.warning(e, exports.IssueSource.TaskInternal);
 	                    break;
 	                }
 	                else {
@@ -16288,7 +16412,7 @@ var ExecState$1 = /** @class */ (function (_super) {
 	            }
 	            catch (err) {
 	                if (err.code == 'ENOENT' && options.skipMissingFiles) {
-	                    exports.warning("No such file or directory: \"" + item.path + "\" - skipping.");
+	                    exports.warning("No such file or directory: \"" + item.path + "\" - skipping.", exports.IssueSource.TaskInternal);
 	                    return "continue";
 	                }
 	                throw err;
@@ -16598,6 +16722,33 @@ var ExecState$1 = /** @class */ (function (_super) {
 	 * Output will be streamed to the live console.
 	 * Returns promise with return code
 	 *
+	 * @param     tool     path to tool to exec
+	 * @param     args     an arg string or array of args
+	 * @param     options  optional exec options.  See IExecOptions
+	 * @returns   number
+	 */
+	function execAsync(tool, args, options) {
+	    var tr = this.tool(tool);
+	    tr.on('debug', function (data) {
+	        exports.debug(data);
+	    });
+	    if (args) {
+	        if (args instanceof Array) {
+	            tr.arg(args);
+	        }
+	        else if (typeof (args) === 'string') {
+	            tr.line(args);
+	        }
+	    }
+	    return tr.execAsync(options);
+	}
+	exports.execAsync = execAsync;
+	/**
+	 * Exec a tool.  Convenience wrapper over ToolRunner to exec with args in one call.
+	 * Output will be streamed to the live console.
+	 * Returns promise with return code
+	 *
+	 * @deprecated Use the {@link execAsync} method that returns a native Javascript Promise instead
 	 * @param     tool     path to tool to exec
 	 * @param     args     an arg string or array of args
 	 * @param     options  optional exec options.  See IExecOptions
@@ -17365,7 +17516,7 @@ var ExecState$1 = /** @class */ (function (_super) {
 	//-----------------------------------------------------
 	// async await needs generators in node 4.x+
 	if (semver.lt(process.versions.node, '4.2.0')) {
-	    exports.warning('Tasks require a new agent.  Upgrade your agent or node to 4.2.0 or later');
+	    exports.warning('Tasks require a new agent.  Upgrade your agent or node to 4.2.0 or later', exports.IssueSource.TaskInternal);
 	}
 	//-------------------------------------------------------------------
 	// Populate the vault with sensitive data.  Inputs and Endpoints
@@ -17376,7 +17527,7 @@ var ExecState$1 = /** @class */ (function (_super) {
 	    im._exposeProxySettings();
 	    im._exposeCertSettings();
 	} 
-} (task$1));
+} (task));
 
 var tool = {};
 
@@ -17450,43 +17601,75 @@ var hasProto$1 = function hasProto() {
 /* eslint no-invalid-this: 1 */
 
 var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ';
-var slice = Array.prototype.slice;
 var toStr$1 = Object.prototype.toString;
+var max = Math.max;
 var funcType = '[object Function]';
+
+var concatty = function concatty(a, b) {
+    var arr = [];
+
+    for (var i = 0; i < a.length; i += 1) {
+        arr[i] = a[i];
+    }
+    for (var j = 0; j < b.length; j += 1) {
+        arr[j + a.length] = b[j];
+    }
+
+    return arr;
+};
+
+var slicy = function slicy(arrLike, offset) {
+    var arr = [];
+    for (var i = offset || 0, j = 0; i < arrLike.length; i += 1, j += 1) {
+        arr[j] = arrLike[i];
+    }
+    return arr;
+};
+
+var joiny = function (arr, joiner) {
+    var str = '';
+    for (var i = 0; i < arr.length; i += 1) {
+        str += arr[i];
+        if (i + 1 < arr.length) {
+            str += joiner;
+        }
+    }
+    return str;
+};
 
 var implementation$1 = function bind(that) {
     var target = this;
-    if (typeof target !== 'function' || toStr$1.call(target) !== funcType) {
+    if (typeof target !== 'function' || toStr$1.apply(target) !== funcType) {
         throw new TypeError(ERROR_MESSAGE + target);
     }
-    var args = slice.call(arguments, 1);
+    var args = slicy(arguments, 1);
 
     var bound;
     var binder = function () {
         if (this instanceof bound) {
             var result = target.apply(
                 this,
-                args.concat(slice.call(arguments))
+                concatty(args, arguments)
             );
             if (Object(result) === result) {
                 return result;
             }
             return this;
-        } else {
-            return target.apply(
-                that,
-                args.concat(slice.call(arguments))
-            );
         }
+        return target.apply(
+            that,
+            concatty(args, arguments)
+        );
+
     };
 
-    var boundLength = Math.max(0, target.length - args.length);
+    var boundLength = max(0, target.length - args.length);
     var boundArgs = [];
     for (var i = 0; i < boundLength; i++) {
-        boundArgs.push('$' + i);
+        boundArgs[i] = '$' + i;
     }
 
-    bound = Function('binder', 'return function (' + boundArgs.join(',') + '){ return binder.apply(this,arguments); }')(binder);
+    bound = Function('binder', 'return function (' + joiny(boundArgs, ',') + '){ return binder.apply(this,arguments); }')(binder);
 
     if (target.prototype) {
         var Empty = function Empty() {};
@@ -19401,7 +19584,7 @@ var normalizeParseOptions = function normalizeParseOptions(opts) {
     };
 };
 
-var parse$2 = function (str, opts) {
+var parse$1 = function (str, opts) {
     var options = normalizeParseOptions(opts);
 
     if (str === '' || str === null || typeof str === 'undefined') {
@@ -19428,12 +19611,12 @@ var parse$2 = function (str, opts) {
 };
 
 var stringify = stringify_1;
-var parse$1 = parse$2;
+var parse = parse$1;
 var formats = formats$3;
 
 var lib = {
     formats: formats,
-    parse: parse$1,
+    parse: parse,
     stringify: stringify
 };
 
@@ -19449,8 +19632,8 @@ var __awaiter$1 = (commonjsGlobal && commonjsGlobal.__awaiter) || function (this
 };
 Object.defineProperty(Util, "__esModule", { value: true });
 const qs = lib;
-const url = require$$1$3;
-const path$3 = require$$0$1;
+const url = require$$1$2;
+const path$1 = require$$0$1;
 const zlib = require$$3;
 /**
  * creates an url from a request url and optional base url (http://server:8080)
@@ -19460,7 +19643,7 @@ const zlib = require$$3;
  * @return {string} - resultant url
  */
 function getUrl(resource, baseUrl, queryParams) {
-    const pathApi = path$3.posix || path$3;
+    const pathApi = path$1.posix || path$1;
     let requestUrl = '';
     if (!baseUrl) {
         requestUrl = resource;
@@ -19587,11 +19770,11 @@ var hasRequiredTunnel$1;
 function requireTunnel$1 () {
 	if (hasRequiredTunnel$1) return tunnel$1;
 	hasRequiredTunnel$1 = 1;
-	var tls = require$$1$4;
+	var tls = require$$1$3;
 	var http = require$$2$2;
 	var https = require$$3$1;
 	var events = require$$2;
-	var util = require$$0$3;
+	var util = require$$0$4;
 
 
 	tunnel$1.httpOverHttp = httpOverHttp;
@@ -19872,7 +20055,7 @@ function requireTunnel () {
 	    });
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
-	const url = require$$1$3;
+	const url = require$$1$2;
 	const http = require$$2$2;
 	const https = require$$3$1;
 	const util = Util;
@@ -20364,5530 +20547,6 @@ function requireTunnel () {
 	exports.HttpClient = HttpClient; 
 } (HttpClient));
 
-var task = {};
-
-var concatMap = concatMap$3;
-var balanced = balancedMatch;
-
-var braceExpansion = expandTop;
-
-var escSlash = '\0SLASH'+Math.random()+'\0';
-var escOpen = '\0OPEN'+Math.random()+'\0';
-var escClose = '\0CLOSE'+Math.random()+'\0';
-var escComma = '\0COMMA'+Math.random()+'\0';
-var escPeriod = '\0PERIOD'+Math.random()+'\0';
-
-function numeric(str) {
-  return parseInt(str, 10) == str
-    ? parseInt(str, 10)
-    : str.charCodeAt(0);
-}
-
-function escapeBraces(str) {
-  return str.split('\\\\').join(escSlash)
-            .split('\\{').join(escOpen)
-            .split('\\}').join(escClose)
-            .split('\\,').join(escComma)
-            .split('\\.').join(escPeriod);
-}
-
-function unescapeBraces(str) {
-  return str.split(escSlash).join('\\')
-            .split(escOpen).join('{')
-            .split(escClose).join('}')
-            .split(escComma).join(',')
-            .split(escPeriod).join('.');
-}
-
-
-// Basically just str.split(","), but handling cases
-// where we have nested braced sections, which should be
-// treated as individual members, like {a,{b,c},d}
-function parseCommaParts(str) {
-  if (!str)
-    return [''];
-
-  var parts = [];
-  var m = balanced('{', '}', str);
-
-  if (!m)
-    return str.split(',');
-
-  var pre = m.pre;
-  var body = m.body;
-  var post = m.post;
-  var p = pre.split(',');
-
-  p[p.length-1] += '{' + body + '}';
-  var postParts = parseCommaParts(post);
-  if (post.length) {
-    p[p.length-1] += postParts.shift();
-    p.push.apply(p, postParts);
-  }
-
-  parts.push.apply(parts, p);
-
-  return parts;
-}
-
-function expandTop(str) {
-  if (!str)
-    return [];
-
-  // I don't know why Bash 4.3 does this, but it does.
-  // Anything starting with {} will have the first two bytes preserved
-  // but *only* at the top level, so {},a}b will not expand to anything,
-  // but a{},b}c will be expanded to [a}c,abc].
-  // One could argue that this is a bug in Bash, but since the goal of
-  // this module is to match Bash's rules, we escape a leading {}
-  if (str.substr(0, 2) === '{}') {
-    str = '\\{\\}' + str.substr(2);
-  }
-
-  return expand$1(escapeBraces(str), true).map(unescapeBraces);
-}
-
-function embrace(str) {
-  return '{' + str + '}';
-}
-function isPadded(el) {
-  return /^-?0\d/.test(el);
-}
-
-function lte(i, y) {
-  return i <= y;
-}
-function gte(i, y) {
-  return i >= y;
-}
-
-function expand$1(str, isTop) {
-  var expansions = [];
-
-  var m = balanced('{', '}', str);
-  if (!m || /\$$/.test(m.pre)) return [str];
-
-  var isNumericSequence = /^-?\d+\.\.-?\d+(?:\.\.-?\d+)?$/.test(m.body);
-  var isAlphaSequence = /^[a-zA-Z]\.\.[a-zA-Z](?:\.\.-?\d+)?$/.test(m.body);
-  var isSequence = isNumericSequence || isAlphaSequence;
-  var isOptions = m.body.indexOf(',') >= 0;
-  if (!isSequence && !isOptions) {
-    // {a},b}
-    if (m.post.match(/,.*\}/)) {
-      str = m.pre + '{' + m.body + escClose + m.post;
-      return expand$1(str);
-    }
-    return [str];
-  }
-
-  var n;
-  if (isSequence) {
-    n = m.body.split(/\.\./);
-  } else {
-    n = parseCommaParts(m.body);
-    if (n.length === 1) {
-      // x{{a,b}}y ==> x{a}y x{b}y
-      n = expand$1(n[0], false).map(embrace);
-      if (n.length === 1) {
-        var post = m.post.length
-          ? expand$1(m.post, false)
-          : [''];
-        return post.map(function(p) {
-          return m.pre + n[0] + p;
-        });
-      }
-    }
-  }
-
-  // at this point, n is the parts, and we know it's not a comma set
-  // with a single entry.
-
-  // no need to expand pre, since it is guaranteed to be free of brace-sets
-  var pre = m.pre;
-  var post = m.post.length
-    ? expand$1(m.post, false)
-    : [''];
-
-  var N;
-
-  if (isSequence) {
-    var x = numeric(n[0]);
-    var y = numeric(n[1]);
-    var width = Math.max(n[0].length, n[1].length);
-    var incr = n.length == 3
-      ? Math.abs(numeric(n[2]))
-      : 1;
-    var test = lte;
-    var reverse = y < x;
-    if (reverse) {
-      incr *= -1;
-      test = gte;
-    }
-    var pad = n.some(isPadded);
-
-    N = [];
-
-    for (var i = x; test(i, y); i += incr) {
-      var c;
-      if (isAlphaSequence) {
-        c = String.fromCharCode(i);
-        if (c === '\\')
-          c = '';
-      } else {
-        c = String(i);
-        if (pad) {
-          var need = width - c.length;
-          if (need > 0) {
-            var z = new Array(need + 1).join('0');
-            if (i < 0)
-              c = '-' + z + c.slice(1);
-            else
-              c = z + c;
-          }
-        }
-      }
-      N.push(c);
-    }
-  } else {
-    N = concatMap(n, function(el) { return expand$1(el, false) });
-  }
-
-  for (var j = 0; j < N.length; j++) {
-    for (var k = 0; k < post.length; k++) {
-      var expansion = pre + N[j] + post[k];
-      if (!isTop || isSequence || expansion)
-        expansions.push(expansion);
-    }
-  }
-
-  return expansions;
-}
-
-var minimatch_1 = minimatch;
-minimatch.Minimatch = Minimatch;
-
-const path$2 = (() => { try { return require('path') } catch (e) {}})() || {
-  sep: '/'
-};
-minimatch.sep = path$2.sep;
-
-const GLOBSTAR = minimatch.GLOBSTAR = Minimatch.GLOBSTAR = {};
-const expand = braceExpansion;
-
-const plTypes = {
-  '!': { open: '(?:(?!(?:', close: '))[^/]*?)'},
-  '?': { open: '(?:', close: ')?' },
-  '+': { open: '(?:', close: ')+' },
-  '*': { open: '(?:', close: ')*' },
-  '@': { open: '(?:', close: ')' }
-};
-
-// any single thing other than /
-// don't need to escape / when using new RegExp()
-const qmark = '[^/]';
-
-// * => any number of characters
-const star = qmark + '*?';
-
-// ** when dots are allowed.  Anything goes, except .. and .
-// not (^ or / followed by one or two dots followed by $ or /),
-// followed by anything, any number of times.
-const twoStarDot = '(?:(?!(?:\\\/|^)(?:\\.{1,2})($|\\\/)).)*?';
-
-// not a ^ or / followed by a dot,
-// followed by anything, any number of times.
-const twoStarNoDot = '(?:(?!(?:\\\/|^)\\.).)*?';
-
-// characters that need to be escaped in RegExp.
-const reSpecials = charSet('().*{}+?[]^$\\!');
-
-// "abc" -> { a:true, b:true, c:true }
-function charSet (s) {
-  return s.split('').reduce(function (set, c) {
-    set[c] = true;
-    return set
-  }, {})
-}
-
-// normalizes slashes.
-const slashSplit = /\/+/;
-
-minimatch.filter = filter;
-function filter (pattern, options) {
-  options = options || {};
-  return function (p, i, list) {
-    return minimatch(p, pattern, options)
-  }
-}
-
-function ext (a, b) {
-  a = a || {};
-  b = b || {};
-  const t = {};
-  Object.keys(a).forEach(function (k) {
-    t[k] = a[k];
-  });
-  Object.keys(b).forEach(function (k) {
-    t[k] = b[k];
-  });
-  return t
-}
-
-minimatch.defaults = function (def) {
-  if (!def || typeof def !== 'object' || !Object.keys(def).length) {
-    return minimatch
-  }
-
-  const orig = minimatch;
-
-  const m = function minimatch (p, pattern, options) {
-    return orig(p, pattern, ext(def, options))
-  };
-
-  m.Minimatch = function Minimatch (pattern, options) {
-    return new orig.Minimatch(pattern, ext(def, options))
-  };
-  m.Minimatch.defaults = options => {
-    return orig.defaults(ext(def, options)).Minimatch
-  };
-
-  m.filter = function filter (pattern, options) {
-    return orig.filter(pattern, ext(def, options))
-  };
-
-  m.defaults = function defaults (options) {
-    return orig.defaults(ext(def, options))
-  };
-
-  m.makeRe = function makeRe (pattern, options) {
-    return orig.makeRe(pattern, ext(def, options))
-  };
-
-  m.braceExpand = function braceExpand (pattern, options) {
-    return orig.braceExpand(pattern, ext(def, options))
-  };
-
-  m.match = function (list, pattern, options) {
-    return orig.match(list, pattern, ext(def, options))
-  };
-
-  return m
-};
-
-Minimatch.defaults = function (def) {
-  return minimatch.defaults(def).Minimatch
-};
-
-function minimatch (p, pattern, options) {
-  assertValidPattern(pattern);
-
-  if (!options) options = {};
-
-  // shortcut: comments match nothing.
-  if (!options.nocomment && pattern.charAt(0) === '#') {
-    return false
-  }
-
-  // "" only matches ""
-  if (pattern.trim() === '') return p === ''
-
-  return new Minimatch(pattern, options).match(p)
-}
-
-function Minimatch (pattern, options) {
-  if (!(this instanceof Minimatch)) {
-    return new Minimatch(pattern, options)
-  }
-
-  assertValidPattern(pattern);
-
-  if (!options) options = {};
-  pattern = pattern.trim();
-
-  // windows support: need to use /, not \
-  if (path$2.sep !== '/') {
-    pattern = pattern.split(path$2.sep).join('/');
-  }
-
-  this.options = options;
-  this.set = [];
-  this.pattern = pattern;
-  this.regexp = null;
-  this.negate = false;
-  this.comment = false;
-  this.empty = false;
-
-  // make the set of regexps etc.
-  this.make();
-}
-
-Minimatch.prototype.debug = function () {};
-
-Minimatch.prototype.make = make;
-function make () {
-  // don't do it more than once.
-  if (this._made) return
-
-  var pattern = this.pattern;
-  var options = this.options;
-
-  // empty patterns and comments match nothing.
-  if (!options.nocomment && pattern.charAt(0) === '#') {
-    this.comment = true;
-    return
-  }
-  if (!pattern) {
-    this.empty = true;
-    return
-  }
-
-  // step 1: figure out negation, etc.
-  this.parseNegate();
-
-  // step 2: expand braces
-  var set = this.globSet = this.braceExpand();
-
-  if (options.debug) this.debug = console.error;
-
-  this.debug(this.pattern, set);
-
-  // step 3: now we have a set, so turn each one into a series of path-portion
-  // matching patterns.
-  // These will be regexps, except in the case of "**", which is
-  // set to the GLOBSTAR object for globstar behavior,
-  // and will not contain any / characters
-  set = this.globParts = set.map(function (s) {
-    return s.split(slashSplit)
-  });
-
-  this.debug(this.pattern, set);
-
-  // glob --> regexps
-  set = set.map(function (s, si, set) {
-    return s.map(this.parse, this)
-  }, this);
-
-  this.debug(this.pattern, set);
-
-  // filter out everything that didn't compile properly.
-  set = set.filter(function (s) {
-    return s.indexOf(false) === -1
-  });
-
-  this.debug(this.pattern, set);
-
-  this.set = set;
-}
-
-Minimatch.prototype.parseNegate = parseNegate;
-function parseNegate () {
-  var pattern = this.pattern;
-  var negate = false;
-  var options = this.options;
-  var negateOffset = 0;
-
-  if (options.nonegate) return
-
-  for (var i = 0, l = pattern.length
-    ; i < l && pattern.charAt(i) === '!'
-    ; i++) {
-    negate = !negate;
-    negateOffset++;
-  }
-
-  if (negateOffset) this.pattern = pattern.substr(negateOffset);
-  this.negate = negate;
-}
-
-// Brace expansion:
-// a{b,c}d -> abd acd
-// a{b,}c -> abc ac
-// a{0..3}d -> a0d a1d a2d a3d
-// a{b,c{d,e}f}g -> abg acdfg acefg
-// a{b,c}d{e,f}g -> abdeg acdeg abdeg abdfg
-//
-// Invalid sets are not expanded.
-// a{2..}b -> a{2..}b
-// a{b}c -> a{b}c
-minimatch.braceExpand = function (pattern, options) {
-  return braceExpand(pattern, options)
-};
-
-Minimatch.prototype.braceExpand = braceExpand;
-
-function braceExpand (pattern, options) {
-  if (!options) {
-    if (this instanceof Minimatch) {
-      options = this.options;
-    } else {
-      options = {};
-    }
-  }
-
-  pattern = typeof pattern === 'undefined'
-    ? this.pattern : pattern;
-
-  assertValidPattern(pattern);
-
-  if (options.nobrace || !/\{(?:(?!\{).)*\}/.test(pattern)) {
-    // shortcut. no need to expand.
-    return [pattern]
-  }
-
-  return expand(pattern)
-}
-
-const MAX_PATTERN_LENGTH = 1024 * 64;
-const assertValidPattern = pattern => {
-  if (typeof pattern !== 'string') {
-    throw new TypeError('invalid pattern')
-  }
-
-  if (pattern.length > MAX_PATTERN_LENGTH) {
-    throw new TypeError('pattern is too long')
-  }
-};
-
-// parse a component of the expanded set.
-// At this point, no pattern may contain "/" in it
-// so we're going to return a 2d array, where each entry is the full
-// pattern, split on '/', and then turned into a regular expression.
-// A regexp is made at the end which joins each array with an
-// escaped /, and another full one which joins each regexp with |.
-//
-// Following the lead of Bash 4.1, note that "**" only has special meaning
-// when it is the *only* thing in a path portion.  Otherwise, any series
-// of * is equivalent to a single *.  Globstar behavior is enabled by
-// default, and can be disabled by setting options.noglobstar.
-Minimatch.prototype.parse = parse;
-const SUBPARSE = {};
-function parse (pattern, isSub) {
-  assertValidPattern(pattern);
-
-  var options = this.options;
-
-  // shortcuts
-  if (!options.noglobstar && pattern === '**') return GLOBSTAR
-  if (pattern === '') return ''
-
-  var re = '';
-  var hasMagic = false;
-  var escaping = false;
-  // ? => one single character
-  var patternListStack = [];
-  var negativeLists = [];
-  var stateChar;
-  var inClass = false;
-  var reClassStart = -1;
-  var classStart = -1;
-  // . and .. never match anything that doesn't start with .,
-  // even when options.dot is set.
-  var patternStart = pattern.charAt(0) === '.' ? '' // anything
-  // not (start or / followed by . or .. followed by / or end)
-  : options.dot ? '(?!(?:^|\\\/)\\.{1,2}(?:$|\\\/))'
-  : '(?!\\.)';
-  var self = this;
-
-  function clearStateChar () {
-    if (stateChar) {
-      // we had some state-tracking character
-      // that wasn't consumed by this pass.
-      switch (stateChar) {
-        case '*':
-          re += star;
-          hasMagic = true;
-        break
-        case '?':
-          re += qmark;
-          hasMagic = true;
-        break
-        default:
-          re += '\\' + stateChar;
-        break
-      }
-      self.debug('clearStateChar %j %j', stateChar, re);
-      stateChar = false;
-    }
-  }
-
-  for (var i = 0, len = pattern.length, c
-    ; (i < len) && (c = pattern.charAt(i))
-    ; i++) {
-    this.debug('%s\t%s %s %j', pattern, i, re, c);
-
-    // skip over any that are escaped.
-    if (escaping && reSpecials[c]) {
-      re += '\\' + c;
-      escaping = false;
-      continue
-    }
-
-    switch (c) {
-      case '/': /* istanbul ignore next */ {
-        // completely not allowed, even escaped.
-        // Should already be path-split by now.
-        return false
-      }
-
-      case '\\':
-        clearStateChar();
-        escaping = true;
-      continue
-
-      // the various stateChar values
-      // for the "extglob" stuff.
-      case '?':
-      case '*':
-      case '+':
-      case '@':
-      case '!':
-        this.debug('%s\t%s %s %j <-- stateChar', pattern, i, re, c);
-
-        // all of those are literals inside a class, except that
-        // the glob [!a] means [^a] in regexp
-        if (inClass) {
-          this.debug('  in class');
-          if (c === '!' && i === classStart + 1) c = '^';
-          re += c;
-          continue
-        }
-
-        // if we already have a stateChar, then it means
-        // that there was something like ** or +? in there.
-        // Handle the stateChar, then proceed with this one.
-        self.debug('call clearStateChar %j', stateChar);
-        clearStateChar();
-        stateChar = c;
-        // if extglob is disabled, then +(asdf|foo) isn't a thing.
-        // just clear the statechar *now*, rather than even diving into
-        // the patternList stuff.
-        if (options.noext) clearStateChar();
-      continue
-
-      case '(':
-        if (inClass) {
-          re += '(';
-          continue
-        }
-
-        if (!stateChar) {
-          re += '\\(';
-          continue
-        }
-
-        patternListStack.push({
-          type: stateChar,
-          start: i - 1,
-          reStart: re.length,
-          open: plTypes[stateChar].open,
-          close: plTypes[stateChar].close
-        });
-        // negation is (?:(?!js)[^/]*)
-        re += stateChar === '!' ? '(?:(?!(?:' : '(?:';
-        this.debug('plType %j %j', stateChar, re);
-        stateChar = false;
-      continue
-
-      case ')':
-        if (inClass || !patternListStack.length) {
-          re += '\\)';
-          continue
-        }
-
-        clearStateChar();
-        hasMagic = true;
-        var pl = patternListStack.pop();
-        // negation is (?:(?!js)[^/]*)
-        // The others are (?:<pattern>)<type>
-        re += pl.close;
-        if (pl.type === '!') {
-          negativeLists.push(pl);
-        }
-        pl.reEnd = re.length;
-      continue
-
-      case '|':
-        if (inClass || !patternListStack.length || escaping) {
-          re += '\\|';
-          escaping = false;
-          continue
-        }
-
-        clearStateChar();
-        re += '|';
-      continue
-
-      // these are mostly the same in regexp and glob
-      case '[':
-        // swallow any state-tracking char before the [
-        clearStateChar();
-
-        if (inClass) {
-          re += '\\' + c;
-          continue
-        }
-
-        inClass = true;
-        classStart = i;
-        reClassStart = re.length;
-        re += c;
-      continue
-
-      case ']':
-        //  a right bracket shall lose its special
-        //  meaning and represent itself in
-        //  a bracket expression if it occurs
-        //  first in the list.  -- POSIX.2 2.8.3.2
-        if (i === classStart + 1 || !inClass) {
-          re += '\\' + c;
-          escaping = false;
-          continue
-        }
-
-        // handle the case where we left a class open.
-        // "[z-a]" is valid, equivalent to "\[z-a\]"
-        if (inClass) {
-          // split where the last [ was, make sure we don't have
-          // an invalid re. if so, re-walk the contents of the
-          // would-be class to re-translate any characters that
-          // were passed through as-is
-          // TODO: It would probably be faster to determine this
-          // without a try/catch and a new RegExp, but it's tricky
-          // to do safely.  For now, this is safe and works.
-          var cs = pattern.substring(classStart + 1, i);
-          try {
-            RegExp('[' + cs + ']');
-          } catch (er) {
-            // not a valid class!
-            var sp = this.parse(cs, SUBPARSE);
-            re = re.substr(0, reClassStart) + '\\[' + sp[0] + '\\]';
-            hasMagic = hasMagic || sp[1];
-            inClass = false;
-            continue
-          }
-        }
-
-        // finish up the class.
-        hasMagic = true;
-        inClass = false;
-        re += c;
-      continue
-
-      default:
-        // swallow any state char that wasn't consumed
-        clearStateChar();
-
-        if (escaping) {
-          // no need
-          escaping = false;
-        } else if (reSpecials[c]
-          && !(c === '^' && inClass)) {
-          re += '\\';
-        }
-
-        re += c;
-
-    } // switch
-  } // for
-
-  // handle the case where we left a class open.
-  // "[abc" is valid, equivalent to "\[abc"
-  if (inClass) {
-    // split where the last [ was, and escape it
-    // this is a huge pita.  We now have to re-walk
-    // the contents of the would-be class to re-translate
-    // any characters that were passed through as-is
-    cs = pattern.substr(classStart + 1);
-    sp = this.parse(cs, SUBPARSE);
-    re = re.substr(0, reClassStart) + '\\[' + sp[0];
-    hasMagic = hasMagic || sp[1];
-  }
-
-  // handle the case where we had a +( thing at the *end*
-  // of the pattern.
-  // each pattern list stack adds 3 chars, and we need to go through
-  // and escape any | chars that were passed through as-is for the regexp.
-  // Go through and escape them, taking care not to double-escape any
-  // | chars that were already escaped.
-  for (pl = patternListStack.pop(); pl; pl = patternListStack.pop()) {
-    var tail = re.slice(pl.reStart + pl.open.length);
-    this.debug('setting tail', re, pl);
-    // maybe some even number of \, then maybe 1 \, followed by a |
-    tail = tail.replace(/((?:\\{2}){0,64})(\\?)\|/g, function (_, $1, $2) {
-      if (!$2) {
-        // the | isn't already escaped, so escape it.
-        $2 = '\\';
-      }
-
-      // need to escape all those slashes *again*, without escaping the
-      // one that we need for escaping the | character.  As it works out,
-      // escaping an even number of slashes can be done by simply repeating
-      // it exactly after itself.  That's why this trick works.
-      //
-      // I am sorry that you have to see this.
-      return $1 + $1 + $2 + '|'
-    });
-
-    this.debug('tail=%j\n   %s', tail, tail, pl, re);
-    var t = pl.type === '*' ? star
-      : pl.type === '?' ? qmark
-      : '\\' + pl.type;
-
-    hasMagic = true;
-    re = re.slice(0, pl.reStart) + t + '\\(' + tail;
-  }
-
-  // handle trailing things that only matter at the very end.
-  clearStateChar();
-  if (escaping) {
-    // trailing \\
-    re += '\\\\';
-  }
-
-  // only need to apply the nodot start if the re starts with
-  // something that could conceivably capture a dot
-  var addPatternStart = false;
-  switch (re.charAt(0)) {
-    case '.':
-    case '[':
-    case '(': addPatternStart = true;
-  }
-
-  // Hack to work around lack of negative lookbehind in JS
-  // A pattern like: *.!(x).!(y|z) needs to ensure that a name
-  // like 'a.xyz.yz' doesn't match.  So, the first negative
-  // lookahead, has to look ALL the way ahead, to the end of
-  // the pattern.
-  for (var n = negativeLists.length - 1; n > -1; n--) {
-    var nl = negativeLists[n];
-
-    var nlBefore = re.slice(0, nl.reStart);
-    var nlFirst = re.slice(nl.reStart, nl.reEnd - 8);
-    var nlLast = re.slice(nl.reEnd - 8, nl.reEnd);
-    var nlAfter = re.slice(nl.reEnd);
-
-    nlLast += nlAfter;
-
-    // Handle nested stuff like *(*.js|!(*.json)), where open parens
-    // mean that we should *not* include the ) in the bit that is considered
-    // "after" the negated section.
-    var openParensBefore = nlBefore.split('(').length - 1;
-    var cleanAfter = nlAfter;
-    for (i = 0; i < openParensBefore; i++) {
-      cleanAfter = cleanAfter.replace(/\)[+*?]?/, '');
-    }
-    nlAfter = cleanAfter;
-
-    var dollar = '';
-    if (nlAfter === '' && isSub !== SUBPARSE) {
-      dollar = '$';
-    }
-    var newRe = nlBefore + nlFirst + nlAfter + dollar + nlLast;
-    re = newRe;
-  }
-
-  // if the re is not "" at this point, then we need to make sure
-  // it doesn't match against an empty path part.
-  // Otherwise a/* will match a/, which it should not.
-  if (re !== '' && hasMagic) {
-    re = '(?=.)' + re;
-  }
-
-  if (addPatternStart) {
-    re = patternStart + re;
-  }
-
-  // parsing just a piece of a larger pattern.
-  if (isSub === SUBPARSE) {
-    return [re, hasMagic]
-  }
-
-  // skip the regexp for non-magical patterns
-  // unescape anything in it, though, so that it'll be
-  // an exact match against a file etc.
-  if (!hasMagic) {
-    return globUnescape(pattern)
-  }
-
-  var flags = options.nocase ? 'i' : '';
-  try {
-    var regExp = new RegExp('^' + re + '$', flags);
-  } catch (er) /* istanbul ignore next - should be impossible */ {
-    // If it was an invalid regular expression, then it can't match
-    // anything.  This trick looks for a character after the end of
-    // the string, which is of course impossible, except in multi-line
-    // mode, but it's not a /m regex.
-    return new RegExp('$.')
-  }
-
-  regExp._glob = pattern;
-  regExp._src = re;
-
-  return regExp
-}
-
-minimatch.makeRe = function (pattern, options) {
-  return new Minimatch(pattern, options || {}).makeRe()
-};
-
-Minimatch.prototype.makeRe = makeRe;
-function makeRe () {
-  if (this.regexp || this.regexp === false) return this.regexp
-
-  // at this point, this.set is a 2d array of partial
-  // pattern strings, or "**".
-  //
-  // It's better to use .match().  This function shouldn't
-  // be used, really, but it's pretty convenient sometimes,
-  // when you just want to work with a regex.
-  var set = this.set;
-
-  if (!set.length) {
-    this.regexp = false;
-    return this.regexp
-  }
-  var options = this.options;
-
-  var twoStar = options.noglobstar ? star
-    : options.dot ? twoStarDot
-    : twoStarNoDot;
-  var flags = options.nocase ? 'i' : '';
-
-  var re = set.map(function (pattern) {
-    return pattern.map(function (p) {
-      return (p === GLOBSTAR) ? twoStar
-      : (typeof p === 'string') ? regExpEscape(p)
-      : p._src
-    }).join('\\\/')
-  }).join('|');
-
-  // must match entire pattern
-  // ending in a * or ** will make it less strict.
-  re = '^(?:' + re + ')$';
-
-  // can match anything, as long as it's not this.
-  if (this.negate) re = '^(?!' + re + ').*$';
-
-  try {
-    this.regexp = new RegExp(re, flags);
-  } catch (ex) /* istanbul ignore next - should be impossible */ {
-    this.regexp = false;
-  }
-  return this.regexp
-}
-
-minimatch.match = function (list, pattern, options) {
-  options = options || {};
-  const mm = new Minimatch(pattern, options);
-  list = list.filter(function (f) {
-    return mm.match(f)
-  });
-  if (mm.options.nonull && !list.length) {
-    list.push(pattern);
-  }
-  return list
-};
-
-Minimatch.prototype.match = match;
-function match (f, partial) {
-  this.debug('match', f, this.pattern);
-  // short-circuit in the case of busted things.
-  // comments, etc.
-  if (this.comment) return false
-  if (this.empty) return f === ''
-
-  if (f === '/' && partial) return true
-
-  var options = this.options;
-
-  // windows: need to use /, not \
-  if (path$2.sep !== '/') {
-    f = f.split(path$2.sep).join('/');
-  }
-
-  // treat the test path as a set of pathparts.
-  f = f.split(slashSplit);
-  this.debug(this.pattern, 'split', f);
-
-  // just ONE of the pattern sets in this.set needs to match
-  // in order for it to be valid.  If negating, then just one
-  // match means that we have failed.
-  // Either way, return on the first hit.
-
-  var set = this.set;
-  this.debug(this.pattern, 'set', set);
-
-  // Find the basename of the path by looking for the last non-empty segment
-  var filename;
-  var i;
-  for (i = f.length - 1; i >= 0; i--) {
-    filename = f[i];
-    if (filename) break
-  }
-
-  for (i = 0; i < set.length; i++) {
-    var pattern = set[i];
-    var file = f;
-    if (options.matchBase && pattern.length === 1) {
-      file = [filename];
-    }
-    var hit = this.matchOne(file, pattern, partial);
-    if (hit) {
-      if (options.flipNegate) return true
-      return !this.negate
-    }
-  }
-
-  // didn't get any hits.  this is success if it's a negative
-  // pattern, failure otherwise.
-  if (options.flipNegate) return false
-  return this.negate
-}
-
-// set partial to true to test if, for example,
-// "/a/b" matches the start of "/*/b/*/d"
-// Partial means, if you run out of file before you run
-// out of pattern, then that's fine, as long as all
-// the parts match.
-Minimatch.prototype.matchOne = function (file, pattern, partial) {
-  var options = this.options;
-
-  this.debug('matchOne',
-    { 'this': this, file: file, pattern: pattern });
-
-  this.debug('matchOne', file.length, pattern.length);
-
-  for (var fi = 0,
-      pi = 0,
-      fl = file.length,
-      pl = pattern.length
-      ; (fi < fl) && (pi < pl)
-      ; fi++, pi++) {
-    this.debug('matchOne loop');
-    var p = pattern[pi];
-    var f = file[fi];
-
-    this.debug(pattern, p, f);
-
-    // should be impossible.
-    // some invalid regexp stuff in the set.
-    /* istanbul ignore if */
-    if (p === false) return false
-
-    if (p === GLOBSTAR) {
-      this.debug('GLOBSTAR', [pattern, p, f]);
-
-      // "**"
-      // a/**/b/**/c would match the following:
-      // a/b/x/y/z/c
-      // a/x/y/z/b/c
-      // a/b/x/b/x/c
-      // a/b/c
-      // To do this, take the rest of the pattern after
-      // the **, and see if it would match the file remainder.
-      // If so, return success.
-      // If not, the ** "swallows" a segment, and try again.
-      // This is recursively awful.
-      //
-      // a/**/b/**/c matching a/b/x/y/z/c
-      // - a matches a
-      // - doublestar
-      //   - matchOne(b/x/y/z/c, b/**/c)
-      //     - b matches b
-      //     - doublestar
-      //       - matchOne(x/y/z/c, c) -> no
-      //       - matchOne(y/z/c, c) -> no
-      //       - matchOne(z/c, c) -> no
-      //       - matchOne(c, c) yes, hit
-      var fr = fi;
-      var pr = pi + 1;
-      if (pr === pl) {
-        this.debug('** at the end');
-        // a ** at the end will just swallow the rest.
-        // We have found a match.
-        // however, it will not swallow /.x, unless
-        // options.dot is set.
-        // . and .. are *never* matched by **, for explosively
-        // exponential reasons.
-        for (; fi < fl; fi++) {
-          if (file[fi] === '.' || file[fi] === '..' ||
-            (!options.dot && file[fi].charAt(0) === '.')) return false
-        }
-        return true
-      }
-
-      // ok, let's see if we can swallow whatever we can.
-      while (fr < fl) {
-        var swallowee = file[fr];
-
-        this.debug('\nglobstar while', file, fr, pattern, pr, swallowee);
-
-        // XXX remove this slice.  Just pass the start index.
-        if (this.matchOne(file.slice(fr), pattern.slice(pr), partial)) {
-          this.debug('globstar found match!', fr, fl, swallowee);
-          // found a match.
-          return true
-        } else {
-          // can't swallow "." or ".." ever.
-          // can only swallow ".foo" when explicitly asked.
-          if (swallowee === '.' || swallowee === '..' ||
-            (!options.dot && swallowee.charAt(0) === '.')) {
-            this.debug('dot detected!', file, fr, pattern, pr);
-            break
-          }
-
-          // ** swallows a segment, and continue.
-          this.debug('globstar swallow a segment, and continue');
-          fr++;
-        }
-      }
-
-      // no match was found.
-      // However, in partial mode, we can't say this is necessarily over.
-      // If there's more *pattern* left, then
-      /* istanbul ignore if */
-      if (partial) {
-        // ran out of file
-        this.debug('\n>>> no match, partial?', file, fr, pattern, pr);
-        if (fr === fl) return true
-      }
-      return false
-    }
-
-    // something other than **
-    // non-magic patterns just have to match exactly
-    // patterns with magic have been turned into regexps.
-    var hit;
-    if (typeof p === 'string') {
-      if (options.nocase) {
-        hit = f.toLowerCase() === p.toLowerCase();
-      } else {
-        hit = f === p;
-      }
-      this.debug('string match', p, f, hit);
-    } else {
-      hit = f.match(p);
-      this.debug('pattern match', p, f, hit);
-    }
-
-    if (!hit) return false
-  }
-
-  // Note: ending in / means that we'll get a final ""
-  // at the end of the pattern.  This can only match a
-  // corresponding "" at the end of the file.
-  // If the file ends in /, then it can only match a
-  // a pattern that ends in /, unless the pattern just
-  // doesn't have any more for it. But, a/b/ should *not*
-  // match "a/b/*", even though "" matches against the
-  // [^/]*? pattern, except in partial mode, where it might
-  // simply not be reached yet.
-  // However, a/b/ should still satisfy a/*
-
-  // now either we fell off the end of the pattern, or we're done.
-  if (fi === fl && pi === pl) {
-    // ran out of pattern and filename at the same time.
-    // an exact hit!
-    return true
-  } else if (fi === fl) {
-    // ran out of file, but still had pattern left.
-    // this is ok if we're doing the match as part of
-    // a glob fs traversal.
-    return partial
-  } else /* istanbul ignore else */ if (pi === pl) {
-    // ran out of pattern, still have file left.
-    // this is only acceptable if we're on the very last
-    // empty segment of a file with a trailing slash.
-    // a/* should match a/b/
-    return (fi === fl - 1) && (file[fi] === '')
-  }
-
-  // should be unreachable.
-  /* istanbul ignore next */
-  throw new Error('wtf?')
-};
-
-// replace stuff like \* with *
-function globUnescape (s) {
-  return s.replace(/\\(.)/g, '$1')
-}
-
-function regExpEscape (s) {
-  return s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
-}
-
-var internal = {};
-
-var taskcommand = {};
-
-Object.defineProperty(taskcommand, "__esModule", { value: true });
-taskcommand.commandFromString = taskcommand.TaskCommand = void 0;
-//
-// Command Format:
-//    ##vso[artifact.command key=value;key=value]user message
-//    
-// Examples:
-//    ##vso[task.progress value=58]
-//    ##vso[task.issue type=warning;]This is the user warning message
-//
-var CMD_PREFIX = '##vso[';
-var TaskCommand = /** @class */ (function () {
-    function TaskCommand(command, properties, message) {
-        if (!command) {
-            command = 'missing.command';
-        }
-        this.command = command;
-        this.properties = properties;
-        this.message = message;
-    }
-    TaskCommand.prototype.toString = function () {
-        var cmdStr = CMD_PREFIX + this.command;
-        if (this.properties && Object.keys(this.properties).length > 0) {
-            cmdStr += ' ';
-            for (var key in this.properties) {
-                if (this.properties.hasOwnProperty(key)) {
-                    var val = this.properties[key];
-                    if (val) {
-                        // safely append the val - avoid blowing up when attempting to
-                        // call .replace() if message is not a string for some reason
-                        cmdStr += key + '=' + escape$1('' + (val || '')) + ';';
-                    }
-                }
-            }
-        }
-        cmdStr += ']';
-        // safely append the message - avoid blowing up when attempting to
-        // call .replace() if message is not a string for some reason
-        var message = '' + (this.message || '');
-        cmdStr += escapedata(message);
-        return cmdStr;
-    };
-    return TaskCommand;
-}());
-taskcommand.TaskCommand = TaskCommand;
-function commandFromString(commandLine) {
-    var lbPos = commandLine.indexOf('[');
-    var rbPos = commandLine.indexOf(']');
-    if (lbPos == -1 || rbPos == -1 || rbPos - lbPos < 3) {
-        throw new Error('Invalid command brackets');
-    }
-    var cmdInfo = commandLine.substring(lbPos + 1, rbPos);
-    var spaceIdx = cmdInfo.indexOf(' ');
-    var command = cmdInfo;
-    var properties = {};
-    if (spaceIdx > 0) {
-        command = cmdInfo.trim().substring(0, spaceIdx);
-        var propSection = cmdInfo.trim().substring(spaceIdx + 1);
-        var propLines = propSection.split(';');
-        propLines.forEach(function (propLine) {
-            propLine = propLine.trim();
-            if (propLine.length > 0) {
-                var eqIndex = propLine.indexOf('=');
-                if (eqIndex == -1) {
-                    throw new Error('Invalid property: ' + propLine);
-                }
-                var key = propLine.substring(0, eqIndex);
-                var val = propLine.substring(eqIndex + 1);
-                properties[key] = unescape$1(val);
-            }
-        });
-    }
-    var msg = unescapedata(commandLine.substring(rbPos + 1));
-    var cmd = new TaskCommand(command, properties, msg);
-    return cmd;
-}
-taskcommand.commandFromString = commandFromString;
-function escapedata(s) {
-    return s.replace(/%/g, '%AZP25')
-        .replace(/\r/g, '%0D')
-        .replace(/\n/g, '%0A');
-}
-function unescapedata(s) {
-    return s.replace(/%0D/g, '\r')
-        .replace(/%0A/g, '\n')
-        .replace(/%AZP25/g, '%');
-}
-function escape$1(s) {
-    return s.replace(/%/g, '%AZP25')
-        .replace(/\r/g, '%0D')
-        .replace(/\n/g, '%0A')
-        .replace(/]/g, '%5D')
-        .replace(/;/g, '%3B');
-}
-function unescape$1(s) {
-    return s.replace(/%0D/g, '\r')
-        .replace(/%0A/g, '\n')
-        .replace(/%5D/g, ']')
-        .replace(/%3B/g, ';')
-        .replace(/%AZP25/g, '%');
-}
-
-var vault = {};
-
-Object.defineProperty(vault, "__esModule", { value: true });
-vault.Vault = void 0;
-var fs$2 = require$$1;
-var path$1 = require$$0$1;
-var crypto$1 = require$$2$1;
-var uuidV4$1 = v4_1;
-var algorithm = "aes-256-ctr";
-var encryptEncoding = 'hex';
-var unencryptedEncoding = 'utf8';
-//
-// Store sensitive data in proc.
-// Main goal: Protects tasks which would dump envvars from leaking secrets inadvertently
-//            the task lib clears after storing.
-// Also protects against a dump of a process getting the secrets
-// The secret is generated and stored externally for the lifetime of the task.
-//
-var Vault = /** @class */ (function () {
-    function Vault(keyPath) {
-        this._keyFile = path$1.join(keyPath, '.taskkey');
-        this._store = {};
-        this.genKey();
-    }
-    Vault.prototype.initialize = function () {
-    };
-    Vault.prototype.storeSecret = function (name, data) {
-        if (!name || name.length == 0) {
-            return false;
-        }
-        name = name.toLowerCase();
-        if (!data || data.length == 0) {
-            if (this._store.hasOwnProperty(name)) {
-                delete this._store[name];
-            }
-            return false;
-        }
-        var key = this.getKey();
-        var iv = crypto$1.randomBytes(16);
-        var cipher = crypto$1.createCipheriv(algorithm, key, iv);
-        var crypted = cipher.update(data, unencryptedEncoding, encryptEncoding);
-        var cryptedFinal = cipher.final(encryptEncoding);
-        this._store[name] = iv.toString(encryptEncoding) + crypted + cryptedFinal;
-        return true;
-    };
-    Vault.prototype.retrieveSecret = function (name) {
-        var secret;
-        name = (name || '').toLowerCase();
-        if (this._store.hasOwnProperty(name)) {
-            var key = this.getKey();
-            var data = this._store[name];
-            var ivDataBuffer = Buffer.from(data, encryptEncoding);
-            var iv = ivDataBuffer.slice(0, 16);
-            var encryptedText = ivDataBuffer.slice(16);
-            var decipher = crypto$1.createDecipheriv(algorithm, key, iv);
-            var dec = decipher.update(encryptedText);
-            var decFinal = decipher.final(unencryptedEncoding);
-            secret = dec + decFinal;
-        }
-        return secret;
-    };
-    Vault.prototype.getKey = function () {
-        var key = fs$2.readFileSync(this._keyFile).toString('utf8');
-        // Key needs to be hashed to correct length to match algorithm (aes-256-ctr)
-        return crypto$1.createHash('sha256').update(key).digest();
-    };
-    Vault.prototype.genKey = function () {
-        fs$2.writeFileSync(this._keyFile, uuidV4$1(), { encoding: 'utf8' });
-    };
-    return Vault;
-}());
-vault.Vault = Vault;
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports._exposeCertSettings = exports._exposeProxySettings = exports._normalizeSeparators = exports._isRooted = exports._getDirectoryName = exports._ensureRooted = exports._isUncPath = exports._loadData = exports._ensurePatternRooted = exports._getFindInfoFromPattern = exports._cloneMatchOptions = exports._legacyFindFiles_convertPatternToRegExp = exports._which = exports._checkPath = exports._exist = exports._debug = exports._error = exports._warning = exports._command = exports._getVariableKey = exports._getVariable = exports._loc = exports._setResourcePath = exports._setErrStream = exports._setStdStream = exports._writeLine = exports._endsWith = exports._startsWith = exports._vault = exports._knownVariableMap = void 0;
-	var fs = require$$1;
-	var path = require$$0$1;
-	var os = require$$1$1;
-	var minimatch = minimatch_1;
-	var util = require$$0$3;
-	var tcm = taskcommand;
-	var vm = vault;
-	var semver = semverExports$2;
-	var crypto = require$$2$1;
-	/**
-	 * Hash table of known variable info. The formatted env var name is the lookup key.
-	 *
-	 * The purpose of this hash table is to keep track of known variables. The hash table
-	 * needs to be maintained for multiple reasons:
-	 *  1) to distinguish between env vars and job vars
-	 *  2) to distinguish between secret vars and public
-	 *  3) to know the real variable name and not just the formatted env var name.
-	 */
-	exports._knownVariableMap = {};
-	//-----------------------------------------------------
-	// Validation Checks
-	//-----------------------------------------------------
-	// async await needs generators in node 4.x+
-	if (semver.lt(process.versions.node, '4.2.0')) {
-	    _warning('Tasks require a new agent.  Upgrade your agent or node to 4.2.0 or later');
-	}
-	//-----------------------------------------------------
-	// String convenience
-	//-----------------------------------------------------
-	function _startsWith(str, start) {
-	    return str.slice(0, start.length) == start;
-	}
-	exports._startsWith = _startsWith;
-	function _endsWith(str, end) {
-	    return str.slice(-end.length) == end;
-	}
-	exports._endsWith = _endsWith;
-	//-----------------------------------------------------
-	// General Helpers
-	//-----------------------------------------------------
-	var _outStream = process.stdout;
-	process.stderr;
-	function _writeLine(str) {
-	    _outStream.write(str + os.EOL);
-	}
-	exports._writeLine = _writeLine;
-	function _setStdStream(stdStream) {
-	    _outStream = stdStream;
-	}
-	exports._setStdStream = _setStdStream;
-	function _setErrStream(errStream) {
-	}
-	exports._setErrStream = _setErrStream;
-	//-----------------------------------------------------
-	// Loc Helpers
-	//-----------------------------------------------------
-	var _locStringCache = {};
-	var _resourceFiles = {};
-	var _libResourceFileLoaded = false;
-	var _resourceCulture = 'en-US';
-	function _loadResJson(resjsonFile) {
-	    var resJson;
-	    if (_exist(resjsonFile)) {
-	        var resjsonContent = fs.readFileSync(resjsonFile, 'utf8').toString();
-	        // remove BOM
-	        if (resjsonContent.indexOf('\uFEFF') == 0) {
-	            resjsonContent = resjsonContent.slice(1);
-	        }
-	        try {
-	            resJson = JSON.parse(resjsonContent);
-	        }
-	        catch (err) {
-	            _debug('unable to parse resjson with err: ' + err.message);
-	        }
-	    }
-	    else {
-	        _debug('.resjson file not found: ' + resjsonFile);
-	    }
-	    return resJson;
-	}
-	function _loadLocStrings(resourceFile, culture) {
-	    var locStrings = {};
-	    if (_exist(resourceFile)) {
-	        var resourceJson = commonjsRequire(resourceFile);
-	        if (resourceJson && resourceJson.hasOwnProperty('messages')) {
-	            var locResourceJson;
-	            // load up resource resjson for different culture
-	            var localizedResourceFile = path.join(path.dirname(resourceFile), 'Strings', 'resources.resjson');
-	            var upperCulture = culture.toUpperCase();
-	            var cultures = [];
-	            try {
-	                cultures = fs.readdirSync(localizedResourceFile);
-	            }
-	            catch (ex) { }
-	            for (var i = 0; i < cultures.length; i++) {
-	                if (cultures[i].toUpperCase() == upperCulture) {
-	                    localizedResourceFile = path.join(localizedResourceFile, cultures[i], 'resources.resjson');
-	                    if (_exist(localizedResourceFile)) {
-	                        locResourceJson = _loadResJson(localizedResourceFile);
-	                    }
-	                    break;
-	                }
-	            }
-	            for (var key in resourceJson.messages) {
-	                if (locResourceJson && locResourceJson.hasOwnProperty('loc.messages.' + key)) {
-	                    locStrings[key] = locResourceJson['loc.messages.' + key];
-	                }
-	                else {
-	                    locStrings[key] = resourceJson.messages[key];
-	                }
-	            }
-	        }
-	    }
-	    else {
-	        _warning('LIB_ResourceFile does not exist');
-	    }
-	    return locStrings;
-	}
-	/**
-	 * Sets the location of the resources json.  This is typically the task.json file.
-	 * Call once at the beginning of the script before any calls to loc.
-	 * @param     path      Full path to the json.
-	 * @param     ignoreWarnings  Won't throw warnings if path already set.
-	 * @returns   void
-	 */
-	function _setResourcePath(path, ignoreWarnings) {
-	    if (ignoreWarnings === void 0) { ignoreWarnings = false; }
-	    if (process.env['TASKLIB_INPROC_UNITS']) {
-	        _resourceFiles = {};
-	        _libResourceFileLoaded = false;
-	        _locStringCache = {};
-	        _resourceCulture = 'en-US';
-	    }
-	    if (!_resourceFiles[path]) {
-	        _checkPath(path, 'resource file path');
-	        _resourceFiles[path] = path;
-	        _debug('adding resource file: ' + path);
-	        _resourceCulture = _getVariable('system.culture') || _resourceCulture;
-	        var locStrs = _loadLocStrings(path, _resourceCulture);
-	        for (var key in locStrs) {
-	            //cache loc string
-	            _locStringCache[key] = locStrs[key];
-	        }
-	    }
-	    else {
-	        if (ignoreWarnings) {
-	            _debug(_loc('LIB_ResourceFileAlreadySet', path));
-	        }
-	        else {
-	            _warning(_loc('LIB_ResourceFileAlreadySet', path));
-	        }
-	    }
-	}
-	exports._setResourcePath = _setResourcePath;
-	/**
-	 * Gets the localized string from the json resource file.  Optionally formats with additional params.
-	 *
-	 * @param     key      key of the resources string in the resource file
-	 * @param     param    additional params for formatting the string
-	 * @returns   string
-	 */
-	function _loc(key) {
-	    var param = [];
-	    for (var _i = 1; _i < arguments.length; _i++) {
-	        param[_i - 1] = arguments[_i];
-	    }
-	    if (!_libResourceFileLoaded) {
-	        // merge loc strings from azure-pipelines-task-lib.
-	        var libResourceFile = path.join(__dirname, 'lib.json');
-	        var libLocStrs = _loadLocStrings(libResourceFile, _resourceCulture);
-	        for (var libKey in libLocStrs) {
-	            //cache azure-pipelines-task-lib loc string
-	            _locStringCache[libKey] = libLocStrs[libKey];
-	        }
-	        _libResourceFileLoaded = true;
-	    }
-	    var locString;
-	    if (_locStringCache.hasOwnProperty(key)) {
-	        locString = _locStringCache[key];
-	    }
-	    else {
-	        if (Object.keys(_resourceFiles).length <= 0) {
-	            _warning("Resource file haven't been set, can't find loc string for key: " + key);
-	        }
-	        else {
-	            _warning("Can't find loc string for key: " + key);
-	        }
-	        locString = key;
-	    }
-	    if (param.length > 0) {
-	        return util.format.apply(this, [locString].concat(param));
-	    }
-	    else {
-	        return locString;
-	    }
-	}
-	exports._loc = _loc;
-	//-----------------------------------------------------
-	// Input Helpers
-	//-----------------------------------------------------
-	/**
-	 * Gets a variable value that is defined on the build/release definition or set at runtime.
-	 *
-	 * @param     name     name of the variable to get
-	 * @returns   string
-	 */
-	function _getVariable(name) {
-	    var varval;
-	    // get the metadata
-	    var info;
-	    var key = _getVariableKey(name);
-	    if (exports._knownVariableMap.hasOwnProperty(key)) {
-	        info = exports._knownVariableMap[key];
-	    }
-	    if (info && info.secret) {
-	        // get the secret value
-	        varval = exports._vault.retrieveSecret('SECRET_' + key);
-	    }
-	    else {
-	        // get the public value
-	        varval = process.env[key];
-	        // fallback for pre 2.104.1 agent
-	        if (!varval && name.toUpperCase() == 'AGENT.JOBSTATUS') {
-	            varval = process.env['agent.jobstatus'];
-	        }
-	    }
-	    _debug(name + '=' + varval);
-	    return varval;
-	}
-	exports._getVariable = _getVariable;
-	function _getVariableKey(name) {
-	    if (!name) {
-	        throw new Error(_loc('LIB_ParameterIsRequired', 'name'));
-	    }
-	    return name.replace(/\./g, '_').replace(/ /g, '_').toUpperCase();
-	}
-	exports._getVariableKey = _getVariableKey;
-	//-----------------------------------------------------
-	// Cmd Helpers
-	//-----------------------------------------------------
-	function _command(command, properties, message) {
-	    var taskCmd = new tcm.TaskCommand(command, properties, message);
-	    _writeLine(taskCmd.toString());
-	}
-	exports._command = _command;
-	function _warning(message) {
-	    _command('task.issue', { 'type': 'warning' }, message);
-	}
-	exports._warning = _warning;
-	function _error(message) {
-	    _command('task.issue', { 'type': 'error' }, message);
-	}
-	exports._error = _error;
-	function _debug(message) {
-	    _command('task.debug', null, message);
-	}
-	exports._debug = _debug;
-	// //-----------------------------------------------------
-	// // Disk Functions
-	// //-----------------------------------------------------
-	/**
-	 * Returns whether a path exists.
-	 *
-	 * @param     path      path to check
-	 * @returns   boolean
-	 */
-	function _exist(path) {
-	    var exist = false;
-	    try {
-	        exist = !!(path && fs.statSync(path) != null);
-	    }
-	    catch (err) {
-	        if (err && err.code === 'ENOENT') {
-	            exist = false;
-	        }
-	        else {
-	            throw err;
-	        }
-	    }
-	    return exist;
-	}
-	exports._exist = _exist;
-	/**
-	 * Checks whether a path exists.
-	 * If the path does not exist, it will throw.
-	 *
-	 * @param     p         path to check
-	 * @param     name      name only used in error message to identify the path
-	 * @returns   void
-	 */
-	function _checkPath(p, name) {
-	    _debug('check path : ' + p);
-	    if (!_exist(p)) {
-	        throw new Error(_loc('LIB_PathNotFound', name, p));
-	    }
-	}
-	exports._checkPath = _checkPath;
-	/**
-	 * Returns path of a tool had the tool actually been invoked.  Resolves via paths.
-	 * If you check and the tool does not exist, it will throw.
-	 *
-	 * @param     tool       name of the tool
-	 * @param     check      whether to check if tool exists
-	 * @returns   string
-	 */
-	function _which(tool, check) {
-	    if (!tool) {
-	        throw new Error('parameter \'tool\' is required');
-	    }
-	    // recursive when check=true
-	    if (check) {
-	        var result = _which(tool, false);
-	        if (result) {
-	            return result;
-	        }
-	        else {
-	            if (process.platform == 'win32') {
-	                throw new Error(_loc('LIB_WhichNotFound_Win', tool));
-	            }
-	            else {
-	                throw new Error(_loc('LIB_WhichNotFound_Linux', tool));
-	            }
-	        }
-	    }
-	    _debug("which '" + tool + "'");
-	    try {
-	        // build the list of extensions to try
-	        var extensions = [];
-	        if (process.platform == 'win32' && process.env['PATHEXT']) {
-	            for (var _i = 0, _a = process.env['PATHEXT'].split(path.delimiter); _i < _a.length; _i++) {
-	                var extension = _a[_i];
-	                if (extension) {
-	                    extensions.push(extension);
-	                }
-	            }
-	        }
-	        // if it's rooted, return it if exists. otherwise return empty.
-	        if (_isRooted(tool)) {
-	            var filePath = _tryGetExecutablePath(tool, extensions);
-	            if (filePath) {
-	                _debug("found: '" + filePath + "'");
-	                return filePath;
-	            }
-	            _debug('not found');
-	            return '';
-	        }
-	        // if any path separators, return empty
-	        if (tool.indexOf('/') >= 0 || (process.platform == 'win32' && tool.indexOf('\\') >= 0)) {
-	            _debug('not found');
-	            return '';
-	        }
-	        // build the list of directories
-	        //
-	        // Note, technically "where" checks the current directory on Windows. From a task lib perspective,
-	        // it feels like we should not do this. Checking the current directory seems like more of a use
-	        // case of a shell, and the which() function exposed by the task lib should strive for consistency
-	        // across platforms.
-	        var directories = [];
-	        if (process.env['PATH']) {
-	            for (var _b = 0, _c = process.env['PATH'].split(path.delimiter); _b < _c.length; _b++) {
-	                var p = _c[_b];
-	                if (p) {
-	                    directories.push(p);
-	                }
-	            }
-	        }
-	        // return the first match
-	        for (var _d = 0, directories_1 = directories; _d < directories_1.length; _d++) {
-	            var directory = directories_1[_d];
-	            var filePath = _tryGetExecutablePath(directory + path.sep + tool, extensions);
-	            if (filePath) {
-	                _debug("found: '" + filePath + "'");
-	                return filePath;
-	            }
-	        }
-	        _debug('not found');
-	        return '';
-	    }
-	    catch (err) {
-	        throw new Error(_loc('LIB_OperationFailed', 'which', err.message));
-	    }
-	}
-	exports._which = _which;
-	/**
-	 * Best effort attempt to determine whether a file exists and is executable.
-	 * @param filePath    file path to check
-	 * @param extensions  additional file extensions to try
-	 * @return if file exists and is executable, returns the file path. otherwise empty string.
-	 */
-	function _tryGetExecutablePath(filePath, extensions) {
-	    try {
-	        // test file exists
-	        var stats = fs.statSync(filePath);
-	        if (stats.isFile()) {
-	            if (process.platform == 'win32') {
-	                // on Windows, test for valid extension
-	                var isExecutable = false;
-	                var fileName = path.basename(filePath);
-	                var dotIndex = fileName.lastIndexOf('.');
-	                if (dotIndex >= 0) {
-	                    var upperExt_1 = fileName.substr(dotIndex).toUpperCase();
-	                    if (extensions.some(function (validExt) { return validExt.toUpperCase() == upperExt_1; })) {
-	                        return filePath;
-	                    }
-	                }
-	            }
-	            else {
-	                if (isUnixExecutable(stats)) {
-	                    return filePath;
-	                }
-	            }
-	        }
-	    }
-	    catch (err) {
-	        if (err.code != 'ENOENT') {
-	            _debug("Unexpected error attempting to determine if executable file exists '" + filePath + "': " + err);
-	        }
-	    }
-	    // try each extension
-	    var originalFilePath = filePath;
-	    for (var _i = 0, extensions_1 = extensions; _i < extensions_1.length; _i++) {
-	        var extension = extensions_1[_i];
-	        var filePath_1 = originalFilePath + extension;
-	        try {
-	            var stats = fs.statSync(filePath_1);
-	            if (stats.isFile()) {
-	                if (process.platform == 'win32') {
-	                    // preserve the case of the actual file (since an extension was appended)
-	                    try {
-	                        var directory = path.dirname(filePath_1);
-	                        var upperName = path.basename(filePath_1).toUpperCase();
-	                        for (var _a = 0, _b = fs.readdirSync(directory); _a < _b.length; _a++) {
-	                            var actualName = _b[_a];
-	                            if (upperName == actualName.toUpperCase()) {
-	                                filePath_1 = path.join(directory, actualName);
-	                                break;
-	                            }
-	                        }
-	                    }
-	                    catch (err) {
-	                        _debug("Unexpected error attempting to determine the actual case of the file '" + filePath_1 + "': " + err);
-	                    }
-	                    return filePath_1;
-	                }
-	                else {
-	                    if (isUnixExecutable(stats)) {
-	                        return filePath_1;
-	                    }
-	                }
-	            }
-	        }
-	        catch (err) {
-	            if (err.code != 'ENOENT') {
-	                _debug("Unexpected error attempting to determine if executable file exists '" + filePath_1 + "': " + err);
-	            }
-	        }
-	    }
-	    return '';
-	}
-	// on Mac/Linux, test the execute bit
-	//     R   W  X  R  W X R W X
-	//   256 128 64 32 16 8 4 2 1
-	function isUnixExecutable(stats) {
-	    return (stats.mode & 1) > 0 || ((stats.mode & 8) > 0 && stats.gid === process.getgid()) || ((stats.mode & 64) > 0 && stats.uid === process.getuid());
-	}
-	function _legacyFindFiles_convertPatternToRegExp(pattern) {
-	    pattern = (process.platform == 'win32' ? pattern.replace(/\\/g, '/') : pattern) // normalize separator on Windows
-	        .replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') // regex escape - from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
-	        .replace(/\\\/\\\*\\\*\\\//g, '((\/.+/)|(\/))') // replace directory globstar, e.g. /hello/**/world
-	        .replace(/\\\*\\\*/g, '.*') // replace remaining globstars with a wildcard that can span directory separators, e.g. /hello/**dll
-	        .replace(/\\\*/g, '[^\/]*') // replace asterisks with a wildcard that cannot span directory separators, e.g. /hello/*.dll
-	        .replace(/\\\?/g, '[^\/]'); // replace single character wildcards, e.g. /hello/log?.dll
-	    pattern = "^" + pattern + "$";
-	    var flags = process.platform == 'win32' ? 'i' : '';
-	    return new RegExp(pattern, flags);
-	}
-	exports._legacyFindFiles_convertPatternToRegExp = _legacyFindFiles_convertPatternToRegExp;
-	function _cloneMatchOptions(matchOptions) {
-	    return {
-	        debug: matchOptions.debug,
-	        nobrace: matchOptions.nobrace,
-	        noglobstar: matchOptions.noglobstar,
-	        dot: matchOptions.dot,
-	        noext: matchOptions.noext,
-	        nocase: matchOptions.nocase,
-	        nonull: matchOptions.nonull,
-	        matchBase: matchOptions.matchBase,
-	        nocomment: matchOptions.nocomment,
-	        nonegate: matchOptions.nonegate,
-	        flipNegate: matchOptions.flipNegate
-	    };
-	}
-	exports._cloneMatchOptions = _cloneMatchOptions;
-	function _getFindInfoFromPattern(defaultRoot, pattern, matchOptions) {
-	    // parameter validation
-	    if (!defaultRoot) {
-	        throw new Error('getFindRootFromPattern() parameter defaultRoot cannot be empty');
-	    }
-	    if (!pattern) {
-	        throw new Error('getFindRootFromPattern() parameter pattern cannot be empty');
-	    }
-	    if (!matchOptions.nobrace) {
-	        throw new Error('getFindRootFromPattern() expected matchOptions.nobrace to be true');
-	    }
-	    // for the sake of determining the findPath, pretend nocase=false
-	    matchOptions = _cloneMatchOptions(matchOptions);
-	    matchOptions.nocase = false;
-	    // check if basename only and matchBase=true
-	    if (matchOptions.matchBase &&
-	        !_isRooted(pattern) &&
-	        (process.platform == 'win32' ? pattern.replace(/\\/g, '/') : pattern).indexOf('/') < 0) {
-	        return {
-	            adjustedPattern: pattern,
-	            findPath: defaultRoot,
-	            statOnly: false,
-	        };
-	    }
-	    // the technique applied by this function is to use the information on the Minimatch object determine
-	    // the findPath. Minimatch breaks the pattern into path segments, and exposes information about which
-	    // segments are literal vs patterns.
-	    //
-	    // note, the technique currently imposes a limitation for drive-relative paths with a glob in the
-	    // first segment, e.g. C:hello*/world. it's feasible to overcome this limitation, but is left unsolved
-	    // for now.
-	    var minimatchObj = new minimatch.Minimatch(pattern, matchOptions);
-	    // the "set" property is an array of arrays of parsed path segment info. the outer array should only
-	    // contain one item, otherwise something went wrong. brace expansion can result in multiple arrays,
-	    // but that should be turned off by the time this function is reached.
-	    if (minimatchObj.set.length != 1) {
-	        throw new Error('getFindRootFromPattern() expected Minimatch(...).set.length to be 1. Actual: ' + minimatchObj.set.length);
-	    }
-	    var literalSegments = [];
-	    for (var _i = 0, _a = minimatchObj.set[0]; _i < _a.length; _i++) {
-	        var parsedSegment = _a[_i];
-	        if (typeof parsedSegment == 'string') {
-	            // the item is a string when the original input for the path segment does not contain any
-	            // unescaped glob characters.
-	            //
-	            // note, the string here is already unescaped (i.e. glob escaping removed), so it is ready
-	            // to pass to find() as-is. for example, an input string 'hello\\*world' => 'hello*world'.
-	            literalSegments.push(parsedSegment);
-	            continue;
-	        }
-	        break;
-	    }
-	    // join the literal segments back together. Minimatch converts '\' to '/' on Windows, then squashes
-	    // consequetive slashes, and finally splits on slash. this means that UNC format is lost, but can
-	    // be detected from the original pattern.
-	    var joinedSegments = literalSegments.join('/');
-	    if (joinedSegments && process.platform == 'win32' && _startsWith(pattern.replace(/\\/g, '/'), '//')) {
-	        joinedSegments = '/' + joinedSegments; // restore UNC format
-	    }
-	    // determine the find path
-	    var findPath;
-	    if (_isRooted(pattern)) { // the pattern was rooted
-	        findPath = joinedSegments;
-	    }
-	    else if (joinedSegments) { // the pattern was not rooted, and literal segments were found
-	        findPath = _ensureRooted(defaultRoot, joinedSegments);
-	    }
-	    else { // the pattern was not rooted, and no literal segments were found
-	        findPath = defaultRoot;
-	    }
-	    // clean up the path
-	    if (findPath) {
-	        findPath = _getDirectoryName(_ensureRooted(findPath, '_')); // hack to remove unnecessary trailing slash
-	        findPath = _normalizeSeparators(findPath); // normalize slashes
-	    }
-	    return {
-	        adjustedPattern: _ensurePatternRooted(defaultRoot, pattern),
-	        findPath: findPath,
-	        statOnly: literalSegments.length == minimatchObj.set[0].length,
-	    };
-	}
-	exports._getFindInfoFromPattern = _getFindInfoFromPattern;
-	function _ensurePatternRooted(root, p) {
-	    if (!root) {
-	        throw new Error('ensurePatternRooted() parameter "root" cannot be empty');
-	    }
-	    if (!p) {
-	        throw new Error('ensurePatternRooted() parameter "p" cannot be empty');
-	    }
-	    if (_isRooted(p)) {
-	        return p;
-	    }
-	    // normalize root
-	    root = _normalizeSeparators(root);
-	    // escape special glob characters
-	    root = (process.platform == 'win32' ? root : root.replace(/\\/g, '\\\\')) // escape '\' on OSX/Linux
-	        .replace(/(\[)(?=[^\/]+\])/g, '[[]') // escape '[' when ']' follows within the path segment
-	        .replace(/\?/g, '[?]') // escape '?'
-	        .replace(/\*/g, '[*]') // escape '*'
-	        .replace(/\+\(/g, '[+](') // escape '+('
-	        .replace(/@\(/g, '[@](') // escape '@('
-	        .replace(/!\(/g, '[!]('); // escape '!('
-	    return _ensureRooted(root, p);
-	}
-	exports._ensurePatternRooted = _ensurePatternRooted;
-	//-------------------------------------------------------------------
-	// Populate the vault with sensitive data.  Inputs and Endpoints
-	//-------------------------------------------------------------------
-	function _loadData() {
-	    // in agent, prefer TempDirectory then workFolder.
-	    // In interactive dev mode, it won't be
-	    var keyPath = _getVariable("agent.TempDirectory") || _getVariable("agent.workFolder") || process.cwd();
-	    exports._vault = new vm.Vault(keyPath);
-	    exports._knownVariableMap = {};
-	    _debug('loading inputs and endpoints');
-	    var loaded = 0;
-	    for (var envvar in process.env) {
-	        if (_startsWith(envvar, 'INPUT_') ||
-	            _startsWith(envvar, 'ENDPOINT_AUTH_') ||
-	            _startsWith(envvar, 'SECUREFILE_TICKET_') ||
-	            _startsWith(envvar, 'SECRET_') ||
-	            _startsWith(envvar, 'VSTS_TASKVARIABLE_')) {
-	            // Record the secret variable metadata. This is required by getVariable to know whether
-	            // to retrieve the value from the vault. In a 2.104.1 agent or higher, this metadata will
-	            // be overwritten when the VSTS_SECRET_VARIABLES env var is processed below.
-	            if (_startsWith(envvar, 'SECRET_')) {
-	                var variableName = envvar.substring('SECRET_'.length);
-	                if (variableName) {
-	                    // This is technically not the variable name (has underscores instead of dots),
-	                    // but it's good enough to make getVariable work in a pre-2.104.1 agent where
-	                    // the VSTS_SECRET_VARIABLES env var is not defined.
-	                    exports._knownVariableMap[_getVariableKey(variableName)] = { name: variableName, secret: true };
-	                }
-	            }
-	            // store the secret
-	            var value = process.env[envvar];
-	            if (value) {
-	                ++loaded;
-	                _debug('loading ' + envvar);
-	                exports._vault.storeSecret(envvar, value);
-	                delete process.env[envvar];
-	            }
-	        }
-	    }
-	    _debug('loaded ' + loaded);
-	    // store public variable metadata
-	    var names;
-	    try {
-	        names = JSON.parse(process.env['VSTS_PUBLIC_VARIABLES'] || '[]');
-	    }
-	    catch (err) {
-	        throw new Error('Failed to parse VSTS_PUBLIC_VARIABLES as JSON. ' + err); // may occur during interactive testing
-	    }
-	    names.forEach(function (name) {
-	        exports._knownVariableMap[_getVariableKey(name)] = { name: name, secret: false };
-	    });
-	    delete process.env['VSTS_PUBLIC_VARIABLES'];
-	    // store secret variable metadata
-	    try {
-	        names = JSON.parse(process.env['VSTS_SECRET_VARIABLES'] || '[]');
-	    }
-	    catch (err) {
-	        throw new Error('Failed to parse VSTS_SECRET_VARIABLES as JSON. ' + err); // may occur during interactive testing
-	    }
-	    names.forEach(function (name) {
-	        exports._knownVariableMap[_getVariableKey(name)] = { name: name, secret: true };
-	    });
-	    delete process.env['VSTS_SECRET_VARIABLES'];
-	    // avoid loading twice (overwrites .taskkey)
-	    commonjsGlobal['_vsts_task_lib_loaded'] = true;
-	}
-	exports._loadData = _loadData;
-	//--------------------------------------------------------------------------------
-	// Internal path helpers.
-	//--------------------------------------------------------------------------------
-	/**
-	 * Defines if path is unc-path.
-	 *
-	 * @param path  a path to a file.
-	 * @returns     true if path starts with double backslash, otherwise returns false.
-	 */
-	function _isUncPath(path) {
-	    return /^\\\\[^\\]/.test(path);
-	}
-	exports._isUncPath = _isUncPath;
-	function _ensureRooted(root, p) {
-	    if (!root) {
-	        throw new Error('ensureRooted() parameter "root" cannot be empty');
-	    }
-	    if (!p) {
-	        throw new Error('ensureRooted() parameter "p" cannot be empty');
-	    }
-	    if (_isRooted(p)) {
-	        return p;
-	    }
-	    if (process.platform == 'win32' && root.match(/^[A-Z]:$/i)) { // e.g. C:
-	        return root + p;
-	    }
-	    // ensure root ends with a separator
-	    if (_endsWith(root, '/') || (process.platform == 'win32' && _endsWith(root, '\\'))) ;
-	    else {
-	        root += path.sep; // append separator
-	    }
-	    return root + p;
-	}
-	exports._ensureRooted = _ensureRooted;
-	/**
-	 * Determines the parent path and trims trailing slashes (when safe). Path separators are normalized
-	 * in the result. This function works similar to the .NET System.IO.Path.GetDirectoryName() method.
-	 * For example, C:\hello\world\ returns C:\hello\world (trailing slash removed). Returns empty when
-	 * no higher directory can be determined.
-	 */
-	function _getDirectoryName(p) {
-	    // short-circuit if empty
-	    if (!p) {
-	        return '';
-	    }
-	    // normalize separators
-	    p = _normalizeSeparators(p);
-	    // on Windows, the goal of this function is to match the behavior of
-	    // [System.IO.Path]::GetDirectoryName(), e.g.
-	    //      C:/             =>
-	    //      C:/hello        => C:\
-	    //      C:/hello/       => C:\hello
-	    //      C:/hello/world  => C:\hello
-	    //      C:/hello/world/ => C:\hello\world
-	    //      C:              =>
-	    //      C:hello         => C:
-	    //      C:hello/        => C:hello
-	    //      /               =>
-	    //      /hello          => \
-	    //      /hello/         => \hello
-	    //      //hello         =>
-	    //      //hello/        =>
-	    //      //hello/world   =>
-	    //      //hello/world/  => \\hello\world
-	    //
-	    // unfortunately, path.dirname() can't simply be used. for example, on Windows
-	    // it yields different results from Path.GetDirectoryName:
-	    //      C:/             => C:/
-	    //      C:/hello        => C:/
-	    //      C:/hello/       => C:/
-	    //      C:/hello/world  => C:/hello
-	    //      C:/hello/world/ => C:/hello
-	    //      C:              => C:
-	    //      C:hello         => C:
-	    //      C:hello/        => C:
-	    //      /               => /
-	    //      /hello          => /
-	    //      /hello/         => /
-	    //      //hello         => /
-	    //      //hello/        => /
-	    //      //hello/world   => //hello/world
-	    //      //hello/world/  => //hello/world/
-	    //      //hello/world/again => //hello/world/
-	    //      //hello/world/again/ => //hello/world/
-	    //      //hello/world/again/again => //hello/world/again
-	    //      //hello/world/again/again/ => //hello/world/again
-	    if (process.platform == 'win32') {
-	        if (/^[A-Z]:\\?[^\\]+$/i.test(p)) { // e.g. C:\hello or C:hello
-	            return p.charAt(2) == '\\' ? p.substring(0, 3) : p.substring(0, 2);
-	        }
-	        else if (/^[A-Z]:\\?$/i.test(p)) { // e.g. C:\ or C:
-	            return '';
-	        }
-	        var lastSlashIndex = p.lastIndexOf('\\');
-	        if (lastSlashIndex < 0) { // file name only
-	            return '';
-	        }
-	        else if (p == '\\') { // relative root
-	            return '';
-	        }
-	        else if (lastSlashIndex == 0) { // e.g. \\hello
-	            return '\\';
-	        }
-	        else if (/^\\\\[^\\]+(\\[^\\]*)?$/.test(p)) { // UNC root, e.g. \\hello or \\hello\ or \\hello\world
-	            return '';
-	        }
-	        return p.substring(0, lastSlashIndex); // e.g. hello\world => hello or hello\world\ => hello\world
-	        // note, this means trailing slashes for non-root directories
-	        // (i.e. not C:\, \, or \\unc\) will simply be removed.
-	    }
-	    // OSX/Linux
-	    if (p.indexOf('/') < 0) { // file name only
-	        return '';
-	    }
-	    else if (p == '/') {
-	        return '';
-	    }
-	    else if (_endsWith(p, '/')) {
-	        return p.substring(0, p.length - 1);
-	    }
-	    return path.dirname(p);
-	}
-	exports._getDirectoryName = _getDirectoryName;
-	/**
-	 * On OSX/Linux, true if path starts with '/'. On Windows, true for paths like:
-	 * \, \hello, \\hello\share, C:, and C:\hello (and corresponding alternate separator cases).
-	 */
-	function _isRooted(p) {
-	    p = _normalizeSeparators(p);
-	    if (!p) {
-	        throw new Error('isRooted() parameter "p" cannot be empty');
-	    }
-	    if (process.platform == 'win32') {
-	        return _startsWith(p, '\\') || // e.g. \ or \hello or \\hello
-	            /^[A-Z]:/i.test(p); // e.g. C: or C:\hello
-	    }
-	    return _startsWith(p, '/'); // e.g. /hello
-	}
-	exports._isRooted = _isRooted;
-	function _normalizeSeparators(p) {
-	    p = p || '';
-	    if (process.platform == 'win32') {
-	        // convert slashes on Windows
-	        p = p.replace(/\//g, '\\');
-	        // remove redundant slashes
-	        var isUnc = /^\\\\+[^\\]/.test(p); // e.g. \\hello
-	        return (isUnc ? '\\' : '') + p.replace(/\\\\+/g, '\\'); // preserve leading // for UNC
-	    }
-	    // remove redundant slashes
-	    return p.replace(/\/\/+/g, '/');
-	}
-	exports._normalizeSeparators = _normalizeSeparators;
-	//-----------------------------------------------------
-	// Expose proxy information to vsts-node-api
-	//-----------------------------------------------------
-	function _exposeProxySettings() {
-	    var proxyUrl = _getVariable('Agent.ProxyUrl');
-	    if (proxyUrl && proxyUrl.length > 0) {
-	        var proxyUsername = _getVariable('Agent.ProxyUsername');
-	        var proxyPassword = _getVariable('Agent.ProxyPassword');
-	        var proxyBypassHostsJson = _getVariable('Agent.ProxyBypassList');
-	        commonjsGlobal['_vsts_task_lib_proxy_url'] = proxyUrl;
-	        commonjsGlobal['_vsts_task_lib_proxy_username'] = proxyUsername;
-	        commonjsGlobal['_vsts_task_lib_proxy_bypass'] = proxyBypassHostsJson;
-	        commonjsGlobal['_vsts_task_lib_proxy_password'] = _exposeTaskLibSecret('proxy', proxyPassword || '');
-	        _debug('expose agent proxy configuration.');
-	        commonjsGlobal['_vsts_task_lib_proxy'] = true;
-	    }
-	}
-	exports._exposeProxySettings = _exposeProxySettings;
-	//-----------------------------------------------------
-	// Expose certificate information to vsts-node-api
-	//-----------------------------------------------------
-	function _exposeCertSettings() {
-	    var ca = _getVariable('Agent.CAInfo');
-	    if (ca) {
-	        commonjsGlobal['_vsts_task_lib_cert_ca'] = ca;
-	    }
-	    var clientCert = _getVariable('Agent.ClientCert');
-	    if (clientCert) {
-	        var clientCertKey = _getVariable('Agent.ClientCertKey');
-	        var clientCertArchive = _getVariable('Agent.ClientCertArchive');
-	        var clientCertPassword = _getVariable('Agent.ClientCertPassword');
-	        commonjsGlobal['_vsts_task_lib_cert_clientcert'] = clientCert;
-	        commonjsGlobal['_vsts_task_lib_cert_key'] = clientCertKey;
-	        commonjsGlobal['_vsts_task_lib_cert_archive'] = clientCertArchive;
-	        commonjsGlobal['_vsts_task_lib_cert_passphrase'] = _exposeTaskLibSecret('cert', clientCertPassword || '');
-	    }
-	    if (ca || clientCert) {
-	        _debug('expose agent certificate configuration.');
-	        commonjsGlobal['_vsts_task_lib_cert'] = true;
-	    }
-	    var skipCertValidation = _getVariable('Agent.SkipCertValidation') || 'false';
-	    if (skipCertValidation) {
-	        commonjsGlobal['_vsts_task_lib_skip_cert_validation'] = skipCertValidation.toUpperCase() === 'TRUE';
-	    }
-	}
-	exports._exposeCertSettings = _exposeCertSettings;
-	// We store the encryption key on disk and hold the encrypted content and key file in memory
-	// return base64encoded<keyFilePath>:base64encoded<encryptedContent>
-	// downstream vsts-node-api will retrieve the secret later
-	function _exposeTaskLibSecret(keyFile, secret) {
-	    if (secret) {
-	        var encryptKey = crypto.randomBytes(256);
-	        var cipher = crypto.createCipher("aes-256-ctr", encryptKey);
-	        var encryptedContent = cipher.update(secret, "utf8", "hex");
-	        encryptedContent += cipher.final("hex");
-	        var storageFile = path.join(_getVariable('Agent.TempDirectory') || _getVariable("agent.workFolder") || process.cwd(), keyFile);
-	        fs.writeFileSync(storageFile, encryptKey.toString('base64'), { encoding: 'utf8' });
-	        return new Buffer(storageFile).toString('base64') + ':' + new Buffer(encryptedContent).toString('base64');
-	    }
-	} 
-} (internal));
-
-var toolrunner = {};
-
-var __extends = (commonjsGlobal && commonjsGlobal.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(toolrunner, "__esModule", { value: true });
-toolrunner.ToolRunner = void 0;
-var Q = qExports;
-var os$1 = require$$1$1;
-var events = require$$2;
-var child = require$$1$2;
-var im = internal;
-var fs$1 = require$$1;
-var ToolRunner = /** @class */ (function (_super) {
-    __extends(ToolRunner, _super);
-    function ToolRunner(toolPath) {
-        var _this = _super.call(this) || this;
-        _this.cmdSpecialChars = [' ', '\t', '&', '(', ')', '[', ']', '{', '}', '^', '=', ';', '!', '\'', '+', ',', '`', '~', '|', '<', '>', '"'];
-        if (!toolPath) {
-            throw new Error('Parameter \'toolPath\' cannot be null or empty.');
-        }
-        _this.toolPath = im._which(toolPath, true);
-        _this.args = [];
-        _this._debug('toolRunner toolPath: ' + toolPath);
-        return _this;
-    }
-    ToolRunner.prototype._debug = function (message) {
-        this.emit('debug', message);
-    };
-    ToolRunner.prototype._argStringToArray = function (argString) {
-        var args = [];
-        var inQuotes = false;
-        var escaped = false;
-        var lastCharWasSpace = true;
-        var arg = '';
-        var append = function (c) {
-            // we only escape double quotes.
-            if (escaped) {
-                if (c !== '"') {
-                    arg += '\\';
-                }
-                else {
-                    arg.slice(0, -1);
-                }
-            }
-            arg += c;
-            escaped = false;
-        };
-        for (var i = 0; i < argString.length; i++) {
-            var c = argString.charAt(i);
-            if (c === ' ' && !inQuotes) {
-                if (!lastCharWasSpace) {
-                    args.push(arg);
-                    arg = '';
-                }
-                lastCharWasSpace = true;
-                continue;
-            }
-            else {
-                lastCharWasSpace = false;
-            }
-            if (c === '"') {
-                if (!escaped) {
-                    inQuotes = !inQuotes;
-                }
-                else {
-                    append(c);
-                }
-                continue;
-            }
-            if (c === "\\" && escaped) {
-                append(c);
-                continue;
-            }
-            if (c === "\\" && inQuotes) {
-                escaped = true;
-                continue;
-            }
-            append(c);
-            lastCharWasSpace = false;
-        }
-        if (!lastCharWasSpace) {
-            args.push(arg.trim());
-        }
-        return args;
-    };
-    ToolRunner.prototype._getCommandString = function (options, noPrefix) {
-        var _this = this;
-        var toolPath = this._getSpawnFileName();
-        var args = this._getSpawnArgs(options);
-        var cmd = noPrefix ? '' : '[command]'; // omit prefix when piped to a second tool
-        var commandParts = [];
-        if (process.platform == 'win32') {
-            // Windows + cmd file
-            if (this._isCmdFile()) {
-                commandParts.push(toolPath);
-                commandParts = commandParts.concat(args);
-            }
-            // Windows + verbatim
-            else if (options.windowsVerbatimArguments) {
-                commandParts.push("\"" + toolPath + "\"");
-                commandParts = commandParts.concat(args);
-            }
-            else if (options.shell) {
-                commandParts.push(this._windowsQuoteCmdArg(toolPath));
-                commandParts = commandParts.concat(args);
-            }
-            // Windows (regular)
-            else {
-                commandParts.push(this._windowsQuoteCmdArg(toolPath));
-                commandParts = commandParts.concat(args.map(function (arg) { return _this._windowsQuoteCmdArg(arg); }));
-            }
-        }
-        else {
-            // OSX/Linux - this can likely be improved with some form of quoting.
-            // creating processes on Unix is fundamentally different than Windows.
-            // on Unix, execvp() takes an arg array.
-            commandParts.push(toolPath);
-            commandParts = commandParts.concat(args);
-        }
-        cmd += commandParts.join(' ');
-        // append second tool
-        if (this.pipeOutputToTool) {
-            cmd += ' | ' + this.pipeOutputToTool._getCommandString(options, /*noPrefix:*/ true);
-        }
-        return cmd;
-    };
-    ToolRunner.prototype._processLineBuffer = function (data, strBuffer, onLine) {
-        try {
-            var s = strBuffer + data.toString();
-            var n = s.indexOf(os$1.EOL);
-            while (n > -1) {
-                var line = s.substring(0, n);
-                onLine(line);
-                // the rest of the string ...
-                s = s.substring(n + os$1.EOL.length);
-                n = s.indexOf(os$1.EOL);
-            }
-            strBuffer = s;
-        }
-        catch (err) {
-            // streaming lines to console is best effort.  Don't fail a build.
-            this._debug('error processing line');
-        }
-    };
-    /**
-     * Wraps an arg string with specified char if it's not already wrapped
-     * @returns {string} Arg wrapped with specified char
-     * @param {string} arg Input argument string
-     * @param {string} wrapChar A char input string should be wrapped with
-     */
-    ToolRunner.prototype._wrapArg = function (arg, wrapChar) {
-        if (!this._isWrapped(arg, wrapChar)) {
-            return "" + wrapChar + arg + wrapChar;
-        }
-        return arg;
-    };
-    /**
-     * Unwraps an arg string wrapped with specified char
-     * @param arg Arg wrapped with specified char
-     * @param wrapChar A char to be removed
-     */
-    ToolRunner.prototype._unwrapArg = function (arg, wrapChar) {
-        if (this._isWrapped(arg, wrapChar)) {
-            var pattern = new RegExp("(^\\\\?" + wrapChar + ")|(\\\\?" + wrapChar + "$)", 'g');
-            return arg.trim().replace(pattern, '');
-        }
-        return arg;
-    };
-    /**
-     * Determine if arg string is wrapped with specified char
-     * @param arg Input arg string
-     */
-    ToolRunner.prototype._isWrapped = function (arg, wrapChar) {
-        var pattern = new RegExp("^\\\\?" + wrapChar + ".+\\\\?" + wrapChar + "$");
-        return pattern.test(arg.trim());
-    };
-    ToolRunner.prototype._getSpawnFileName = function (options) {
-        if (process.platform == 'win32') {
-            if (this._isCmdFile()) {
-                return process.env['COMSPEC'] || 'cmd.exe';
-            }
-        }
-        if (options && options.shell) {
-            return this._wrapArg(this.toolPath, '"');
-        }
-        return this.toolPath;
-    };
-    ToolRunner.prototype._getSpawnArgs = function (options) {
-        var _this = this;
-        if (process.platform == 'win32') {
-            if (this._isCmdFile()) {
-                var argline = "/D /S /C \"" + this._windowsQuoteCmdArg(this.toolPath);
-                for (var i = 0; i < this.args.length; i++) {
-                    argline += ' ';
-                    argline += options.windowsVerbatimArguments ? this.args[i] : this._windowsQuoteCmdArg(this.args[i]);
-                }
-                argline += '"';
-                return [argline];
-            }
-            if (options.windowsVerbatimArguments) {
-                // note, in Node 6.x options.argv0 can be used instead of overriding args.slice and args.unshift.
-                // for more details, refer to https://github.com/nodejs/node/blob/v6.x/lib/child_process.js
-                var args_1 = this.args.slice(0); // copy the array
-                // override slice to prevent Node from creating a copy of the arg array.
-                // we need Node to use the "unshift" override below.
-                args_1.slice = function () {
-                    if (arguments.length != 1 || arguments[0] != 0) {
-                        throw new Error('Unexpected arguments passed to args.slice when windowsVerbatimArguments flag is set.');
-                    }
-                    return args_1;
-                };
-                // override unshift
-                //
-                // when using the windowsVerbatimArguments option, Node does not quote the tool path when building
-                // the cmdline parameter for the win32 function CreateProcess(). an unquoted space in the tool path
-                // causes problems for tools when attempting to parse their own command line args. tools typically
-                // assume their arguments begin after arg 0.
-                //
-                // by hijacking unshift, we can quote the tool path when it pushed onto the args array. Node builds
-                // the cmdline parameter from the args array.
-                //
-                // note, we can't simply pass a quoted tool path to Node for multiple reasons:
-                //   1) Node verifies the file exists (calls win32 function GetFileAttributesW) and the check returns
-                //      false if the path is quoted.
-                //   2) Node passes the tool path as the application parameter to CreateProcess, which expects the
-                //      path to be unquoted.
-                //
-                // also note, in addition to the tool path being embedded within the cmdline parameter, Node also
-                // passes the tool path to CreateProcess via the application parameter (optional parameter). when
-                // present, Windows uses the application parameter to determine which file to run, instead of
-                // interpreting the file from the cmdline parameter.
-                args_1.unshift = function () {
-                    if (arguments.length != 1) {
-                        throw new Error('Unexpected arguments passed to args.unshift when windowsVerbatimArguments flag is set.');
-                    }
-                    return Array.prototype.unshift.call(args_1, "\"" + arguments[0] + "\""); // quote the file name
-                };
-                return args_1;
-            }
-            else if (options.shell) {
-                var args = [];
-                for (var _i = 0, _a = this.args; _i < _a.length; _i++) {
-                    var arg = _a[_i];
-                    if (this._needQuotesForCmd(arg, '%')) {
-                        args.push(this._wrapArg(arg, '"'));
-                    }
-                    else {
-                        args.push(arg);
-                    }
-                }
-                return args;
-            }
-        }
-        else if (options.shell) {
-            return this.args.map(function (arg) {
-                if (_this._isWrapped(arg, "'")) {
-                    return arg;
-                }
-                // remove wrapping double quotes to avoid escaping
-                arg = _this._unwrapArg(arg, '"');
-                arg = _this._escapeChar(arg, '"');
-                return _this._wrapArg(arg, '"');
-            });
-        }
-        return this.args;
-    };
-    /**
-     * Escape specified character.
-     * @param arg String to escape char in
-     * @param charToEscape Char should be escaped
-     */
-    ToolRunner.prototype._escapeChar = function (arg, charToEscape) {
-        var escChar = "\\";
-        var output = '';
-        var charIsEscaped = false;
-        for (var _i = 0, arg_1 = arg; _i < arg_1.length; _i++) {
-            var char = arg_1[_i];
-            if (char === charToEscape && !charIsEscaped) {
-                output += escChar + char;
-            }
-            else {
-                output += char;
-            }
-            charIsEscaped = char === escChar && !charIsEscaped;
-        }
-        return output;
-    };
-    ToolRunner.prototype._isCmdFile = function () {
-        var upperToolPath = this.toolPath.toUpperCase();
-        return im._endsWith(upperToolPath, '.CMD') || im._endsWith(upperToolPath, '.BAT');
-    };
-    /**
-     * Determine whether the cmd arg needs to be quoted. Returns true if arg contains any of special chars array.
-     * @param arg The cmd command arg.
-     * @param additionalChars Additional chars which should be also checked.
-     */
-    ToolRunner.prototype._needQuotesForCmd = function (arg, additionalChars) {
-        var specialChars = this.cmdSpecialChars;
-        if (additionalChars) {
-            specialChars = this.cmdSpecialChars.concat(additionalChars);
-        }
-        var _loop_1 = function (char) {
-            if (specialChars.some(function (x) { return x === char; })) {
-                return { value: true };
-            }
-        };
-        for (var _i = 0, arg_2 = arg; _i < arg_2.length; _i++) {
-            var char = arg_2[_i];
-            var state_1 = _loop_1(char);
-            if (typeof state_1 === "object")
-                return state_1.value;
-        }
-        return false;
-    };
-    ToolRunner.prototype._windowsQuoteCmdArg = function (arg) {
-        // for .exe, apply the normal quoting rules that libuv applies
-        if (!this._isCmdFile()) {
-            return this._uv_quote_cmd_arg(arg);
-        }
-        // otherwise apply quoting rules specific to the cmd.exe command line parser.
-        // the libuv rules are generic and are not designed specifically for cmd.exe
-        // command line parser.
-        //
-        // for a detailed description of the cmd.exe command line parser, refer to
-        // http://stackoverflow.com/questions/4094699/how-does-the-windows-command-interpreter-cmd-exe-parse-scripts/7970912#7970912
-        // need quotes for empty arg
-        if (!arg) {
-            return '""';
-        }
-        // determine whether the arg needs to be quoted
-        var needsQuotes = this._needQuotesForCmd(arg);
-        // short-circuit if quotes not needed
-        if (!needsQuotes) {
-            return arg;
-        }
-        // the following quoting rules are very similar to the rules that by libuv applies.
-        //
-        // 1) wrap the string in quotes
-        //
-        // 2) double-up quotes - i.e. " => ""
-        //
-        //    this is different from the libuv quoting rules. libuv replaces " with \", which unfortunately
-        //    doesn't work well with a cmd.exe command line.
-        //
-        //    note, replacing " with "" also works well if the arg is passed to a downstream .NET console app.
-        //    for example, the command line:
-        //          foo.exe "myarg:""my val"""
-        //    is parsed by a .NET console app into an arg array:
-        //          [ "myarg:\"my val\"" ]
-        //    which is the same end result when applying libuv quoting rules. although the actual
-        //    command line from libuv quoting rules would look like:
-        //          foo.exe "myarg:\"my val\""
-        //
-        // 3) double-up slashes that preceed a quote,
-        //    e.g.  hello \world    => "hello \world"
-        //          hello\"world    => "hello\\""world"
-        //          hello\\"world   => "hello\\\\""world"
-        //          hello world\    => "hello world\\"
-        //
-        //    technically this is not required for a cmd.exe command line, or the batch argument parser.
-        //    the reasons for including this as a .cmd quoting rule are:
-        //
-        //    a) this is optimized for the scenario where the argument is passed from the .cmd file to an
-        //       external program. many programs (e.g. .NET console apps) rely on the slash-doubling rule.
-        //
-        //    b) it's what we've been doing previously (by deferring to node default behavior) and we
-        //       haven't heard any complaints about that aspect.
-        //
-        // note, a weakness of the quoting rules chosen here, is that % is not escaped. in fact, % cannot be
-        // escaped when used on the command line directly - even though within a .cmd file % can be escaped
-        // by using %%.
-        //
-        // the saving grace is, on the command line, %var% is left as-is if var is not defined. this contrasts
-        // the line parsing rules within a .cmd file, where if var is not defined it is replaced with nothing.
-        //
-        // one option that was explored was replacing % with ^% - i.e. %var% => ^%var^%. this hack would
-        // often work, since it is unlikely that var^ would exist, and the ^ character is removed when the
-        // variable is used. the problem, however, is that ^ is not removed when %* is used to pass the args
-        // to an external program.
-        //
-        // an unexplored potential solution for the % escaping problem, is to create a wrapper .cmd file.
-        // % can be escaped within a .cmd file.
-        var reverse = '"';
-        var quote_hit = true;
-        for (var i = arg.length; i > 0; i--) { // walk the string in reverse
-            reverse += arg[i - 1];
-            if (quote_hit && arg[i - 1] == '\\') {
-                reverse += '\\'; // double the slash
-            }
-            else if (arg[i - 1] == '"') {
-                quote_hit = true;
-                reverse += '"'; // double the quote
-            }
-            else {
-                quote_hit = false;
-            }
-        }
-        reverse += '"';
-        return reverse.split('').reverse().join('');
-    };
-    ToolRunner.prototype._uv_quote_cmd_arg = function (arg) {
-        // Tool runner wraps child_process.spawn() and needs to apply the same quoting as
-        // Node in certain cases where the undocumented spawn option windowsVerbatimArguments
-        // is used.
-        //
-        // Since this function is a port of quote_cmd_arg from Node 4.x (technically, lib UV,
-        // see https://github.com/nodejs/node/blob/v4.x/deps/uv/src/win/process.c for details),
-        // pasting copyright notice from Node within this function:
-        //
-        //      Copyright Joyent, Inc. and other Node contributors. All rights reserved.
-        //
-        //      Permission is hereby granted, free of charge, to any person obtaining a copy
-        //      of this software and associated documentation files (the "Software"), to
-        //      deal in the Software without restriction, including without limitation the
-        //      rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-        //      sell copies of the Software, and to permit persons to whom the Software is
-        //      furnished to do so, subject to the following conditions:
-        //
-        //      The above copyright notice and this permission notice shall be included in
-        //      all copies or substantial portions of the Software.
-        //
-        //      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-        //      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-        //      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-        //      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-        //      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-        //      FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-        //      IN THE SOFTWARE.
-        if (!arg) {
-            // Need double quotation for empty argument
-            return '""';
-        }
-        if (arg.indexOf(' ') < 0 && arg.indexOf('\t') < 0 && arg.indexOf('"') < 0) {
-            // No quotation needed
-            return arg;
-        }
-        if (arg.indexOf('"') < 0 && arg.indexOf('\\') < 0) {
-            // No embedded double quotes or backslashes, so I can just wrap
-            // quote marks around the whole thing.
-            return "\"" + arg + "\"";
-        }
-        // Expected input/output:
-        //   input : hello"world
-        //   output: "hello\"world"
-        //   input : hello""world
-        //   output: "hello\"\"world"
-        //   input : hello\world
-        //   output: hello\world
-        //   input : hello\\world
-        //   output: hello\\world
-        //   input : hello\"world
-        //   output: "hello\\\"world"
-        //   input : hello\\"world
-        //   output: "hello\\\\\"world"
-        //   input : hello world\
-        //   output: "hello world\\" - note the comment in libuv actually reads "hello world\"
-        //                             but it appears the comment is wrong, it should be "hello world\\"
-        var reverse = '"';
-        var quote_hit = true;
-        for (var i = arg.length; i > 0; i--) { // walk the string in reverse
-            reverse += arg[i - 1];
-            if (quote_hit && arg[i - 1] == '\\') {
-                reverse += '\\';
-            }
-            else if (arg[i - 1] == '"') {
-                quote_hit = true;
-                reverse += '\\';
-            }
-            else {
-                quote_hit = false;
-            }
-        }
-        reverse += '"';
-        return reverse.split('').reverse().join('');
-    };
-    ToolRunner.prototype._cloneExecOptions = function (options) {
-        options = options || {};
-        var result = {
-            cwd: options.cwd || process.cwd(),
-            env: options.env || process.env,
-            silent: options.silent || false,
-            failOnStdErr: options.failOnStdErr || false,
-            ignoreReturnCode: options.ignoreReturnCode || false,
-            windowsVerbatimArguments: options.windowsVerbatimArguments || false,
-            shell: options.shell || false
-        };
-        result.outStream = options.outStream || process.stdout;
-        result.errStream = options.errStream || process.stderr;
-        return result;
-    };
-    ToolRunner.prototype._getSpawnOptions = function (options) {
-        options = options || {};
-        var result = {};
-        result.cwd = options.cwd;
-        result.env = options.env;
-        result.shell = options.shell;
-        result['windowsVerbatimArguments'] = options.windowsVerbatimArguments || this._isCmdFile();
-        return result;
-    };
-    ToolRunner.prototype._getSpawnSyncOptions = function (options) {
-        var result = {};
-        result.maxBuffer = 1024 * 1024 * 1024;
-        result.cwd = options.cwd;
-        result.env = options.env;
-        result.shell = options.shell;
-        result['windowsVerbatimArguments'] = options.windowsVerbatimArguments || this._isCmdFile();
-        return result;
-    };
-    ToolRunner.prototype.execWithPipingAsync = function (pipeOutputToTool, options) {
-        var _this = this;
-        this._debug('exec tool: ' + this.toolPath);
-        this._debug('arguments:');
-        this.args.forEach(function (arg) {
-            _this._debug('   ' + arg);
-        });
-        var success = true;
-        var optionsNonNull = this._cloneExecOptions(options);
-        if (!optionsNonNull.silent) {
-            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os$1.EOL);
-        }
-        var cp;
-        var toolPath = pipeOutputToTool.toolPath;
-        var toolPathFirst;
-        var successFirst = true;
-        var returnCodeFirst;
-        var fileStream;
-        var waitingEvents = 0; // number of process or stream events we are waiting on to complete
-        var returnCode = 0;
-        var error;
-        toolPathFirst = this.toolPath;
-        // Following node documentation example from this link on how to pipe output of one process to another
-        // https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
-        //start the child process for both tools
-        waitingEvents++;
-        var cpFirst = child.spawn(this._getSpawnFileName(optionsNonNull), this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(optionsNonNull));
-        waitingEvents++;
-        cp = child.spawn(pipeOutputToTool._getSpawnFileName(optionsNonNull), pipeOutputToTool._getSpawnArgs(optionsNonNull), pipeOutputToTool._getSpawnOptions(optionsNonNull));
-        fileStream = this.pipeOutputToFile ? fs$1.createWriteStream(this.pipeOutputToFile) : null;
-        return new Promise(function (resolve, reject) {
-            var _a, _b, _c, _d;
-            if (fileStream) {
-                waitingEvents++;
-                fileStream.on('finish', function () {
-                    waitingEvents--; //file write is complete
-                    fileStream = null;
-                    if (waitingEvents == 0) {
-                        if (error) {
-                            reject(error);
-                        }
-                        else {
-                            resolve(returnCode);
-                        }
-                    }
-                });
-                fileStream.on('error', function (err) {
-                    waitingEvents--; //there were errors writing to the file, write is done
-                    _this._debug("Failed to pipe output of " + toolPathFirst + " to file " + _this.pipeOutputToFile + ". Error = " + err);
-                    fileStream = null;
-                    if (waitingEvents == 0) {
-                        if (error) {
-                            reject(error);
-                        }
-                        else {
-                            resolve(returnCode);
-                        }
-                    }
-                });
-            }
-            //pipe stdout of first tool to stdin of second tool
-            (_a = cpFirst.stdout) === null || _a === void 0 ? void 0 : _a.on('data', function (data) {
-                var _a;
-                try {
-                    if (fileStream) {
-                        fileStream.write(data);
-                    }
-                    (_a = cp.stdin) === null || _a === void 0 ? void 0 : _a.write(data);
-                }
-                catch (err) {
-                    _this._debug('Failed to pipe output of ' + toolPathFirst + ' to ' + toolPath);
-                    _this._debug(toolPath + ' might have exited due to errors prematurely. Verify the arguments passed are valid.');
-                }
-            });
-            (_b = cpFirst.stderr) === null || _b === void 0 ? void 0 : _b.on('data', function (data) {
-                if (fileStream) {
-                    fileStream.write(data);
-                }
-                successFirst = !optionsNonNull.failOnStdErr;
-                if (!optionsNonNull.silent) {
-                    var s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
-                    s.write(data);
-                }
-            });
-            cpFirst.on('error', function (err) {
-                var _a;
-                waitingEvents--; //first process is complete with errors
-                if (fileStream) {
-                    fileStream.end();
-                }
-                (_a = cp.stdin) === null || _a === void 0 ? void 0 : _a.end();
-                error = new Error(toolPathFirst + ' failed. ' + err.message);
-                if (waitingEvents == 0) {
-                    reject(error);
-                }
-            });
-            cpFirst.on('close', function (code, signal) {
-                var _a;
-                waitingEvents--; //first process is complete
-                if (code != 0 && !optionsNonNull.ignoreReturnCode) {
-                    successFirst = false;
-                    returnCodeFirst = code;
-                    returnCode = returnCodeFirst;
-                }
-                _this._debug('success of first tool:' + successFirst);
-                if (fileStream) {
-                    fileStream.end();
-                }
-                (_a = cp.stdin) === null || _a === void 0 ? void 0 : _a.end();
-                if (waitingEvents == 0) {
-                    if (error) {
-                        reject(error);
-                    }
-                    else {
-                        resolve(returnCode);
-                    }
-                }
-            });
-            var stdbuffer = '';
-            (_c = cp.stdout) === null || _c === void 0 ? void 0 : _c.on('data', function (data) {
-                _this.emit('stdout', data);
-                if (!optionsNonNull.silent) {
-                    optionsNonNull.outStream.write(data);
-                }
-                _this._processLineBuffer(data, stdbuffer, function (line) {
-                    _this.emit('stdline', line);
-                });
-            });
-            var errbuffer = '';
-            (_d = cp.stderr) === null || _d === void 0 ? void 0 : _d.on('data', function (data) {
-                _this.emit('stderr', data);
-                success = !optionsNonNull.failOnStdErr;
-                if (!optionsNonNull.silent) {
-                    var s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
-                    s.write(data);
-                }
-                _this._processLineBuffer(data, errbuffer, function (line) {
-                    _this.emit('errline', line);
-                });
-            });
-            cp.on('error', function (err) {
-                waitingEvents--; //process is done with errors
-                error = new Error(toolPath + ' failed. ' + err.message);
-                if (waitingEvents == 0) {
-                    reject(error);
-                }
-            });
-            cp.on('close', function (code, signal) {
-                waitingEvents--; //process is complete
-                _this._debug('rc:' + code);
-                returnCode = code;
-                if (stdbuffer.length > 0) {
-                    _this.emit('stdline', stdbuffer);
-                }
-                if (errbuffer.length > 0) {
-                    _this.emit('errline', errbuffer);
-                }
-                if (code != 0 && !optionsNonNull.ignoreReturnCode) {
-                    success = false;
-                }
-                _this._debug('success:' + success);
-                if (!successFirst) { //in the case output is piped to another tool, check exit code of both tools
-                    error = new Error(toolPathFirst + ' failed with return code: ' + returnCodeFirst);
-                }
-                else if (!success) {
-                    error = new Error(toolPath + ' failed with return code: ' + code);
-                }
-                if (waitingEvents == 0) {
-                    if (error) {
-                        reject(error);
-                    }
-                    else {
-                        resolve(returnCode);
-                    }
-                }
-            });
-        });
-    };
-    ToolRunner.prototype.execWithPiping = function (pipeOutputToTool, options) {
-        var _this = this;
-        var _a, _b, _c, _d;
-        var defer = Q.defer();
-        this._debug('exec tool: ' + this.toolPath);
-        this._debug('arguments:');
-        this.args.forEach(function (arg) {
-            _this._debug('   ' + arg);
-        });
-        var success = true;
-        var optionsNonNull = this._cloneExecOptions(options);
-        if (!optionsNonNull.silent) {
-            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os$1.EOL);
-        }
-        var cp;
-        var toolPath = pipeOutputToTool.toolPath;
-        var toolPathFirst;
-        var successFirst = true;
-        var returnCodeFirst;
-        var fileStream;
-        var waitingEvents = 0; // number of process or stream events we are waiting on to complete
-        var returnCode = 0;
-        var error;
-        toolPathFirst = this.toolPath;
-        // Following node documentation example from this link on how to pipe output of one process to another
-        // https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
-        //start the child process for both tools
-        waitingEvents++;
-        var cpFirst = child.spawn(this._getSpawnFileName(optionsNonNull), this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(optionsNonNull));
-        waitingEvents++;
-        cp = child.spawn(pipeOutputToTool._getSpawnFileName(optionsNonNull), pipeOutputToTool._getSpawnArgs(optionsNonNull), pipeOutputToTool._getSpawnOptions(optionsNonNull));
-        fileStream = this.pipeOutputToFile ? fs$1.createWriteStream(this.pipeOutputToFile) : null;
-        if (fileStream) {
-            waitingEvents++;
-            fileStream.on('finish', function () {
-                waitingEvents--; //file write is complete
-                fileStream = null;
-                if (waitingEvents == 0) {
-                    if (error) {
-                        defer.reject(error);
-                    }
-                    else {
-                        defer.resolve(returnCode);
-                    }
-                }
-            });
-            fileStream.on('error', function (err) {
-                waitingEvents--; //there were errors writing to the file, write is done
-                _this._debug("Failed to pipe output of " + toolPathFirst + " to file " + _this.pipeOutputToFile + ". Error = " + err);
-                fileStream = null;
-                if (waitingEvents == 0) {
-                    if (error) {
-                        defer.reject(error);
-                    }
-                    else {
-                        defer.resolve(returnCode);
-                    }
-                }
-            });
-        }
-        //pipe stdout of first tool to stdin of second tool
-        (_a = cpFirst.stdout) === null || _a === void 0 ? void 0 : _a.on('data', function (data) {
-            var _a;
-            try {
-                if (fileStream) {
-                    fileStream.write(data);
-                }
-                (_a = cp.stdin) === null || _a === void 0 ? void 0 : _a.write(data);
-            }
-            catch (err) {
-                _this._debug('Failed to pipe output of ' + toolPathFirst + ' to ' + toolPath);
-                _this._debug(toolPath + ' might have exited due to errors prematurely. Verify the arguments passed are valid.');
-            }
-        });
-        (_b = cpFirst.stderr) === null || _b === void 0 ? void 0 : _b.on('data', function (data) {
-            if (fileStream) {
-                fileStream.write(data);
-            }
-            successFirst = !optionsNonNull.failOnStdErr;
-            if (!optionsNonNull.silent) {
-                var s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
-                s.write(data);
-            }
-        });
-        cpFirst.on('error', function (err) {
-            var _a;
-            waitingEvents--; //first process is complete with errors
-            if (fileStream) {
-                fileStream.end();
-            }
-            (_a = cp.stdin) === null || _a === void 0 ? void 0 : _a.end();
-            error = new Error(toolPathFirst + ' failed. ' + err.message);
-            if (waitingEvents == 0) {
-                defer.reject(error);
-            }
-        });
-        cpFirst.on('close', function (code, signal) {
-            var _a;
-            waitingEvents--; //first process is complete
-            if (code != 0 && !optionsNonNull.ignoreReturnCode) {
-                successFirst = false;
-                returnCodeFirst = code;
-                returnCode = returnCodeFirst;
-            }
-            _this._debug('success of first tool:' + successFirst);
-            if (fileStream) {
-                fileStream.end();
-            }
-            (_a = cp.stdin) === null || _a === void 0 ? void 0 : _a.end();
-            if (waitingEvents == 0) {
-                if (error) {
-                    defer.reject(error);
-                }
-                else {
-                    defer.resolve(returnCode);
-                }
-            }
-        });
-        var stdbuffer = '';
-        (_c = cp.stdout) === null || _c === void 0 ? void 0 : _c.on('data', function (data) {
-            _this.emit('stdout', data);
-            if (!optionsNonNull.silent) {
-                optionsNonNull.outStream.write(data);
-            }
-            _this._processLineBuffer(data, stdbuffer, function (line) {
-                _this.emit('stdline', line);
-            });
-        });
-        var errbuffer = '';
-        (_d = cp.stderr) === null || _d === void 0 ? void 0 : _d.on('data', function (data) {
-            _this.emit('stderr', data);
-            success = !optionsNonNull.failOnStdErr;
-            if (!optionsNonNull.silent) {
-                var s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
-                s.write(data);
-            }
-            _this._processLineBuffer(data, errbuffer, function (line) {
-                _this.emit('errline', line);
-            });
-        });
-        cp.on('error', function (err) {
-            waitingEvents--; //process is done with errors
-            error = new Error(toolPath + ' failed. ' + err.message);
-            if (waitingEvents == 0) {
-                defer.reject(error);
-            }
-        });
-        cp.on('close', function (code, signal) {
-            waitingEvents--; //process is complete
-            _this._debug('rc:' + code);
-            returnCode = code;
-            if (stdbuffer.length > 0) {
-                _this.emit('stdline', stdbuffer);
-            }
-            if (errbuffer.length > 0) {
-                _this.emit('errline', errbuffer);
-            }
-            if (code != 0 && !optionsNonNull.ignoreReturnCode) {
-                success = false;
-            }
-            _this._debug('success:' + success);
-            if (!successFirst) { //in the case output is piped to another tool, check exit code of both tools
-                error = new Error(toolPathFirst + ' failed with return code: ' + returnCodeFirst);
-            }
-            else if (!success) {
-                error = new Error(toolPath + ' failed with return code: ' + code);
-            }
-            if (waitingEvents == 0) {
-                if (error) {
-                    defer.reject(error);
-                }
-                else {
-                    defer.resolve(returnCode);
-                }
-            }
-        });
-        return defer.promise;
-    };
-    /**
-     * Add argument
-     * Append an argument or an array of arguments
-     * returns ToolRunner for chaining
-     *
-     * @param     val        string cmdline or array of strings
-     * @returns   ToolRunner
-     */
-    ToolRunner.prototype.arg = function (val) {
-        if (!val) {
-            return this;
-        }
-        if (val instanceof Array) {
-            this._debug(this.toolPath + ' arg: ' + JSON.stringify(val));
-            this.args = this.args.concat(val);
-        }
-        else if (typeof (val) === 'string') {
-            this._debug(this.toolPath + ' arg: ' + val);
-            this.args = this.args.concat(val.trim());
-        }
-        return this;
-    };
-    /**
-     * Parses an argument line into one or more arguments
-     * e.g. .line('"arg one" two -z') is equivalent to .arg(['arg one', 'two', '-z'])
-     * returns ToolRunner for chaining
-     *
-     * @param     val        string argument line
-     * @returns   ToolRunner
-     */
-    ToolRunner.prototype.line = function (val) {
-        if (!val) {
-            return this;
-        }
-        this._debug(this.toolPath + ' arg: ' + val);
-        this.args = this.args.concat(this._argStringToArray(val));
-        return this;
-    };
-    /**
-     * Add argument(s) if a condition is met
-     * Wraps arg().  See arg for details
-     * returns ToolRunner for chaining
-     *
-     * @param     condition     boolean condition
-     * @param     val     string cmdline or array of strings
-     * @returns   ToolRunner
-     */
-    ToolRunner.prototype.argIf = function (condition, val) {
-        if (condition) {
-            this.arg(val);
-        }
-        return this;
-    };
-    /**
-     * Pipe output of exec() to another tool
-     * @param tool
-     * @param file  optional filename to additionally stream the output to.
-     * @returns {ToolRunner}
-     */
-    ToolRunner.prototype.pipeExecOutputToTool = function (tool, file) {
-        this.pipeOutputToTool = tool;
-        this.pipeOutputToFile = file;
-        return this;
-    };
-    /**
-     * Exec a tool.
-     * Output will be streamed to the live console.
-     * Returns promise with return code
-     *
-     * @param     tool     path to tool to exec
-     * @param     options  optional exec options.  See IExecOptions
-     * @returns   number
-     */
-    ToolRunner.prototype.execAsync = function (options) {
-        var _this = this;
-        var _a, _b, _c;
-        if (this.pipeOutputToTool) {
-            return this.execWithPipingAsync(this.pipeOutputToTool, options);
-        }
-        this._debug('exec tool: ' + this.toolPath);
-        this._debug('arguments:');
-        this.args.forEach(function (arg) {
-            _this._debug('   ' + arg);
-        });
-        var optionsNonNull = this._cloneExecOptions(options);
-        if (!optionsNonNull.silent) {
-            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os$1.EOL);
-        }
-        var state = new ExecState(optionsNonNull, this.toolPath);
-        state.on('debug', function (message) {
-            _this._debug(message);
-        });
-        var cp = child.spawn(this._getSpawnFileName(options), this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(options));
-        this.childProcess = cp;
-        // it is possible for the child process to end its last line without a new line.
-        // because stdout is buffered, this causes the last line to not get sent to the parent
-        // stream. Adding this event forces a flush before the child streams are closed.
-        (_a = cp.stdout) === null || _a === void 0 ? void 0 : _a.on('finish', function () {
-            if (!optionsNonNull.silent) {
-                optionsNonNull.outStream.write(os$1.EOL);
-            }
-        });
-        var stdbuffer = '';
-        (_b = cp.stdout) === null || _b === void 0 ? void 0 : _b.on('data', function (data) {
-            _this.emit('stdout', data);
-            if (!optionsNonNull.silent) {
-                optionsNonNull.outStream.write(data);
-            }
-            _this._processLineBuffer(data, stdbuffer, function (line) {
-                _this.emit('stdline', line);
-            });
-        });
-        var errbuffer = '';
-        (_c = cp.stderr) === null || _c === void 0 ? void 0 : _c.on('data', function (data) {
-            state.processStderr = true;
-            _this.emit('stderr', data);
-            if (!optionsNonNull.silent) {
-                var s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
-                s.write(data);
-            }
-            _this._processLineBuffer(data, errbuffer, function (line) {
-                _this.emit('errline', line);
-            });
-        });
-        cp.on('error', function (err) {
-            state.processError = err.message;
-            state.processExited = true;
-            state.processClosed = true;
-            state.CheckComplete();
-        });
-        cp.on('exit', function (code, signal) {
-            state.processExitCode = code;
-            state.processExited = true;
-            _this._debug("Exit code " + code + " received from tool '" + _this.toolPath + "'");
-            state.CheckComplete();
-        });
-        cp.on('close', function (code, signal) {
-            state.processExitCode = code;
-            state.processExited = true;
-            state.processClosed = true;
-            _this._debug("STDIO streams have closed for tool '" + _this.toolPath + "'");
-            state.CheckComplete();
-        });
-        return new Promise(function (resolve, reject) {
-            state.on('done', function (error, exitCode) {
-                if (stdbuffer.length > 0) {
-                    _this.emit('stdline', stdbuffer);
-                }
-                if (errbuffer.length > 0) {
-                    _this.emit('errline', errbuffer);
-                }
-                cp.removeAllListeners();
-                if (error) {
-                    reject(error);
-                }
-                else {
-                    resolve(exitCode);
-                }
-            });
-        });
-    };
-    /**
-     * Exec a tool.
-     * Output will be streamed to the live console.
-     * Returns promise with return code
-     *
-     * @deprecated Use the `execAsync` method that returns a native Javascript promise instead
-     * @param     tool     path to tool to exec
-     * @param     options  optional exec options.  See IExecOptions
-     * @returns   number
-     */
-    ToolRunner.prototype.exec = function (options) {
-        var _this = this;
-        var _a, _b, _c;
-        if (this.pipeOutputToTool) {
-            return this.execWithPiping(this.pipeOutputToTool, options);
-        }
-        var defer = Q.defer();
-        this._debug('exec tool: ' + this.toolPath);
-        this._debug('arguments:');
-        this.args.forEach(function (arg) {
-            _this._debug('   ' + arg);
-        });
-        var optionsNonNull = this._cloneExecOptions(options);
-        if (!optionsNonNull.silent) {
-            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os$1.EOL);
-        }
-        var state = new ExecState(optionsNonNull, this.toolPath);
-        state.on('debug', function (message) {
-            _this._debug(message);
-        });
-        var cp = child.spawn(this._getSpawnFileName(options), this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(options));
-        this.childProcess = cp;
-        // it is possible for the child process to end its last line without a new line.
-        // because stdout is buffered, this causes the last line to not get sent to the parent
-        // stream. Adding this event forces a flush before the child streams are closed.
-        (_a = cp.stdout) === null || _a === void 0 ? void 0 : _a.on('finish', function () {
-            if (!optionsNonNull.silent) {
-                optionsNonNull.outStream.write(os$1.EOL);
-            }
-        });
-        var stdbuffer = '';
-        (_b = cp.stdout) === null || _b === void 0 ? void 0 : _b.on('data', function (data) {
-            _this.emit('stdout', data);
-            if (!optionsNonNull.silent) {
-                optionsNonNull.outStream.write(data);
-            }
-            _this._processLineBuffer(data, stdbuffer, function (line) {
-                _this.emit('stdline', line);
-            });
-        });
-        var errbuffer = '';
-        (_c = cp.stderr) === null || _c === void 0 ? void 0 : _c.on('data', function (data) {
-            state.processStderr = true;
-            _this.emit('stderr', data);
-            if (!optionsNonNull.silent) {
-                var s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
-                s.write(data);
-            }
-            _this._processLineBuffer(data, errbuffer, function (line) {
-                _this.emit('errline', line);
-            });
-        });
-        cp.on('error', function (err) {
-            state.processError = err.message;
-            state.processExited = true;
-            state.processClosed = true;
-            state.CheckComplete();
-        });
-        cp.on('exit', function (code, signal) {
-            state.processExitCode = code;
-            state.processExited = true;
-            _this._debug("Exit code " + code + " received from tool '" + _this.toolPath + "'");
-            state.CheckComplete();
-        });
-        cp.on('close', function (code, signal) {
-            state.processExitCode = code;
-            state.processExited = true;
-            state.processClosed = true;
-            _this._debug("STDIO streams have closed for tool '" + _this.toolPath + "'");
-            state.CheckComplete();
-        });
-        state.on('done', function (error, exitCode) {
-            if (stdbuffer.length > 0) {
-                _this.emit('stdline', stdbuffer);
-            }
-            if (errbuffer.length > 0) {
-                _this.emit('errline', errbuffer);
-            }
-            cp.removeAllListeners();
-            if (error) {
-                defer.reject(error);
-            }
-            else {
-                defer.resolve(exitCode);
-            }
-        });
-        return defer.promise;
-    };
-    /**
-     * Exec a tool synchronously.
-     * Output will be *not* be streamed to the live console.  It will be returned after execution is complete.
-     * Appropriate for short running tools
-     * Returns IExecSyncResult with output and return code
-     *
-     * @param     tool     path to tool to exec
-     * @param     options  optional exec options.  See IExecSyncOptions
-     * @returns   IExecSyncResult
-     */
-    ToolRunner.prototype.execSync = function (options) {
-        var _this = this;
-        this._debug('exec tool: ' + this.toolPath);
-        this._debug('arguments:');
-        this.args.forEach(function (arg) {
-            _this._debug('   ' + arg);
-        });
-        options = this._cloneExecOptions(options);
-        if (!options.silent) {
-            options.outStream.write(this._getCommandString(options) + os$1.EOL);
-        }
-        var r = child.spawnSync(this._getSpawnFileName(options), this._getSpawnArgs(options), this._getSpawnSyncOptions(options));
-        if (!options.silent && r.stdout && r.stdout.length > 0) {
-            options.outStream.write(r.stdout);
-        }
-        if (!options.silent && r.stderr && r.stderr.length > 0) {
-            options.errStream.write(r.stderr);
-        }
-        var res = { code: r.status, error: r.error };
-        res.stdout = (r.stdout) ? r.stdout.toString() : '';
-        res.stderr = (r.stderr) ? r.stderr.toString() : '';
-        return res;
-    };
-    /**
-     * Used to close child process by sending SIGNINT signal.
-     * It allows executed script to have some additional logic on SIGINT, before exiting.
-     */
-    ToolRunner.prototype.killChildProcess = function () {
-        if (this.childProcess) {
-            this.childProcess.kill();
-        }
-    };
-    return ToolRunner;
-}(events.EventEmitter));
-toolrunner.ToolRunner = ToolRunner;
-var ExecState = /** @class */ (function (_super) {
-    __extends(ExecState, _super);
-    function ExecState(options, toolPath) {
-        var _this = _super.call(this) || this;
-        _this.delay = 10000; // 10 seconds
-        _this.timeout = null;
-        if (!toolPath) {
-            throw new Error('toolPath must not be empty');
-        }
-        _this.options = options;
-        _this.toolPath = toolPath;
-        var delay = process.env['TASKLIB_TEST_TOOLRUNNER_EXITDELAY'];
-        if (delay) {
-            _this.delay = parseInt(delay);
-        }
-        return _this;
-    }
-    ExecState.prototype.CheckComplete = function () {
-        if (this.done) {
-            return;
-        }
-        if (this.processClosed) {
-            this._setResult();
-        }
-        else if (this.processExited) {
-            this.timeout = setTimeout(ExecState.HandleTimeout, this.delay, this);
-        }
-    };
-    ExecState.prototype._debug = function (message) {
-        this.emit('debug', message);
-    };
-    ExecState.prototype._setResult = function () {
-        // determine whether there is an error
-        var error;
-        if (this.processExited) {
-            if (this.processError) {
-                error = new Error(im._loc('LIB_ProcessError', this.toolPath, this.processError));
-            }
-            else if (this.processExitCode != 0 && !this.options.ignoreReturnCode) {
-                error = new Error(im._loc('LIB_ProcessExitCode', this.toolPath, this.processExitCode));
-            }
-            else if (this.processStderr && this.options.failOnStdErr) {
-                error = new Error(im._loc('LIB_ProcessStderr', this.toolPath));
-            }
-        }
-        // clear the timeout
-        if (this.timeout) {
-            clearTimeout(this.timeout);
-            this.timeout = null;
-        }
-        this.done = true;
-        this.emit('done', error, this.processExitCode);
-    };
-    ExecState.HandleTimeout = function (state) {
-        if (state.done) {
-            return;
-        }
-        if (!state.processClosed && state.processExited) {
-            console.log(im._loc('LIB_StdioNotClosed', state.delay / 1000, state.toolPath));
-            state._debug(im._loc('LIB_StdioNotClosed', state.delay / 1000, state.toolPath));
-        }
-        state._setResult();
-    };
-    return ExecState;
-}(events.EventEmitter));
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.updateReleaseName = exports.addBuildTag = exports.updateBuildNumber = exports.uploadBuildLog = exports.associateArtifact = exports.uploadArtifact = exports.logIssue = exports.logDetail = exports.setProgress = exports.setEndpoint = exports.addAttachment = exports.uploadSummary = exports.prependPath = exports.uploadFile = exports.CodeCoverageEnabler = exports.CodeCoveragePublisher = exports.TestPublisher = exports.getHttpCertConfiguration = exports.getHttpProxyConfiguration = exports.findMatch = exports.filter = exports.match = exports.tool = exports.execSync = exports.exec = exports.execAsync = exports.rmRF = exports.legacyFindFiles = exports.find = exports.retry = exports.mv = exports.cp = exports.ls = exports.which = exports.resolve = exports.mkdirP = exports.popd = exports.pushd = exports.cd = exports.checkPath = exports.cwd = exports.getAgentMode = exports.getPlatform = exports.osType = exports.writeFile = exports.exist = exports.stats = exports.debug = exports.error = exports.warning = exports.command = exports.setTaskVariable = exports.getTaskVariable = exports.getSecureFileTicket = exports.getSecureFileName = exports.getEndpointAuthorization = exports.getEndpointAuthorizationParameterRequired = exports.getEndpointAuthorizationParameter = exports.getEndpointAuthorizationSchemeRequired = exports.getEndpointAuthorizationScheme = exports.getEndpointDataParameterRequired = exports.getEndpointDataParameter = exports.getEndpointUrlRequired = exports.getEndpointUrl = exports.getPathInputRequired = exports.getPathInput = exports.filePathSupplied = exports.getDelimitedInput = exports.getBoolFeatureFlag = exports.getBoolInput = exports.getInputRequired = exports.getInput = exports.setSecret = exports.setVariable = exports.getVariables = exports.assertAgent = exports.getVariable = exports.loc = exports.setResourcePath = exports.setResult = exports.setErrStream = exports.setStdStream = exports.AgentHostedMode = exports.Platform = exports.FieldType = exports.ArtifactType = exports.IssueType = exports.TaskState = exports.TaskResult = void 0;
-	var shell = requireShell();
-	var childProcess = require$$1$2;
-	var fs = require$$1;
-	var path = require$$0$1;
-	var os = require$$1$1;
-	var minimatch = minimatch_1;
-	var im = internal;
-	var tcm = taskcommand;
-	var trm = toolrunner;
-	var semver = semverExports$2;
-	var TaskResult;
-	(function (TaskResult) {
-	    TaskResult[TaskResult["Succeeded"] = 0] = "Succeeded";
-	    TaskResult[TaskResult["SucceededWithIssues"] = 1] = "SucceededWithIssues";
-	    TaskResult[TaskResult["Failed"] = 2] = "Failed";
-	    TaskResult[TaskResult["Cancelled"] = 3] = "Cancelled";
-	    TaskResult[TaskResult["Skipped"] = 4] = "Skipped";
-	})(TaskResult = exports.TaskResult || (exports.TaskResult = {}));
-	var TaskState;
-	(function (TaskState) {
-	    TaskState[TaskState["Unknown"] = 0] = "Unknown";
-	    TaskState[TaskState["Initialized"] = 1] = "Initialized";
-	    TaskState[TaskState["InProgress"] = 2] = "InProgress";
-	    TaskState[TaskState["Completed"] = 3] = "Completed";
-	})(TaskState = exports.TaskState || (exports.TaskState = {}));
-	var IssueType;
-	(function (IssueType) {
-	    IssueType[IssueType["Error"] = 0] = "Error";
-	    IssueType[IssueType["Warning"] = 1] = "Warning";
-	})(IssueType = exports.IssueType || (exports.IssueType = {}));
-	var ArtifactType;
-	(function (ArtifactType) {
-	    ArtifactType[ArtifactType["Container"] = 0] = "Container";
-	    ArtifactType[ArtifactType["FilePath"] = 1] = "FilePath";
-	    ArtifactType[ArtifactType["VersionControl"] = 2] = "VersionControl";
-	    ArtifactType[ArtifactType["GitRef"] = 3] = "GitRef";
-	    ArtifactType[ArtifactType["TfvcLabel"] = 4] = "TfvcLabel";
-	})(ArtifactType = exports.ArtifactType || (exports.ArtifactType = {}));
-	var FieldType;
-	(function (FieldType) {
-	    FieldType[FieldType["AuthParameter"] = 0] = "AuthParameter";
-	    FieldType[FieldType["DataParameter"] = 1] = "DataParameter";
-	    FieldType[FieldType["Url"] = 2] = "Url";
-	})(FieldType = exports.FieldType || (exports.FieldType = {}));
-	/** Platforms supported by our build agent */
-	var Platform;
-	(function (Platform) {
-	    Platform[Platform["Windows"] = 0] = "Windows";
-	    Platform[Platform["MacOS"] = 1] = "MacOS";
-	    Platform[Platform["Linux"] = 2] = "Linux";
-	})(Platform = exports.Platform || (exports.Platform = {}));
-	var AgentHostedMode;
-	(function (AgentHostedMode) {
-	    AgentHostedMode[AgentHostedMode["Unknown"] = 0] = "Unknown";
-	    AgentHostedMode[AgentHostedMode["SelfHosted"] = 1] = "SelfHosted";
-	    AgentHostedMode[AgentHostedMode["MsHosted"] = 2] = "MsHosted";
-	})(AgentHostedMode = exports.AgentHostedMode || (exports.AgentHostedMode = {}));
-	//-----------------------------------------------------
-	// General Helpers
-	//-----------------------------------------------------
-	exports.setStdStream = im._setStdStream;
-	exports.setErrStream = im._setErrStream;
-	function setResult(result, message, done) {
-	    exports.debug('task result: ' + TaskResult[result]);
-	    // add an error issue
-	    if (result == TaskResult.Failed && message) {
-	        exports.error(message);
-	    }
-	    else if (result == TaskResult.SucceededWithIssues && message) {
-	        exports.warning(message);
-	    }
-	    // task.complete
-	    var properties = { 'result': TaskResult[result] };
-	    if (done) {
-	        properties['done'] = 'true';
-	    }
-	    exports.command('task.complete', properties, message);
-	}
-	exports.setResult = setResult;
-	//
-	// Catching all exceptions
-	//
-	process.on('uncaughtException', function (err) {
-	    setResult(TaskResult.Failed, exports.loc('LIB_UnhandledEx', err.message));
-	    exports.error(String(err.stack));
-	});
-	//
-	// Catching unhandled rejections from promises and rethrowing them as exceptions
-	// For example, a promise that is rejected but not handled by a .catch() handler in node 10 
-	// doesn't cause an uncaughtException but causes in Node 16.
-	// For types definitions(Error | Any) see https://nodejs.org/docs/latest-v16.x/api/process.html#event-unhandledrejection
-	//
-	process.on('unhandledRejection', function (reason) {
-	    if (reason instanceof Error) {
-	        throw reason;
-	    }
-	    else {
-	        throw new Error(reason);
-	    }
-	});
-	//-----------------------------------------------------
-	// Loc Helpers
-	//-----------------------------------------------------
-	exports.setResourcePath = im._setResourcePath;
-	exports.loc = im._loc;
-	//-----------------------------------------------------
-	// Input Helpers
-	//-----------------------------------------------------
-	exports.getVariable = im._getVariable;
-	/**
-	 * Asserts the agent version is at least the specified minimum.
-	 *
-	 * @param    minimum    minimum version version - must be 2.104.1 or higher
-	 */
-	function assertAgent(minimum) {
-	    if (semver.lt(minimum, '2.104.1')) {
-	        throw new Error('assertAgent() requires the parameter to be 2.104.1 or higher');
-	    }
-	    var agent = exports.getVariable('Agent.Version');
-	    if (agent && semver.lt(agent, minimum)) {
-	        throw new Error("Agent version " + minimum + " or higher is required");
-	    }
-	}
-	exports.assertAgent = assertAgent;
-	/**
-	 * Gets a snapshot of the current state of all job variables available to the task.
-	 * Requires a 2.104.1 agent or higher for full functionality.
-	 *
-	 * Limitations on an agent prior to 2.104.1:
-	 *  1) The return value does not include all public variables. Only public variables
-	 *     that have been added using setVariable are returned.
-	 *  2) The name returned for each secret variable is the formatted environment variable
-	 *     name, not the actual variable name (unless it was set explicitly at runtime using
-	 *     setVariable).
-	 *
-	 * @returns VariableInfo[]
-	 */
-	function getVariables() {
-	    return Object.keys(im._knownVariableMap)
-	        .map(function (key) {
-	        var info = im._knownVariableMap[key];
-	        return { name: info.name, value: exports.getVariable(info.name), secret: info.secret };
-	    });
-	}
-	exports.getVariables = getVariables;
-	/**
-	 * Sets a variable which will be available to subsequent tasks as well.
-	 *
-	 * @param     name     name of the variable to set
-	 * @param     val      value to set
-	 * @param     secret   whether variable is secret.  Multi-line secrets are not allowed.  Optional, defaults to false
-	 * @param     isOutput whether variable is an output variable.  Optional, defaults to false
-	 * @returns   void
-	 */
-	function setVariable(name, val, secret, isOutput) {
-	    if (secret === void 0) { secret = false; }
-	    if (isOutput === void 0) { isOutput = false; }
-	    // once a secret always a secret
-	    var key = im._getVariableKey(name);
-	    if (im._knownVariableMap.hasOwnProperty(key)) {
-	        secret = secret || im._knownVariableMap[key].secret;
-	    }
-	    // store the value
-	    var varValue = val || '';
-	    exports.debug('set ' + name + '=' + (secret && varValue ? '********' : varValue));
-	    if (secret) {
-	        if (varValue && varValue.match(/\r|\n/) && ("" + process.env['SYSTEM_UNSAFEALLOWMULTILINESECRET']).toUpperCase() != 'TRUE') {
-	            throw new Error(exports.loc('LIB_MultilineSecret'));
-	        }
-	        im._vault.storeSecret('SECRET_' + key, varValue);
-	        delete process.env[key];
-	    }
-	    else {
-	        process.env[key] = varValue;
-	    }
-	    // store the metadata
-	    im._knownVariableMap[key] = { name: name, secret: secret };
-	    // write the setvariable command
-	    exports.command('task.setvariable', { 'variable': name || '', isOutput: (isOutput || false).toString(), 'issecret': (secret || false).toString() }, varValue);
-	}
-	exports.setVariable = setVariable;
-	/**
-	 * Registers a value with the logger, so the value will be masked from the logs.  Multi-line secrets are not allowed.
-	 *
-	 * @param val value to register
-	 */
-	function setSecret(val) {
-	    if (val) {
-	        if (val.match(/\r|\n/) && ("" + process.env['SYSTEM_UNSAFEALLOWMULTILINESECRET']).toUpperCase() !== 'TRUE') {
-	            throw new Error(exports.loc('LIB_MultilineSecret'));
-	        }
-	        exports.command('task.setsecret', {}, val);
-	    }
-	}
-	exports.setSecret = setSecret;
-	/**
-	 * Gets the value of an input.
-	 * If required is true and the value is not set, it will throw.
-	 *
-	 * @param     name     name of the input to get
-	 * @param     required whether input is required.  optional, defaults to false
-	 * @returns   string
-	 */
-	function getInput(name, required) {
-	    var inval = im._vault.retrieveSecret('INPUT_' + im._getVariableKey(name));
-	    if (required && !inval) {
-	        throw new Error(exports.loc('LIB_InputRequired', name));
-	    }
-	    exports.debug(name + '=' + inval);
-	    return inval;
-	}
-	exports.getInput = getInput;
-	/**
-	 * Gets the value of an input.
-	 * If the value is not set, it will throw.
-	 *
-	 * @param     name     name of the input to get
-	 * @returns   string
-	 */
-	function getInputRequired(name) {
-	    return getInput(name, true);
-	}
-	exports.getInputRequired = getInputRequired;
-	/**
-	 * Gets the value of an input and converts to a bool.  Convenience.
-	 * If required is true and the value is not set, it will throw.
-	 * If required is false and the value is not set, returns false.
-	 *
-	 * @param     name     name of the bool input to get
-	 * @param     required whether input is required.  optional, defaults to false
-	 * @returns   boolean
-	 */
-	function getBoolInput(name, required) {
-	    return (getInput(name, required) || '').toUpperCase() == "TRUE";
-	}
-	exports.getBoolInput = getBoolInput;
-	/**
-	 * Gets the value of an feature flag and converts to a bool.
-	 *
-	 * @param     name     name of the feature flag to get.
-	 * @param     defaultValue default value of the feature flag in case it's not found in env. (optional. Default value = false)
-	 * @returns   boolean
-	 */
-	function getBoolFeatureFlag(ffName, defaultValue) {
-	    if (defaultValue === void 0) { defaultValue = false; }
-	    var ffValue = process.env[ffName];
-	    if (!ffValue) {
-	        exports.debug("Feature flag " + ffName + " not found. Returning " + defaultValue + " as default.");
-	        return defaultValue;
-	    }
-	    exports.debug("Feature flag " + ffName + " = " + ffValue);
-	    return ffValue.toLowerCase() === "true";
-	}
-	exports.getBoolFeatureFlag = getBoolFeatureFlag;
-	/**
-	 * Gets the value of an input and splits the value using a delimiter (space, comma, etc).
-	 * Empty values are removed.  This function is useful for splitting an input containing a simple
-	 * list of items - such as build targets.
-	 * IMPORTANT: Do not use this function for splitting additional args!  Instead use argString(), which
-	 * follows normal argument splitting rules and handles values encapsulated by quotes.
-	 * If required is true and the value is not set, it will throw.
-	 *
-	 * @param     name     name of the input to get
-	 * @param     delim    delimiter to split on
-	 * @param     required whether input is required.  optional, defaults to false
-	 * @returns   string[]
-	 */
-	function getDelimitedInput(name, delim, required) {
-	    var inputVal = getInput(name, required);
-	    if (!inputVal) {
-	        return [];
-	    }
-	    var result = [];
-	    inputVal.split(delim).forEach(function (x) {
-	        if (x) {
-	            result.push(x);
-	        }
-	    });
-	    return result;
-	}
-	exports.getDelimitedInput = getDelimitedInput;
-	/**
-	 * Checks whether a path inputs value was supplied by the user
-	 * File paths are relative with a picker, so an empty path is the root of the repo.
-	 * Useful if you need to condition work (like append an arg) if a value was supplied
-	 *
-	 * @param     name      name of the path input to check
-	 * @returns   boolean
-	 */
-	function filePathSupplied(name) {
-	    // normalize paths
-	    var pathValue = this.resolve(this.getPathInput(name) || '');
-	    var repoRoot = this.resolve(exports.getVariable('build.sourcesDirectory') || exports.getVariable('system.defaultWorkingDirectory') || '');
-	    var supplied = pathValue !== repoRoot;
-	    exports.debug(name + 'path supplied :' + supplied);
-	    return supplied;
-	}
-	exports.filePathSupplied = filePathSupplied;
-	/**
-	 * Gets the value of a path input
-	 * It will be quoted for you if it isn't already and contains spaces
-	 * If required is true and the value is not set, it will throw.
-	 * If check is true and the path does not exist, it will throw.
-	 *
-	 * @param     name      name of the input to get
-	 * @param     required  whether input is required.  optional, defaults to false
-	 * @param     check     whether path is checked.  optional, defaults to false
-	 * @returns   string
-	 */
-	function getPathInput(name, required, check) {
-	    var inval = getInput(name, required);
-	    if (inval) {
-	        if (check) {
-	            exports.checkPath(inval, name);
-	        }
-	    }
-	    return inval;
-	}
-	exports.getPathInput = getPathInput;
-	/**
-	 * Gets the value of a path input
-	 * It will be quoted for you if it isn't already and contains spaces
-	 * If the value is not set, it will throw.
-	 * If check is true and the path does not exist, it will throw.
-	 *
-	 * @param     name      name of the input to get
-	 * @param     check     whether path is checked.  optional, defaults to false
-	 * @returns   string
-	 */
-	function getPathInputRequired(name, check) {
-	    return getPathInput(name, true, check);
-	}
-	exports.getPathInputRequired = getPathInputRequired;
-	//-----------------------------------------------------
-	// Endpoint Helpers
-	//-----------------------------------------------------
-	/**
-	 * Gets the url for a service endpoint
-	 * If the url was not set and is not optional, it will throw.
-	 *
-	 * @param     id        name of the service endpoint
-	 * @param     optional  whether the url is optional
-	 * @returns   string
-	 */
-	function getEndpointUrl(id, optional) {
-	    var urlval = process.env['ENDPOINT_URL_' + id];
-	    if (!optional && !urlval) {
-	        throw new Error(exports.loc('LIB_EndpointNotExist', id));
-	    }
-	    exports.debug(id + '=' + urlval);
-	    return urlval;
-	}
-	exports.getEndpointUrl = getEndpointUrl;
-	/**
-	 * Gets the url for a service endpoint
-	 * If the url was not set, it will throw.
-	 *
-	 * @param     id        name of the service endpoint
-	 * @returns   string
-	 */
-	function getEndpointUrlRequired(id) {
-	    return getEndpointUrl(id, false);
-	}
-	exports.getEndpointUrlRequired = getEndpointUrlRequired;
-	/*
-	 * Gets the endpoint data parameter value with specified key for a service endpoint
-	 * If the endpoint data parameter was not set and is not optional, it will throw.
-	 *
-	 * @param id name of the service endpoint
-	 * @param key of the parameter
-	 * @param optional whether the endpoint data is optional
-	 * @returns {string} value of the endpoint data parameter
-	 */
-	function getEndpointDataParameter(id, key, optional) {
-	    var dataParamVal = process.env['ENDPOINT_DATA_' + id + '_' + key.toUpperCase()];
-	    if (!optional && !dataParamVal) {
-	        throw new Error(exports.loc('LIB_EndpointDataNotExist', id, key));
-	    }
-	    exports.debug(id + ' data ' + key + ' = ' + dataParamVal);
-	    return dataParamVal;
-	}
-	exports.getEndpointDataParameter = getEndpointDataParameter;
-	/*
-	 * Gets the endpoint data parameter value with specified key for a service endpoint
-	 * If the endpoint data parameter was not set, it will throw.
-	 *
-	 * @param id name of the service endpoint
-	 * @param key of the parameter
-	 * @returns {string} value of the endpoint data parameter
-	 */
-	function getEndpointDataParameterRequired(id, key) {
-	    return getEndpointDataParameter(id, key, false);
-	}
-	exports.getEndpointDataParameterRequired = getEndpointDataParameterRequired;
-	/**
-	 * Gets the endpoint authorization scheme for a service endpoint
-	 * If the endpoint authorization scheme is not set and is not optional, it will throw.
-	 *
-	 * @param id name of the service endpoint
-	 * @param optional whether the endpoint authorization scheme is optional
-	 * @returns {string} value of the endpoint authorization scheme
-	 */
-	function getEndpointAuthorizationScheme(id, optional) {
-	    var authScheme = im._vault.retrieveSecret('ENDPOINT_AUTH_SCHEME_' + id);
-	    if (!optional && !authScheme) {
-	        throw new Error(exports.loc('LIB_EndpointAuthNotExist', id));
-	    }
-	    exports.debug(id + ' auth scheme = ' + authScheme);
-	    return authScheme;
-	}
-	exports.getEndpointAuthorizationScheme = getEndpointAuthorizationScheme;
-	/**
-	 * Gets the endpoint authorization scheme for a service endpoint
-	 * If the endpoint authorization scheme is not set, it will throw.
-	 *
-	 * @param id name of the service endpoint
-	 * @returns {string} value of the endpoint authorization scheme
-	 */
-	function getEndpointAuthorizationSchemeRequired(id) {
-	    return getEndpointAuthorizationScheme(id, false);
-	}
-	exports.getEndpointAuthorizationSchemeRequired = getEndpointAuthorizationSchemeRequired;
-	/**
-	 * Gets the endpoint authorization parameter value for a service endpoint with specified key
-	 * If the endpoint authorization parameter is not set and is not optional, it will throw.
-	 *
-	 * @param id name of the service endpoint
-	 * @param key key to find the endpoint authorization parameter
-	 * @param optional optional whether the endpoint authorization scheme is optional
-	 * @returns {string} value of the endpoint authorization parameter value
-	 */
-	function getEndpointAuthorizationParameter(id, key, optional) {
-	    var authParam = im._vault.retrieveSecret('ENDPOINT_AUTH_PARAMETER_' + id + '_' + key.toUpperCase());
-	    if (!optional && !authParam) {
-	        throw new Error(exports.loc('LIB_EndpointAuthNotExist', id));
-	    }
-	    exports.debug(id + ' auth param ' + key + ' = ' + authParam);
-	    return authParam;
-	}
-	exports.getEndpointAuthorizationParameter = getEndpointAuthorizationParameter;
-	/**
-	 * Gets the endpoint authorization parameter value for a service endpoint with specified key
-	 * If the endpoint authorization parameter is not set, it will throw.
-	 *
-	 * @param id name of the service endpoint
-	 * @param key key to find the endpoint authorization parameter
-	 * @returns {string} value of the endpoint authorization parameter value
-	 */
-	function getEndpointAuthorizationParameterRequired(id, key) {
-	    return getEndpointAuthorizationParameter(id, key, false);
-	}
-	exports.getEndpointAuthorizationParameterRequired = getEndpointAuthorizationParameterRequired;
-	/**
-	 * Gets the authorization details for a service endpoint
-	 * If the authorization was not set and is not optional, it will set the task result to Failed.
-	 *
-	 * @param     id        name of the service endpoint
-	 * @param     optional  whether the url is optional
-	 * @returns   string
-	 */
-	function getEndpointAuthorization(id, optional) {
-	    var aval = im._vault.retrieveSecret('ENDPOINT_AUTH_' + id);
-	    if (!optional && !aval) {
-	        setResult(TaskResult.Failed, exports.loc('LIB_EndpointAuthNotExist', id));
-	    }
-	    exports.debug(id + ' exists ' + (!!aval));
-	    var auth;
-	    try {
-	        if (aval) {
-	            auth = JSON.parse(aval);
-	        }
-	    }
-	    catch (err) {
-	        throw new Error(exports.loc('LIB_InvalidEndpointAuth', aval));
-	    }
-	    return auth;
-	}
-	exports.getEndpointAuthorization = getEndpointAuthorization;
-	//-----------------------------------------------------
-	// SecureFile Helpers
-	//-----------------------------------------------------
-	/**
-	 * Gets the name for a secure file
-	 *
-	 * @param     id        secure file id
-	 * @returns   string
-	 */
-	function getSecureFileName(id) {
-	    var name = process.env['SECUREFILE_NAME_' + id];
-	    exports.debug('secure file name for id ' + id + ' = ' + name);
-	    return name;
-	}
-	exports.getSecureFileName = getSecureFileName;
-	/**
-	  * Gets the secure file ticket that can be used to download the secure file contents
-	  *
-	  * @param id name of the secure file
-	  * @returns {string} secure file ticket
-	  */
-	function getSecureFileTicket(id) {
-	    var ticket = im._vault.retrieveSecret('SECUREFILE_TICKET_' + id);
-	    exports.debug('secure file ticket for id ' + id + ' = ' + ticket);
-	    return ticket;
-	}
-	exports.getSecureFileTicket = getSecureFileTicket;
-	//-----------------------------------------------------
-	// Task Variable Helpers
-	//-----------------------------------------------------
-	/**
-	 * Gets a variable value that is set by previous step from the same wrapper task.
-	 * Requires a 2.115.0 agent or higher.
-	 *
-	 * @param     name     name of the variable to get
-	 * @returns   string
-	 */
-	function getTaskVariable(name) {
-	    assertAgent('2.115.0');
-	    var inval = im._vault.retrieveSecret('VSTS_TASKVARIABLE_' + im._getVariableKey(name));
-	    if (inval) {
-	        inval = inval.trim();
-	    }
-	    exports.debug('task variable: ' + name + '=' + inval);
-	    return inval;
-	}
-	exports.getTaskVariable = getTaskVariable;
-	/**
-	 * Sets a task variable which will only be available to subsequent steps belong to the same wrapper task.
-	 * Requires a 2.115.0 agent or higher.
-	 *
-	 * @param     name    name of the variable to set
-	 * @param     val     value to set
-	 * @param     secret  whether variable is secret.  optional, defaults to false
-	 * @returns   void
-	 */
-	function setTaskVariable(name, val, secret) {
-	    if (secret === void 0) { secret = false; }
-	    assertAgent('2.115.0');
-	    var key = im._getVariableKey(name);
-	    // store the value
-	    var varValue = val || '';
-	    exports.debug('set task variable: ' + name + '=' + (secret && varValue ? '********' : varValue));
-	    im._vault.storeSecret('VSTS_TASKVARIABLE_' + key, varValue);
-	    delete process.env[key];
-	    // write the command
-	    exports.command('task.settaskvariable', { 'variable': name || '', 'issecret': (secret || false).toString() }, varValue);
-	}
-	exports.setTaskVariable = setTaskVariable;
-	//-----------------------------------------------------
-	// Cmd Helpers
-	//-----------------------------------------------------
-	exports.command = im._command;
-	exports.warning = im._warning;
-	exports.error = im._error;
-	exports.debug = im._debug;
-	//-----------------------------------------------------
-	// Disk Functions
-	//-----------------------------------------------------
-	function _checkShell(cmd, continueOnError) {
-	    var se = shell.error();
-	    if (se) {
-	        exports.debug(cmd + ' failed');
-	        var errMsg = exports.loc('LIB_OperationFailed', cmd, se);
-	        exports.debug(errMsg);
-	        if (!continueOnError) {
-	            throw new Error(errMsg);
-	        }
-	    }
-	}
-	/**
-	 * Get's stat on a path.
-	 * Useful for checking whether a file or directory.  Also getting created, modified and accessed time.
-	 * see [fs.stat](https://nodejs.org/api/fs.html#fs_class_fs_stats)
-	 *
-	 * @param     path      path to check
-	 * @returns   fsStat
-	 */
-	function stats(path) {
-	    return fs.statSync(path);
-	}
-	exports.stats = stats;
-	exports.exist = im._exist;
-	function writeFile(file, data, options) {
-	    if (typeof (options) === 'string') {
-	        fs.writeFileSync(file, data, { encoding: options });
-	    }
-	    else {
-	        fs.writeFileSync(file, data, options);
-	    }
-	}
-	exports.writeFile = writeFile;
-	/**
-	 * @deprecated Use `getPlatform`
-	 * Useful for determining the host operating system.
-	 * see [os.type](https://nodejs.org/api/os.html#os_os_type)
-	 *
-	 * @return      the name of the operating system
-	 */
-	function osType() {
-	    return os.type();
-	}
-	exports.osType = osType;
-	/**
-	 * Determine the operating system the build agent is running on.
-	 * @returns {Platform}
-	 * @throws {Error} Platform is not supported by our agent
-	 */
-	function getPlatform() {
-	    switch (process.platform) {
-	        case 'win32': return Platform.Windows;
-	        case 'darwin': return Platform.MacOS;
-	        case 'linux': return Platform.Linux;
-	        default: throw Error(exports.loc('LIB_PlatformNotSupported', process.platform));
-	    }
-	}
-	exports.getPlatform = getPlatform;
-	/**
-	 * Return hosted type of Agent
-	 * @returns {AgentHostedMode}
-	 */
-	function getAgentMode() {
-	    var agentCloudId = exports.getVariable('Agent.CloudId');
-	    if (agentCloudId === undefined)
-	        return AgentHostedMode.Unknown;
-	    if (agentCloudId)
-	        return AgentHostedMode.MsHosted;
-	    return AgentHostedMode.SelfHosted;
-	}
-	exports.getAgentMode = getAgentMode;
-	/**
-	 * Returns the process's current working directory.
-	 * see [process.cwd](https://nodejs.org/api/process.html#process_process_cwd)
-	 *
-	 * @return      the path to the current working directory of the process
-	 */
-	function cwd() {
-	    return process.cwd();
-	}
-	exports.cwd = cwd;
-	exports.checkPath = im._checkPath;
-	/**
-	 * Change working directory.
-	 *
-	 * @param     path      new working directory path
-	 * @returns   void
-	 */
-	function cd(path) {
-	    if (path) {
-	        shell.cd(path);
-	        _checkShell('cd');
-	    }
-	}
-	exports.cd = cd;
-	/**
-	 * Change working directory and push it on the stack
-	 *
-	 * @param     path      new working directory path
-	 * @returns   void
-	 */
-	function pushd(path) {
-	    shell.pushd(path);
-	    _checkShell('pushd');
-	}
-	exports.pushd = pushd;
-	/**
-	 * Change working directory back to previously pushed directory
-	 *
-	 * @returns   void
-	 */
-	function popd() {
-	    shell.popd();
-	    _checkShell('popd');
-	}
-	exports.popd = popd;
-	/**
-	 * Make a directory.  Creates the full path with folders in between
-	 * Will throw if it fails
-	 *
-	 * @param     p       path to create
-	 * @returns   void
-	 */
-	function mkdirP(p) {
-	    if (!p) {
-	        throw new Error(exports.loc('LIB_ParameterIsRequired', 'p'));
-	    }
-	    // build a stack of directories to create
-	    var stack = [];
-	    var testDir = p;
-	    while (true) {
-	        // validate the loop is not out of control
-	        if (stack.length >= (process.env['TASKLIB_TEST_MKDIRP_FAILSAFE'] || 1000)) {
-	            // let the framework throw
-	            exports.debug('loop is out of control');
-	            fs.mkdirSync(p);
-	            return;
-	        }
-	        exports.debug("testing directory '" + testDir + "'");
-	        var stats_1 = void 0;
-	        try {
-	            stats_1 = fs.statSync(testDir);
-	        }
-	        catch (err) {
-	            if (err.code == 'ENOENT') {
-	                // validate the directory is not the drive root
-	                var parentDir = path.dirname(testDir);
-	                if (testDir == parentDir) {
-	                    throw new Error(exports.loc('LIB_MkdirFailedInvalidDriveRoot', p, testDir)); // Unable to create directory '{p}'. Root directory does not exist: '{testDir}'
-	                }
-	                // push the dir and test the parent
-	                stack.push(testDir);
-	                testDir = parentDir;
-	                continue;
-	            }
-	            else if (err.code == 'UNKNOWN') {
-	                throw new Error(exports.loc('LIB_MkdirFailedInvalidShare', p, testDir)); // Unable to create directory '{p}'. Unable to verify the directory exists: '{testDir}'. If directory is a file share, please verify the share name is correct, the share is online, and the current process has permission to access the share.
-	            }
-	            else {
-	                throw err;
-	            }
-	        }
-	        if (!stats_1.isDirectory()) {
-	            throw new Error(exports.loc('LIB_MkdirFailedFileExists', p, testDir)); // Unable to create directory '{p}'. Conflicting file exists: '{testDir}'
-	        }
-	        // testDir exists
-	        break;
-	    }
-	    // create each directory
-	    while (stack.length) {
-	        var dir = stack.pop(); // non-null because `stack.length` was truthy
-	        exports.debug("mkdir '" + dir + "'");
-	        try {
-	            fs.mkdirSync(dir);
-	        }
-	        catch (err) {
-	            throw new Error(exports.loc('LIB_MkdirFailed', p, err.message)); // Unable to create directory '{p}'. {err.message}
-	        }
-	    }
-	}
-	exports.mkdirP = mkdirP;
-	/**
-	 * Resolves a sequence of paths or path segments into an absolute path.
-	 * Calls node.js path.resolve()
-	 * Allows L0 testing with consistent path formats on Mac/Linux and Windows in the mock implementation
-	 * @param pathSegments
-	 * @returns {string}
-	 */
-	function resolve() {
-	    var pathSegments = [];
-	    for (var _i = 0; _i < arguments.length; _i++) {
-	        pathSegments[_i] = arguments[_i];
-	    }
-	    var absolutePath = path.resolve.apply(this, pathSegments);
-	    exports.debug('Absolute path for pathSegments: ' + pathSegments + ' = ' + absolutePath);
-	    return absolutePath;
-	}
-	exports.resolve = resolve;
-	exports.which = im._which;
-	/**
-	 * Returns array of files in the given path, or in current directory if no path provided.  See shelljs.ls
-	 * @param  {string}   options  Available options: -R (recursive), -A (all files, include files beginning with ., except for . and ..)
-	 * @param  {string[]} paths    Paths to search.
-	 * @return {string[]}          An array of files in the given path(s).
-	 */
-	function ls(options, paths) {
-	    if (options) {
-	        return shell.ls(options, paths);
-	    }
-	    else {
-	        return shell.ls(paths);
-	    }
-	}
-	exports.ls = ls;
-	/**
-	 * Copies a file or folder.
-	 *
-	 * @param     source     source path
-	 * @param     dest       destination path
-	 * @param     options    string -r, -f or -rf for recursive and force
-	 * @param     continueOnError optional. whether to continue on error
-	 * @param     retryCount optional. Retry count to copy the file. It might help to resolve intermittent issues e.g. with UNC target paths on a remote host.
-	 */
-	function cp(source, dest, options, continueOnError, retryCount) {
-	    if (retryCount === void 0) { retryCount = 0; }
-	    while (retryCount >= 0) {
-	        try {
-	            if (options) {
-	                shell.cp(options, source, dest);
-	            }
-	            else {
-	                shell.cp(source, dest);
-	            }
-	            _checkShell('cp', false);
-	            break;
-	        }
-	        catch (e) {
-	            if (retryCount <= 0) {
-	                if (continueOnError) {
-	                    exports.warning(e);
-	                    break;
-	                }
-	                else {
-	                    throw e;
-	                }
-	            }
-	            else {
-	                console.log(exports.loc('LIB_CopyFileFailed', retryCount));
-	                retryCount--;
-	            }
-	        }
-	    }
-	}
-	exports.cp = cp;
-	/**
-	 * Moves a path.
-	 *
-	 * @param     source     source path
-	 * @param     dest       destination path
-	 * @param     options    string -f or -n for force and no clobber
-	 * @param     continueOnError optional. whether to continue on error
-	 */
-	function mv(source, dest, options, continueOnError) {
-	    if (options) {
-	        shell.mv(options, source, dest);
-	    }
-	    else {
-	        shell.mv(source, dest);
-	    }
-	    _checkShell('mv', continueOnError);
-	}
-	exports.mv = mv;
-	/**
-	 * Tries to execute a function a specified number of times.
-	 *
-	 * @param   func            a function to be executed.
-	 * @param   args            executed function arguments array.
-	 * @param   retryOptions    optional. Defaults to { continueOnError: false, retryCount: 0 }.
-	 * @returns the same as the usual function.
-	 */
-	function retry(func, args, retryOptions) {
-	    if (retryOptions === void 0) { retryOptions = { continueOnError: false, retryCount: 0 }; }
-	    while (retryOptions.retryCount >= 0) {
-	        try {
-	            return func.apply(void 0, args);
-	        }
-	        catch (e) {
-	            if (retryOptions.retryCount <= 0) {
-	                if (retryOptions.continueOnError) {
-	                    exports.warning(e);
-	                    break;
-	                }
-	                else {
-	                    throw e;
-	                }
-	            }
-	            else {
-	                exports.debug("Attempt to execute function \"" + (func === null || func === void 0 ? void 0 : func.name) + "\" failed, retries left: " + retryOptions.retryCount);
-	                retryOptions.retryCount--;
-	            }
-	        }
-	    }
-	}
-	exports.retry = retry;
-	/**
-	 * Gets info about item stats.
-	 *
-	 * @param path                      a path to the item to be processed.
-	 * @param followSymbolicLink        indicates whether to traverse descendants of symbolic link directories.
-	 * @param allowBrokenSymbolicLinks  when true, broken symbolic link will not cause an error.
-	 * @returns fs.Stats
-	 */
-	function _getStats(path, followSymbolicLink, allowBrokenSymbolicLinks) {
-	    // stat returns info about the target of a symlink (or symlink chain),
-	    // lstat returns info about a symlink itself
-	    var stats;
-	    if (followSymbolicLink) {
-	        try {
-	            // use stat (following symlinks)
-	            stats = fs.statSync(path);
-	        }
-	        catch (err) {
-	            if (err.code == 'ENOENT' && allowBrokenSymbolicLinks) {
-	                // fallback to lstat (broken symlinks allowed)
-	                stats = fs.lstatSync(path);
-	                exports.debug("  " + path + " (broken symlink)");
-	            }
-	            else {
-	                throw err;
-	            }
-	        }
-	    }
-	    else {
-	        // use lstat (not following symlinks)
-	        stats = fs.lstatSync(path);
-	    }
-	    return stats;
-	}
-	/**
-	 * Recursively finds all paths a given path. Returns an array of paths.
-	 *
-	 * @param     findPath  path to search
-	 * @param     options   optional. defaults to { followSymbolicLinks: true }. following soft links is generally appropriate unless deleting files.
-	 * @returns   string[]
-	 */
-	function find(findPath, options) {
-	    if (!findPath) {
-	        exports.debug('no path specified');
-	        return [];
-	    }
-	    // normalize the path, otherwise the first result is inconsistently formatted from the rest of the results
-	    // because path.join() performs normalization.
-	    findPath = path.normalize(findPath);
-	    // debug trace the parameters
-	    exports.debug("findPath: '" + findPath + "'");
-	    options = options || _getDefaultFindOptions();
-	    _debugFindOptions(options);
-	    // return empty if not exists
-	    try {
-	        fs.lstatSync(findPath);
-	    }
-	    catch (err) {
-	        if (err.code == 'ENOENT') {
-	            exports.debug('0 results');
-	            return [];
-	        }
-	        throw err;
-	    }
-	    try {
-	        var result = [];
-	        // push the first item
-	        var stack = [new _FindItem(findPath, 1)];
-	        var traversalChain = []; // used to detect cycles
-	        var _loop_1 = function () {
-	            // pop the next item and push to the result array
-	            var item = stack.pop(); // non-null because `stack.length` was truthy
-	            var stats_2 = void 0;
-	            try {
-	                // `item.path` equals `findPath` for the first item to be processed, when the `result` array is empty
-	                var isPathToSearch = !result.length;
-	                // following specified symlinks only if current path equals specified path
-	                var followSpecifiedSymbolicLink = options.followSpecifiedSymbolicLink && isPathToSearch;
-	                // following all symlinks or following symlink for the specified path
-	                var followSymbolicLink = options.followSymbolicLinks || followSpecifiedSymbolicLink;
-	                // stat the item. The stat info is used further below to determine whether to traverse deeper
-	                stats_2 = _getStats(item.path, followSymbolicLink, options.allowBrokenSymbolicLinks);
-	            }
-	            catch (err) {
-	                if (err.code == 'ENOENT' && options.skipMissingFiles) {
-	                    exports.warning("No such file or directory: \"" + item.path + "\" - skipping.");
-	                    return "continue";
-	                }
-	                throw err;
-	            }
-	            result.push(item.path);
-	            // note, isDirectory() returns false for the lstat of a symlink
-	            if (stats_2.isDirectory()) {
-	                exports.debug("  " + item.path + " (directory)");
-	                if (options.followSymbolicLinks) {
-	                    // get the realpath
-	                    var realPath_1;
-	                    if (im._isUncPath(item.path)) {
-	                        // Sometimes there are spontaneous issues when working with unc-paths, so retries have been added for them.
-	                        realPath_1 = retry(fs.realpathSync, [item.path], { continueOnError: false, retryCount: 5 });
-	                    }
-	                    else {
-	                        realPath_1 = fs.realpathSync(item.path);
-	                    }
-	                    // fixup the traversal chain to match the item level
-	                    while (traversalChain.length >= item.level) {
-	                        traversalChain.pop();
-	                    }
-	                    // test for a cycle
-	                    if (traversalChain.some(function (x) { return x == realPath_1; })) {
-	                        exports.debug('    cycle detected');
-	                        return "continue";
-	                    }
-	                    // update the traversal chain
-	                    traversalChain.push(realPath_1);
-	                }
-	                // push the child items in reverse onto the stack
-	                var childLevel_1 = item.level + 1;
-	                var childItems = fs.readdirSync(item.path)
-	                    .map(function (childName) { return new _FindItem(path.join(item.path, childName), childLevel_1); });
-	                for (var i = childItems.length - 1; i >= 0; i--) {
-	                    stack.push(childItems[i]);
-	                }
-	            }
-	            else {
-	                exports.debug("  " + item.path + " (file)");
-	            }
-	        };
-	        while (stack.length) {
-	            _loop_1();
-	        }
-	        exports.debug(result.length + " results");
-	        return result;
-	    }
-	    catch (err) {
-	        throw new Error(exports.loc('LIB_OperationFailed', 'find', err.message));
-	    }
-	}
-	exports.find = find;
-	var _FindItem = /** @class */ (function () {
-	    function _FindItem(path, level) {
-	        this.path = path;
-	        this.level = level;
-	    }
-	    return _FindItem;
-	}());
-	function _debugFindOptions(options) {
-	    exports.debug("findOptions.allowBrokenSymbolicLinks: '" + options.allowBrokenSymbolicLinks + "'");
-	    exports.debug("findOptions.followSpecifiedSymbolicLink: '" + options.followSpecifiedSymbolicLink + "'");
-	    exports.debug("findOptions.followSymbolicLinks: '" + options.followSymbolicLinks + "'");
-	    exports.debug("findOptions.skipMissingFiles: '" + options.skipMissingFiles + "'");
-	}
-	function _getDefaultFindOptions() {
-	    return {
-	        allowBrokenSymbolicLinks: false,
-	        followSpecifiedSymbolicLink: true,
-	        followSymbolicLinks: true,
-	        skipMissingFiles: false
-	    };
-	}
-	/**
-	 * Prefer tl.find() and tl.match() instead. This function is for backward compatibility
-	 * when porting tasks to Node from the PowerShell or PowerShell3 execution handler.
-	 *
-	 * @param    rootDirectory      path to root unrooted patterns with
-	 * @param    pattern            include and exclude patterns
-	 * @param    includeFiles       whether to include files in the result. defaults to true when includeFiles and includeDirectories are both false
-	 * @param    includeDirectories whether to include directories in the result
-	 * @returns  string[]
-	 */
-	function legacyFindFiles(rootDirectory, pattern, includeFiles, includeDirectories) {
-	    if (!pattern) {
-	        throw new Error('pattern parameter cannot be empty');
-	    }
-	    exports.debug("legacyFindFiles rootDirectory: '" + rootDirectory + "'");
-	    exports.debug("pattern: '" + pattern + "'");
-	    exports.debug("includeFiles: '" + includeFiles + "'");
-	    exports.debug("includeDirectories: '" + includeDirectories + "'");
-	    if (!includeFiles && !includeDirectories) {
-	        includeFiles = true;
-	    }
-	    // organize the patterns into include patterns and exclude patterns
-	    var includePatterns = [];
-	    var excludePatterns = [];
-	    pattern = pattern.replace(/;;/g, '\0');
-	    for (var _i = 0, _a = pattern.split(';'); _i < _a.length; _i++) {
-	        var pat = _a[_i];
-	        if (!pat) {
-	            continue;
-	        }
-	        pat = pat.replace(/\0/g, ';');
-	        // determine whether include pattern and remove any include/exclude prefix.
-	        // include patterns start with +: or anything other than -:
-	        // exclude patterns start with -:
-	        var isIncludePattern = void 0;
-	        if (im._startsWith(pat, '+:')) {
-	            pat = pat.substring(2);
-	            isIncludePattern = true;
-	        }
-	        else if (im._startsWith(pat, '-:')) {
-	            pat = pat.substring(2);
-	            isIncludePattern = false;
-	        }
-	        else {
-	            isIncludePattern = true;
-	        }
-	        // validate pattern does not end with a slash
-	        if (im._endsWith(pat, '/') || (process.platform == 'win32' && im._endsWith(pat, '\\'))) {
-	            throw new Error(exports.loc('LIB_InvalidPattern', pat));
-	        }
-	        // root the pattern
-	        if (rootDirectory && !path.isAbsolute(pat)) {
-	            pat = path.join(rootDirectory, pat);
-	            // remove trailing slash sometimes added by path.join() on Windows, e.g.
-	            //      path.join('\\\\hello', 'world') => '\\\\hello\\world\\'
-	            //      path.join('//hello', 'world') => '\\\\hello\\world\\'
-	            if (im._endsWith(pat, '\\')) {
-	                pat = pat.substring(0, pat.length - 1);
-	            }
-	        }
-	        if (isIncludePattern) {
-	            includePatterns.push(pat);
-	        }
-	        else {
-	            excludePatterns.push(im._legacyFindFiles_convertPatternToRegExp(pat));
-	        }
-	    }
-	    var result = _legacyFindFiles_getMatchingItems(includePatterns, excludePatterns, !!includeFiles, !!includeDirectories);
-	    exports.debug('all matches:');
-	    for (var _b = 0, result_1 = result; _b < result_1.length; _b++) {
-	        var resultItem = result_1[_b];
-	        exports.debug(' ' + resultItem);
-	    }
-	    exports.debug('total matched: ' + result.length);
-	    return result;
-	}
-	exports.legacyFindFiles = legacyFindFiles;
-	function _legacyFindFiles_getMatchingItems(includePatterns, excludePatterns, includeFiles, includeDirectories) {
-	    exports.debug('getMatchingItems()');
-	    for (var _i = 0, includePatterns_1 = includePatterns; _i < includePatterns_1.length; _i++) {
-	        var pattern = includePatterns_1[_i];
-	        exports.debug("includePattern: '" + pattern + "'");
-	    }
-	    for (var _a = 0, excludePatterns_1 = excludePatterns; _a < excludePatterns_1.length; _a++) {
-	        var pattern = excludePatterns_1[_a];
-	        exports.debug("excludePattern: " + pattern);
-	    }
-	    exports.debug('includeFiles: ' + includeFiles);
-	    exports.debug('includeDirectories: ' + includeDirectories);
-	    var allFiles = {};
-	    var _loop_2 = function (pattern) {
-	        // determine the directory to search
-	        //
-	        // note, getDirectoryName removes redundant path separators
-	        var findPath = void 0;
-	        var starIndex = pattern.indexOf('*');
-	        var questionIndex = pattern.indexOf('?');
-	        if (starIndex < 0 && questionIndex < 0) {
-	            // if no wildcards are found, use the directory name portion of the path.
-	            // if there is no directory name (file name only in pattern or drive root),
-	            // this will return empty string.
-	            findPath = im._getDirectoryName(pattern);
-	        }
-	        else {
-	            // extract the directory prior to the first wildcard
-	            var index = Math.min(starIndex >= 0 ? starIndex : questionIndex, questionIndex >= 0 ? questionIndex : starIndex);
-	            findPath = im._getDirectoryName(pattern.substring(0, index));
-	        }
-	        // note, due to this short-circuit and the above usage of getDirectoryName, this
-	        // function has the same limitations regarding drive roots as the powershell
-	        // implementation.
-	        //
-	        // also note, since getDirectoryName eliminates slash redundancies, some additional
-	        // work may be required if removal of this limitation is attempted.
-	        if (!findPath) {
-	            return "continue";
-	        }
-	        var patternRegex = im._legacyFindFiles_convertPatternToRegExp(pattern);
-	        // find files/directories
-	        find(findPath, { followSymbolicLinks: true })
-	            .filter(function (item) {
-	            if (includeFiles && includeDirectories) {
-	                return true;
-	            }
-	            var isDir = fs.statSync(item).isDirectory();
-	            return (includeFiles && !isDir) || (includeDirectories && isDir);
-	        })
-	            .forEach(function (item) {
-	            var normalizedPath = process.platform == 'win32' ? item.replace(/\\/g, '/') : item; // normalize separators
-	            // **/times/** will not match C:/fun/times because there isn't a trailing slash
-	            // so try both if including directories
-	            var alternatePath = normalizedPath + "/"; // potential bug: it looks like this will result in a false
-	            // positive if the item is a regular file and not a directory
-	            var isMatch = false;
-	            if (patternRegex.test(normalizedPath) || (includeDirectories && patternRegex.test(alternatePath))) {
-	                isMatch = true;
-	                // test whether the path should be excluded
-	                for (var _i = 0, excludePatterns_2 = excludePatterns; _i < excludePatterns_2.length; _i++) {
-	                    var regex = excludePatterns_2[_i];
-	                    if (regex.test(normalizedPath) || (includeDirectories && regex.test(alternatePath))) {
-	                        isMatch = false;
-	                        break;
-	                    }
-	                }
-	            }
-	            if (isMatch) {
-	                allFiles[item] = item;
-	            }
-	        });
-	    };
-	    for (var _b = 0, includePatterns_2 = includePatterns; _b < includePatterns_2.length; _b++) {
-	        var pattern = includePatterns_2[_b];
-	        _loop_2(pattern);
-	    }
-	    return Object.keys(allFiles).sort();
-	}
-	/**
-	 * Remove a path recursively with force
-	 *
-	 * @param     inputPath path to remove
-	 * @throws    when the file or directory exists but could not be deleted.
-	 */
-	function rmRF(inputPath) {
-	    exports.debug('rm -rf ' + inputPath);
-	    if (getPlatform() == Platform.Windows) {
-	        // Node doesn't provide a delete operation, only an unlink function. This means that if the file is being used by another
-	        // program (e.g. antivirus), it won't be deleted. To address this, we shell out the work to rd/del.
-	        try {
-	            if (fs.statSync(inputPath).isDirectory()) {
-	                exports.debug('removing directory ' + inputPath);
-	                childProcess.execSync("rd /s /q \"" + inputPath + "\"");
-	            }
-	            else {
-	                exports.debug('removing file ' + inputPath);
-	                childProcess.execSync("del /f /a \"" + inputPath + "\"");
-	            }
-	        }
-	        catch (err) {
-	            // if you try to delete a file that doesn't exist, desired result is achieved
-	            // other errors are valid
-	            if (err.code != 'ENOENT') {
-	                throw new Error(exports.loc('LIB_OperationFailed', 'rmRF', err.message));
-	            }
-	        }
-	        // Shelling out fails to remove a symlink folder with missing source, this unlink catches that
-	        try {
-	            fs.unlinkSync(inputPath);
-	        }
-	        catch (err) {
-	            // if you try to delete a file that doesn't exist, desired result is achieved
-	            // other errors are valid
-	            if (err.code != 'ENOENT') {
-	                throw new Error(exports.loc('LIB_OperationFailed', 'rmRF', err.message));
-	            }
-	        }
-	    }
-	    else {
-	        // get the lstats in order to workaround a bug in shelljs@0.3.0 where symlinks
-	        // with missing targets are not handled correctly by "rm('-rf', path)"
-	        var lstats = void 0;
-	        try {
-	            lstats = fs.lstatSync(inputPath);
-	        }
-	        catch (err) {
-	            // if you try to delete a file that doesn't exist, desired result is achieved
-	            // other errors are valid
-	            if (err.code == 'ENOENT') {
-	                return;
-	            }
-	            throw new Error(exports.loc('LIB_OperationFailed', 'rmRF', err.message));
-	        }
-	        if (lstats.isDirectory()) {
-	            exports.debug('removing directory');
-	            shell.rm('-rf', inputPath);
-	            var errMsg = shell.error();
-	            if (errMsg) {
-	                throw new Error(exports.loc('LIB_OperationFailed', 'rmRF', errMsg));
-	            }
-	            return;
-	        }
-	        exports.debug('removing file');
-	        try {
-	            fs.unlinkSync(inputPath);
-	        }
-	        catch (err) {
-	            throw new Error(exports.loc('LIB_OperationFailed', 'rmRF', err.message));
-	        }
-	    }
-	}
-	exports.rmRF = rmRF;
-	/**
-	 * Exec a tool.  Convenience wrapper over ToolRunner to exec with args in one call.
-	 * Output will be streamed to the live console.
-	 * Returns promise with return code
-	 *
-	 * @param     tool     path to tool to exec
-	 * @param     args     an arg string or array of args
-	 * @param     options  optional exec options.  See IExecOptions
-	 * @returns   number
-	 */
-	function execAsync(tool, args, options) {
-	    var tr = this.tool(tool);
-	    tr.on('debug', function (data) {
-	        exports.debug(data);
-	    });
-	    if (args) {
-	        if (args instanceof Array) {
-	            tr.arg(args);
-	        }
-	        else if (typeof (args) === 'string') {
-	            tr.line(args);
-	        }
-	    }
-	    return tr.execAsync(options);
-	}
-	exports.execAsync = execAsync;
-	/**
-	 * Exec a tool.  Convenience wrapper over ToolRunner to exec with args in one call.
-	 * Output will be streamed to the live console.
-	 * Returns promise with return code
-	 *
-	 * @deprecated Use the {@link execAsync} method that returns a native Javascript Promise instead
-	 * @param     tool     path to tool to exec
-	 * @param     args     an arg string or array of args
-	 * @param     options  optional exec options.  See IExecOptions
-	 * @returns   number
-	 */
-	function exec(tool, args, options) {
-	    var tr = this.tool(tool);
-	    tr.on('debug', function (data) {
-	        exports.debug(data);
-	    });
-	    if (args) {
-	        if (args instanceof Array) {
-	            tr.arg(args);
-	        }
-	        else if (typeof (args) === 'string') {
-	            tr.line(args);
-	        }
-	    }
-	    return tr.exec(options);
-	}
-	exports.exec = exec;
-	/**
-	 * Exec a tool synchronously.  Convenience wrapper over ToolRunner to execSync with args in one call.
-	 * Output will be *not* be streamed to the live console.  It will be returned after execution is complete.
-	 * Appropriate for short running tools
-	 * Returns IExecResult with output and return code
-	 *
-	 * @param     tool     path to tool to exec
-	 * @param     args     an arg string or array of args
-	 * @param     options  optional exec options.  See IExecSyncOptions
-	 * @returns   IExecSyncResult
-	 */
-	function execSync(tool, args, options) {
-	    var tr = this.tool(tool);
-	    tr.on('debug', function (data) {
-	        exports.debug(data);
-	    });
-	    if (args) {
-	        if (args instanceof Array) {
-	            tr.arg(args);
-	        }
-	        else if (typeof (args) === 'string') {
-	            tr.line(args);
-	        }
-	    }
-	    return tr.execSync(options);
-	}
-	exports.execSync = execSync;
-	/**
-	 * Convenience factory to create a ToolRunner.
-	 *
-	 * @param     tool     path to tool to exec
-	 * @returns   ToolRunner
-	 */
-	function tool(tool) {
-	    var tr = new trm.ToolRunner(tool);
-	    tr.on('debug', function (message) {
-	        exports.debug(message);
-	    });
-	    return tr;
-	}
-	exports.tool = tool;
-	/**
-	 * Applies glob patterns to a list of paths. Supports interleaved exclude patterns.
-	 *
-	 * @param  list         array of paths
-	 * @param  patterns     patterns to apply. supports interleaved exclude patterns.
-	 * @param  patternRoot  optional. default root to apply to unrooted patterns. not applied to basename-only patterns when matchBase:true.
-	 * @param  options      optional. defaults to { dot: true, nobrace: true, nocase: process.platform == 'win32' }.
-	 */
-	function match(list, patterns, patternRoot, options) {
-	    // trace parameters
-	    exports.debug("patternRoot: '" + patternRoot + "'");
-	    options = options || _getDefaultMatchOptions(); // default match options
-	    _debugMatchOptions(options);
-	    // convert pattern to an array
-	    if (typeof patterns == 'string') {
-	        patterns = [patterns];
-	    }
-	    // hashtable to keep track of matches
-	    var map = {};
-	    var originalOptions = options;
-	    for (var _i = 0, patterns_1 = patterns; _i < patterns_1.length; _i++) {
-	        var pattern = patterns_1[_i];
-	        exports.debug("pattern: '" + pattern + "'");
-	        // trim and skip empty
-	        pattern = (pattern || '').trim();
-	        if (!pattern) {
-	            exports.debug('skipping empty pattern');
-	            continue;
-	        }
-	        // clone match options
-	        var options_1 = im._cloneMatchOptions(originalOptions);
-	        // skip comments
-	        if (!options_1.nocomment && im._startsWith(pattern, '#')) {
-	            exports.debug('skipping comment');
-	            continue;
-	        }
-	        // set nocomment - brace expansion could result in a leading '#'
-	        options_1.nocomment = true;
-	        // determine whether pattern is include or exclude
-	        var negateCount = 0;
-	        if (!options_1.nonegate) {
-	            while (pattern.charAt(negateCount) == '!') {
-	                negateCount++;
-	            }
-	            pattern = pattern.substring(negateCount); // trim leading '!'
-	            if (negateCount) {
-	                exports.debug("trimmed leading '!'. pattern: '" + pattern + "'");
-	            }
-	        }
-	        var isIncludePattern = negateCount == 0 ||
-	            (negateCount % 2 == 0 && !options_1.flipNegate) ||
-	            (negateCount % 2 == 1 && options_1.flipNegate);
-	        // set nonegate - brace expansion could result in a leading '!'
-	        options_1.nonegate = true;
-	        options_1.flipNegate = false;
-	        // expand braces - required to accurately root patterns
-	        var expanded = void 0;
-	        var preExpanded = pattern;
-	        if (options_1.nobrace) {
-	            expanded = [pattern];
-	        }
-	        else {
-	            // convert slashes on Windows before calling braceExpand(). unfortunately this means braces cannot
-	            // be escaped on Windows, this limitation is consistent with current limitations of minimatch (3.0.3).
-	            exports.debug('expanding braces');
-	            var convertedPattern = process.platform == 'win32' ? pattern.replace(/\\/g, '/') : pattern;
-	            expanded = minimatch.braceExpand(convertedPattern);
-	        }
-	        // set nobrace
-	        options_1.nobrace = true;
-	        for (var _a = 0, expanded_1 = expanded; _a < expanded_1.length; _a++) {
-	            var pattern_1 = expanded_1[_a];
-	            if (expanded.length != 1 || pattern_1 != preExpanded) {
-	                exports.debug("pattern: '" + pattern_1 + "'");
-	            }
-	            // trim and skip empty
-	            pattern_1 = (pattern_1 || '').trim();
-	            if (!pattern_1) {
-	                exports.debug('skipping empty pattern');
-	                continue;
-	            }
-	            // root the pattern when all of the following conditions are true:
-	            if (patternRoot && // patternRoot supplied
-	                !im._isRooted(pattern_1) && // AND pattern not rooted
-	                // AND matchBase:false or not basename only
-	                (!options_1.matchBase || (process.platform == 'win32' ? pattern_1.replace(/\\/g, '/') : pattern_1).indexOf('/') >= 0)) {
-	                pattern_1 = im._ensureRooted(patternRoot, pattern_1);
-	                exports.debug("rooted pattern: '" + pattern_1 + "'");
-	            }
-	            if (isIncludePattern) {
-	                // apply the pattern
-	                exports.debug('applying include pattern against original list');
-	                var matchResults = minimatch.match(list, pattern_1, options_1);
-	                exports.debug(matchResults.length + ' matches');
-	                // union the results
-	                for (var _b = 0, matchResults_1 = matchResults; _b < matchResults_1.length; _b++) {
-	                    var matchResult = matchResults_1[_b];
-	                    map[matchResult] = true;
-	                }
-	            }
-	            else {
-	                // apply the pattern
-	                exports.debug('applying exclude pattern against original list');
-	                var matchResults = minimatch.match(list, pattern_1, options_1);
-	                exports.debug(matchResults.length + ' matches');
-	                // substract the results
-	                for (var _c = 0, matchResults_2 = matchResults; _c < matchResults_2.length; _c++) {
-	                    var matchResult = matchResults_2[_c];
-	                    delete map[matchResult];
-	                }
-	            }
-	        }
-	    }
-	    // return a filtered version of the original list (preserves order and prevents duplication)
-	    var result = list.filter(function (item) { return map.hasOwnProperty(item); });
-	    exports.debug(result.length + ' final results');
-	    return result;
-	}
-	exports.match = match;
-	/**
-	 * Filter to apply glob patterns
-	 *
-	 * @param  pattern  pattern to apply
-	 * @param  options  optional. defaults to { dot: true, nobrace: true, nocase: process.platform == 'win32' }.
-	 */
-	function filter(pattern, options) {
-	    options = options || _getDefaultMatchOptions();
-	    return minimatch.filter(pattern, options);
-	}
-	exports.filter = filter;
-	function _debugMatchOptions(options) {
-	    exports.debug("matchOptions.debug: '" + options.debug + "'");
-	    exports.debug("matchOptions.nobrace: '" + options.nobrace + "'");
-	    exports.debug("matchOptions.noglobstar: '" + options.noglobstar + "'");
-	    exports.debug("matchOptions.dot: '" + options.dot + "'");
-	    exports.debug("matchOptions.noext: '" + options.noext + "'");
-	    exports.debug("matchOptions.nocase: '" + options.nocase + "'");
-	    exports.debug("matchOptions.nonull: '" + options.nonull + "'");
-	    exports.debug("matchOptions.matchBase: '" + options.matchBase + "'");
-	    exports.debug("matchOptions.nocomment: '" + options.nocomment + "'");
-	    exports.debug("matchOptions.nonegate: '" + options.nonegate + "'");
-	    exports.debug("matchOptions.flipNegate: '" + options.flipNegate + "'");
-	}
-	function _getDefaultMatchOptions() {
-	    return {
-	        debug: false,
-	        nobrace: true,
-	        noglobstar: false,
-	        dot: true,
-	        noext: false,
-	        nocase: process.platform == 'win32',
-	        nonull: false,
-	        matchBase: false,
-	        nocomment: false,
-	        nonegate: false,
-	        flipNegate: false
-	    };
-	}
-	/**
-	 * Determines the find root from a list of patterns. Performs the find and then applies the glob patterns.
-	 * Supports interleaved exclude patterns. Unrooted patterns are rooted using defaultRoot, unless
-	 * matchOptions.matchBase is specified and the pattern is a basename only. For matchBase cases, the
-	 * defaultRoot is used as the find root.
-	 *
-	 * @param  defaultRoot   default path to root unrooted patterns. falls back to System.DefaultWorkingDirectory or process.cwd().
-	 * @param  patterns      pattern or array of patterns to apply
-	 * @param  findOptions   defaults to { followSymbolicLinks: true }. following soft links is generally appropriate unless deleting files.
-	 * @param  matchOptions  defaults to { dot: true, nobrace: true, nocase: process.platform == 'win32' }
-	 */
-	function findMatch(defaultRoot, patterns, findOptions, matchOptions) {
-	    // apply defaults for parameters and trace
-	    defaultRoot = defaultRoot || this.getVariable('system.defaultWorkingDirectory') || process.cwd();
-	    exports.debug("defaultRoot: '" + defaultRoot + "'");
-	    patterns = patterns || [];
-	    patterns = typeof patterns == 'string' ? [patterns] : patterns;
-	    findOptions = findOptions || _getDefaultFindOptions();
-	    _debugFindOptions(findOptions);
-	    matchOptions = matchOptions || _getDefaultMatchOptions();
-	    _debugMatchOptions(matchOptions);
-	    // normalize slashes for root dir
-	    defaultRoot = im._normalizeSeparators(defaultRoot);
-	    var results = {};
-	    var originalMatchOptions = matchOptions;
-	    for (var _i = 0, _a = (patterns || []); _i < _a.length; _i++) {
-	        var pattern = _a[_i];
-	        exports.debug("pattern: '" + pattern + "'");
-	        // trim and skip empty
-	        pattern = (pattern || '').trim();
-	        if (!pattern) {
-	            exports.debug('skipping empty pattern');
-	            continue;
-	        }
-	        // clone match options
-	        var matchOptions_1 = im._cloneMatchOptions(originalMatchOptions);
-	        // skip comments
-	        if (!matchOptions_1.nocomment && im._startsWith(pattern, '#')) {
-	            exports.debug('skipping comment');
-	            continue;
-	        }
-	        // set nocomment - brace expansion could result in a leading '#'
-	        matchOptions_1.nocomment = true;
-	        // determine whether pattern is include or exclude
-	        var negateCount = 0;
-	        if (!matchOptions_1.nonegate) {
-	            while (pattern.charAt(negateCount) == '!') {
-	                negateCount++;
-	            }
-	            pattern = pattern.substring(negateCount); // trim leading '!'
-	            if (negateCount) {
-	                exports.debug("trimmed leading '!'. pattern: '" + pattern + "'");
-	            }
-	        }
-	        var isIncludePattern = negateCount == 0 ||
-	            (negateCount % 2 == 0 && !matchOptions_1.flipNegate) ||
-	            (negateCount % 2 == 1 && matchOptions_1.flipNegate);
-	        // set nonegate - brace expansion could result in a leading '!'
-	        matchOptions_1.nonegate = true;
-	        matchOptions_1.flipNegate = false;
-	        // expand braces - required to accurately interpret findPath
-	        var expanded = void 0;
-	        var preExpanded = pattern;
-	        if (matchOptions_1.nobrace) {
-	            expanded = [pattern];
-	        }
-	        else {
-	            // convert slashes on Windows before calling braceExpand(). unfortunately this means braces cannot
-	            // be escaped on Windows, this limitation is consistent with current limitations of minimatch (3.0.3).
-	            exports.debug('expanding braces');
-	            var convertedPattern = process.platform == 'win32' ? pattern.replace(/\\/g, '/') : pattern;
-	            expanded = minimatch.braceExpand(convertedPattern);
-	        }
-	        // set nobrace
-	        matchOptions_1.nobrace = true;
-	        for (var _b = 0, expanded_2 = expanded; _b < expanded_2.length; _b++) {
-	            var pattern_2 = expanded_2[_b];
-	            if (expanded.length != 1 || pattern_2 != preExpanded) {
-	                exports.debug("pattern: '" + pattern_2 + "'");
-	            }
-	            // trim and skip empty
-	            pattern_2 = (pattern_2 || '').trim();
-	            if (!pattern_2) {
-	                exports.debug('skipping empty pattern');
-	                continue;
-	            }
-	            if (isIncludePattern) {
-	                // determine the findPath
-	                var findInfo = im._getFindInfoFromPattern(defaultRoot, pattern_2, matchOptions_1);
-	                var findPath = findInfo.findPath;
-	                exports.debug("findPath: '" + findPath + "'");
-	                if (!findPath) {
-	                    exports.debug('skipping empty path');
-	                    continue;
-	                }
-	                // perform the find
-	                exports.debug("statOnly: '" + findInfo.statOnly + "'");
-	                var findResults = [];
-	                if (findInfo.statOnly) {
-	                    // simply stat the path - all path segments were used to build the path
-	                    try {
-	                        fs.statSync(findPath);
-	                        findResults.push(findPath);
-	                    }
-	                    catch (err) {
-	                        if (err.code != 'ENOENT') {
-	                            throw err;
-	                        }
-	                        exports.debug('ENOENT');
-	                    }
-	                }
-	                else {
-	                    findResults = find(findPath, findOptions);
-	                }
-	                exports.debug("found " + findResults.length + " paths");
-	                // apply the pattern
-	                exports.debug('applying include pattern');
-	                if (findInfo.adjustedPattern != pattern_2) {
-	                    exports.debug("adjustedPattern: '" + findInfo.adjustedPattern + "'");
-	                    pattern_2 = findInfo.adjustedPattern;
-	                }
-	                var matchResults = minimatch.match(findResults, pattern_2, matchOptions_1);
-	                exports.debug(matchResults.length + ' matches');
-	                // union the results
-	                for (var _c = 0, matchResults_3 = matchResults; _c < matchResults_3.length; _c++) {
-	                    var matchResult = matchResults_3[_c];
-	                    var key = process.platform == 'win32' ? matchResult.toUpperCase() : matchResult;
-	                    results[key] = matchResult;
-	                }
-	            }
-	            else {
-	                // check if basename only and matchBase=true
-	                if (matchOptions_1.matchBase &&
-	                    !im._isRooted(pattern_2) &&
-	                    (process.platform == 'win32' ? pattern_2.replace(/\\/g, '/') : pattern_2).indexOf('/') < 0) {
-	                    // do not root the pattern
-	                    exports.debug('matchBase and basename only');
-	                }
-	                else {
-	                    // root the exclude pattern
-	                    pattern_2 = im._ensurePatternRooted(defaultRoot, pattern_2);
-	                    exports.debug("after ensurePatternRooted, pattern: '" + pattern_2 + "'");
-	                }
-	                // apply the pattern
-	                exports.debug('applying exclude pattern');
-	                var matchResults = minimatch.match(Object.keys(results).map(function (key) { return results[key]; }), pattern_2, matchOptions_1);
-	                exports.debug(matchResults.length + ' matches');
-	                // substract the results
-	                for (var _d = 0, matchResults_4 = matchResults; _d < matchResults_4.length; _d++) {
-	                    var matchResult = matchResults_4[_d];
-	                    var key = process.platform == 'win32' ? matchResult.toUpperCase() : matchResult;
-	                    delete results[key];
-	                }
-	            }
-	        }
-	    }
-	    var finalResult = Object.keys(results)
-	        .map(function (key) { return results[key]; })
-	        .sort();
-	    exports.debug(finalResult.length + ' final results');
-	    return finalResult;
-	}
-	exports.findMatch = findMatch;
-	/**
-	 * Build Proxy URL in the following format: protocol://username:password@hostname:port
-	 * @param proxyUrl Url address of the proxy server (eg: http://example.com)
-	 * @param proxyUsername Proxy username (optional)
-	 * @param proxyPassword Proxy password (optional)
-	 * @returns string
-	 */
-	function getProxyFormattedUrl(proxyUrl, proxyUsername, proxyPassword) {
-	    var parsedUrl = new URL(proxyUrl);
-	    var proxyAddress = parsedUrl.protocol + "//" + parsedUrl.host;
-	    if (proxyUsername) {
-	        proxyAddress = parsedUrl.protocol + "//" + proxyUsername + ":" + proxyPassword + "@" + parsedUrl.host;
-	    }
-	    return proxyAddress;
-	}
-	/**
-	 * Gets http proxy configuration used by Build/Release agent
-	 *
-	 * @return  ProxyConfiguration
-	 */
-	function getHttpProxyConfiguration(requestUrl) {
-	    var proxyUrl = exports.getVariable('Agent.ProxyUrl');
-	    if (proxyUrl && proxyUrl.length > 0) {
-	        var proxyUsername = exports.getVariable('Agent.ProxyUsername');
-	        var proxyPassword = exports.getVariable('Agent.ProxyPassword');
-	        var proxyBypassHosts = JSON.parse(exports.getVariable('Agent.ProxyBypassList') || '[]');
-	        var bypass_1 = false;
-	        if (requestUrl) {
-	            proxyBypassHosts.forEach(function (bypassHost) {
-	                if (new RegExp(bypassHost, 'i').test(requestUrl)) {
-	                    bypass_1 = true;
-	                }
-	            });
-	        }
-	        if (bypass_1) {
-	            return null;
-	        }
-	        else {
-	            var proxyAddress = getProxyFormattedUrl(proxyUrl, proxyUsername, proxyPassword);
-	            return {
-	                proxyUrl: proxyUrl,
-	                proxyUsername: proxyUsername,
-	                proxyPassword: proxyPassword,
-	                proxyBypassHosts: proxyBypassHosts,
-	                proxyFormattedUrl: proxyAddress
-	            };
-	        }
-	    }
-	    else {
-	        return null;
-	    }
-	}
-	exports.getHttpProxyConfiguration = getHttpProxyConfiguration;
-	/**
-	 * Gets http certificate configuration used by Build/Release agent
-	 *
-	 * @return  CertConfiguration
-	 */
-	function getHttpCertConfiguration() {
-	    var ca = exports.getVariable('Agent.CAInfo');
-	    var clientCert = exports.getVariable('Agent.ClientCert');
-	    if (ca || clientCert) {
-	        var certConfig = {};
-	        certConfig.caFile = ca;
-	        certConfig.certFile = clientCert;
-	        if (clientCert) {
-	            var clientCertKey = exports.getVariable('Agent.ClientCertKey');
-	            var clientCertArchive = exports.getVariable('Agent.ClientCertArchive');
-	            var clientCertPassword = exports.getVariable('Agent.ClientCertPassword');
-	            certConfig.keyFile = clientCertKey;
-	            certConfig.certArchiveFile = clientCertArchive;
-	            certConfig.passphrase = clientCertPassword;
-	        }
-	        return certConfig;
-	    }
-	    else {
-	        return null;
-	    }
-	}
-	exports.getHttpCertConfiguration = getHttpCertConfiguration;
-	//-----------------------------------------------------
-	// Test Publisher
-	//-----------------------------------------------------
-	var TestPublisher = /** @class */ (function () {
-	    function TestPublisher(testRunner) {
-	        this.testRunner = testRunner;
-	    }
-	    TestPublisher.prototype.publish = function (resultFiles, mergeResults, platform, config, runTitle, publishRunAttachments, testRunSystem) {
-	        // Could have used an initializer, but wanted to avoid reordering parameters when converting to strict null checks
-	        // (A parameter cannot both be optional and have an initializer)
-	        testRunSystem = testRunSystem || "VSTSTask";
-	        var properties = {};
-	        properties['type'] = this.testRunner;
-	        if (mergeResults) {
-	            properties['mergeResults'] = mergeResults;
-	        }
-	        if (platform) {
-	            properties['platform'] = platform;
-	        }
-	        if (config) {
-	            properties['config'] = config;
-	        }
-	        if (runTitle) {
-	            properties['runTitle'] = runTitle;
-	        }
-	        if (publishRunAttachments) {
-	            properties['publishRunAttachments'] = publishRunAttachments;
-	        }
-	        if (resultFiles) {
-	            properties['resultFiles'] = Array.isArray(resultFiles) ? resultFiles.join() : resultFiles;
-	        }
-	        properties['testRunSystem'] = testRunSystem;
-	        exports.command('results.publish', properties, '');
-	    };
-	    return TestPublisher;
-	}());
-	exports.TestPublisher = TestPublisher;
-	//-----------------------------------------------------
-	// Code coverage Publisher
-	//-----------------------------------------------------
-	var CodeCoveragePublisher = /** @class */ (function () {
-	    function CodeCoveragePublisher() {
-	    }
-	    CodeCoveragePublisher.prototype.publish = function (codeCoverageTool, summaryFileLocation, reportDirectory, additionalCodeCoverageFiles) {
-	        var properties = {};
-	        if (codeCoverageTool) {
-	            properties['codecoveragetool'] = codeCoverageTool;
-	        }
-	        if (summaryFileLocation) {
-	            properties['summaryfile'] = summaryFileLocation;
-	        }
-	        if (reportDirectory) {
-	            properties['reportdirectory'] = reportDirectory;
-	        }
-	        if (additionalCodeCoverageFiles) {
-	            properties['additionalcodecoveragefiles'] = Array.isArray(additionalCodeCoverageFiles) ? additionalCodeCoverageFiles.join() : additionalCodeCoverageFiles;
-	        }
-	        exports.command('codecoverage.publish', properties, "");
-	    };
-	    return CodeCoveragePublisher;
-	}());
-	exports.CodeCoveragePublisher = CodeCoveragePublisher;
-	//-----------------------------------------------------
-	// Code coverage Publisher
-	//-----------------------------------------------------
-	var CodeCoverageEnabler = /** @class */ (function () {
-	    function CodeCoverageEnabler(buildTool, ccTool) {
-	        this.buildTool = buildTool;
-	        this.ccTool = ccTool;
-	    }
-	    CodeCoverageEnabler.prototype.enableCodeCoverage = function (buildProps) {
-	        buildProps['buildtool'] = this.buildTool;
-	        buildProps['codecoveragetool'] = this.ccTool;
-	        exports.command('codecoverage.enable', buildProps, "");
-	    };
-	    return CodeCoverageEnabler;
-	}());
-	exports.CodeCoverageEnabler = CodeCoverageEnabler;
-	//-----------------------------------------------------
-	// Task Logging Commands
-	//-----------------------------------------------------
-	/**
-	 * Upload user interested file as additional log information
-	 * to the current timeline record.
-	 *
-	 * The file shall be available for download along with task logs.
-	 *
-	 * @param path      Path to the file that should be uploaded.
-	 * @returns         void
-	 */
-	function uploadFile(path) {
-	    exports.command("task.uploadfile", null, path);
-	}
-	exports.uploadFile = uploadFile;
-	/**
-	 * Instruction for the agent to update the PATH environment variable.
-	 * The specified directory is prepended to the PATH.
-	 * The updated environment variable will be reflected in subsequent tasks.
-	 *
-	 * @param path      Local directory path.
-	 * @returns         void
-	 */
-	function prependPath(path) {
-	    assertAgent("2.115.0");
-	    exports.command("task.prependpath", null, path);
-	}
-	exports.prependPath = prependPath;
-	/**
-	 * Upload and attach summary markdown to current timeline record.
-	 * This summary shall be added to the build/release summary and
-	 * not available for download with logs.
-	 *
-	 * @param path      Local directory path.
-	 * @returns         void
-	 */
-	function uploadSummary(path) {
-	    exports.command("task.uploadsummary", null, path);
-	}
-	exports.uploadSummary = uploadSummary;
-	/**
-	 * Upload and attach attachment to current timeline record.
-	 * These files are not available for download with logs.
-	 * These can only be referred to by extensions using the type or name values.
-	 *
-	 * @param type      Attachment type.
-	 * @param name      Attachment name.
-	 * @param path      Attachment path.
-	 * @returns         void
-	 */
-	function addAttachment(type, name, path) {
-	    exports.command("task.addattachment", { "type": type, "name": name }, path);
-	}
-	exports.addAttachment = addAttachment;
-	/**
-	 * Set an endpoint field with given value.
-	 * Value updated will be retained in the endpoint for
-	 * the subsequent tasks that execute within the same job.
-	 *
-	 * @param id      Endpoint id.
-	 * @param field   FieldType enum of AuthParameter, DataParameter or Url.
-	 * @param key     Key.
-	 * @param value   Value for key or url.
-	 * @returns       void
-	 */
-	function setEndpoint(id, field, key, value) {
-	    exports.command("task.setendpoint", { "id": id, "field": FieldType[field].toLowerCase(), "key": key }, value);
-	}
-	exports.setEndpoint = setEndpoint;
-	/**
-	 * Set progress and current operation for current task.
-	 *
-	 * @param percent           Percentage of completion.
-	 * @param currentOperation  Current pperation.
-	 * @returns                 void
-	 */
-	function setProgress(percent, currentOperation) {
-	    exports.command("task.setprogress", { "value": "" + percent }, currentOperation);
-	}
-	exports.setProgress = setProgress;
-	/**
-	 * Indicates whether to write the logging command directly to the host or to the output pipeline.
-	 *
-	 * @param id            Timeline record Guid.
-	 * @param parentId      Parent timeline record Guid.
-	 * @param recordType    Record type.
-	 * @param recordName    Record name.
-	 * @param order         Order of timeline record.
-	 * @param startTime     Start time.
-	 * @param finishTime    End time.
-	 * @param progress      Percentage of completion.
-	 * @param state         TaskState enum of Unknown, Initialized, InProgress or Completed.
-	 * @param result        TaskResult enum of Succeeded, SucceededWithIssues, Failed, Cancelled or Skipped.
-	 * @param message       current operation
-	 * @returns             void
-	 */
-	function logDetail(id, message, parentId, recordType, recordName, order, startTime, finishTime, progress, state, result) {
-	    var properties = {
-	        "id": id,
-	        "parentid": parentId,
-	        "type": recordType,
-	        "name": recordName,
-	        "order": order ? order.toString() : undefined,
-	        "starttime": startTime,
-	        "finishtime": finishTime,
-	        "progress": progress ? progress.toString() : undefined,
-	        "state": state ? TaskState[state] : undefined,
-	        "result": result ? TaskResult[result] : undefined
-	    };
-	    exports.command("task.logdetail", properties, message);
-	}
-	exports.logDetail = logDetail;
-	/**
-	 * Log error or warning issue to timeline record of current task.
-	 *
-	 * @param type          IssueType enum of Error or Warning.
-	 * @param sourcePath    Source file location.
-	 * @param lineNumber    Line number.
-	 * @param columnNumber  Column number.
-	 * @param code          Error or warning code.
-	 * @param message       Error or warning message.
-	 * @returns             void
-	 */
-	function logIssue(type, message, sourcePath, lineNumber, columnNumber, errorCode) {
-	    var properties = {
-	        "type": IssueType[type].toLowerCase(),
-	        "code": errorCode,
-	        "sourcepath": sourcePath,
-	        "linenumber": lineNumber ? lineNumber.toString() : undefined,
-	        "columnnumber": columnNumber ? columnNumber.toString() : undefined,
-	    };
-	    exports.command("task.logissue", properties, message);
-	}
-	exports.logIssue = logIssue;
-	//-----------------------------------------------------
-	// Artifact Logging Commands
-	//-----------------------------------------------------
-	/**
-	 * Upload user interested file as additional log information
-	 * to the current timeline record.
-	 *
-	 * The file shall be available for download along with task logs.
-	 *
-	 * @param containerFolder   Folder that the file will upload to, folder will be created if needed.
-	 * @param path              Path to the file that should be uploaded.
-	 * @param name              Artifact name.
-	 * @returns                 void
-	 */
-	function uploadArtifact(containerFolder, path, name) {
-	    exports.command("artifact.upload", { "containerfolder": containerFolder, "artifactname": name }, path);
-	}
-	exports.uploadArtifact = uploadArtifact;
-	/**
-	 * Create an artifact link, artifact location is required to be
-	 * a file container path, VC path or UNC share path.
-	 *
-	 * The file shall be available for download along with task logs.
-	 *
-	 * @param name              Artifact name.
-	 * @param path              Path to the file that should be associated.
-	 * @param artifactType      ArtifactType enum of Container, FilePath, VersionControl, GitRef or TfvcLabel.
-	 * @returns                 void
-	 */
-	function associateArtifact(name, path, artifactType) {
-	    exports.command("artifact.associate", { "type": ArtifactType[artifactType].toLowerCase(), "artifactname": name }, path);
-	}
-	exports.associateArtifact = associateArtifact;
-	//-----------------------------------------------------
-	// Build Logging Commands
-	//-----------------------------------------------------
-	/**
-	 * Upload user interested log to build’s container “logs\tool” folder.
-	 *
-	 * @param path      Path to the file that should be uploaded.
-	 * @returns         void
-	 */
-	function uploadBuildLog(path) {
-	    exports.command("build.uploadlog", null, path);
-	}
-	exports.uploadBuildLog = uploadBuildLog;
-	/**
-	 * Update build number for current build.
-	 *
-	 * @param value     Value to be assigned as the build number.
-	 * @returns         void
-	 */
-	function updateBuildNumber(value) {
-	    exports.command("build.updatebuildnumber", null, value);
-	}
-	exports.updateBuildNumber = updateBuildNumber;
-	/**
-	 * Add a tag for current build.
-	 *
-	 * @param value     Tag value.
-	 * @returns         void
-	 */
-	function addBuildTag(value) {
-	    exports.command("build.addbuildtag", null, value);
-	}
-	exports.addBuildTag = addBuildTag;
-	//-----------------------------------------------------
-	// Release Logging Commands
-	//-----------------------------------------------------
-	/**
-	 * Update release name for current release.
-	 *
-	 * @param value     Value to be assigned as the release name.
-	 * @returns         void
-	 */
-	function updateReleaseName(name) {
-	    assertAgent("2.132.0");
-	    exports.command("release.updatereleasename", null, name);
-	}
-	exports.updateReleaseName = updateReleaseName;
-	//-----------------------------------------------------
-	// Tools
-	//-----------------------------------------------------
-	exports.TaskCommand = tcm.TaskCommand;
-	exports.commandFromString = tcm.commandFromString;
-	exports.ToolRunner = trm.ToolRunner;
-	//-----------------------------------------------------
-	// Validation Checks
-	//-----------------------------------------------------
-	// async await needs generators in node 4.x+
-	if (semver.lt(process.versions.node, '4.2.0')) {
-	    exports.warning('Tasks require a new agent.  Upgrade your agent or node to 4.2.0 or later');
-	}
-	//-------------------------------------------------------------------
-	// Populate the vault with sensitive data.  Inputs and Endpoints
-	//-------------------------------------------------------------------
-	// avoid loading twice (overwrites .taskkey)
-	if (!commonjsGlobal['_vsts_task_lib_loaded']) {
-	    im._loadData();
-	    im._exposeProxySettings();
-	    im._exposeCertSettings();
-	} 
-} (task));
-
 var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -25898,10 +20557,10 @@ var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisAr
     });
 };
 Object.defineProperty(tool, "__esModule", { value: true });
-tool.scrape = tool.extractZip = tool.extractTar = tool.extract7z = tool.cacheFile = cacheDir_1 = tool.cacheDir = tool.downloadTool = tool.findLocalToolVersions = findLocalTool_1 = tool.findLocalTool = tool.evaluateVersions = tool.cleanVersion = tool.isExplicitVersion = prependPath_1 = tool.prependPath = tool.debug = void 0;
+tool.scrape = tool.extractZip = tool.extractTar = tool.extract7z = tool.cacheFile = cacheDir_1 = tool.cacheDir = tool.downloadToolWithRetries = tool.downloadTool = tool.findLocalToolVersions = findLocalTool_1 = tool.findLocalTool = tool.evaluateVersions = tool.cleanVersion = tool.isExplicitVersion = prependPath_1 = tool.prependPath = tool.debug = void 0;
 const httpm = HttpClient;
 const path = require$$0$1;
-const os = require$$1$1;
+const os = require$$0$2;
 const process$1 = require$$3$2;
 const fs = require$$1;
 const semver = semverExports$2;
@@ -25940,6 +20599,9 @@ function prependPath(toolPath) {
     console.log('##vso[task.prependpath]' + toolPath);
 }
 var prependPath_1 = tool.prependPath = prependPath;
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 //-----------------------------
 // Version Functions
 //-----------------------------
@@ -26091,7 +20753,7 @@ function downloadTool(url, fileName, handlers, additionalHeaders) {
                 }
                 // make sure that the folder exists
                 tl.mkdirP(path.dirname(destPath));
-                console.log(tl.loc('TOOL_LIB_Downloading', url));
+                console.log(tl.loc('TOOL_LIB_Downloading', url.replace(/sig=[^&]*/, "sig=-REDACTED-")));
                 tl.debug('destination ' + destPath);
                 if (fs.existsSync(destPath)) {
                     throw new Error("Destination file path already exists");
@@ -26167,6 +20829,28 @@ function downloadTool(url, fileName, handlers, additionalHeaders) {
     });
 }
 tool.downloadTool = downloadTool;
+function downloadToolWithRetries(url, fileName, handlers, additionalHeaders, maxAttempts = 3, retryInterval = 500) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let attempt = 1;
+        let destinationPath = '';
+        while (attempt <= maxAttempts && destinationPath == '') {
+            try {
+                destinationPath = yield downloadTool(url, fileName, handlers, additionalHeaders);
+            }
+            catch (err) {
+                if (attempt === maxAttempts)
+                    throw err;
+                const attemptInterval = attempt * retryInterval;
+                // Error will be shown in downloadTool.
+                tl.debug(`Attempt ${attempt} failed. Retrying after ${attemptInterval} ms`);
+                yield delay(attemptInterval);
+                attempt++;
+            }
+        }
+        return destinationPath;
+    });
+}
+tool.downloadToolWithRetries = downloadToolWithRetries;
 //---------------------
 // Size functions
 //---------------------
@@ -26284,12 +20968,12 @@ tool.cacheFile = cacheFile;
  * @param dest     destination directory. Optional.
  * @param _7zPath  path to 7zr.exe. Optional, for long path support. Most .7z archives do not have this
  * problem. If your .7z archive contains very long paths, you can pass the path to 7zr.exe which will
- * gracefully handle long paths. By default 7zdec.exe is used because it is a very small program and is
- * bundled with the tool lib. However it does not support long paths. 7zr.exe is the reduced command line
+ * gracefully handle long paths. By default 7z.exe is used because it is a very small program and is
+ * bundled with the tool lib. However it does not support long paths. 7z.exe is the reduced command line
  * interface, it is smaller than the full command line interface, and it does support long paths. At the
  * time of this writing, it is freely available from the LZMA SDK that is available on the 7zip website.
- * Be sure to check the current license agreement. If 7zr.exe is bundled with your task, then the path
- * to 7zr.exe can be pass to this function.
+ * Be sure to check the current license agreement. If 7z.exe is bundled with your task, then the path
+ * to 7z.exe can be pass to this function.
  * @param overwriteDest Overwrite files in destination catalog. Optional.
  * @returns        path to the destination directory
  */
@@ -26457,5 +21141,5 @@ function _getAgentTemp() {
     return tempDirectory;
 }
 
-export { cacheDir_1 as c, findLocalTool_1 as f, lruCache as l, prependPath_1 as p, task$1 as t };
+export { cacheDir_1 as c, findLocalTool_1 as f, lruCache as l, prependPath_1 as p, task as t };
 //# sourceMappingURL=vendor.js.map
