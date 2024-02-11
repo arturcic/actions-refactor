@@ -1,10 +1,11 @@
 import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs } from './tools-common.js';
 import 'util';
-import 'os';
-import 'fs';
-import 'path';
-import 'crypto';
-import './vendor.js';
+import 'node:os';
+import 'node:fs';
+import 'node:path';
+import 'node:crypto';
+import '../agents/vendor.js';
+import '../agents/fake/vendor.js';
 
 var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
   ExecuteFields2["targetPath"] = "targetPath";
@@ -175,6 +176,7 @@ switch (command) {
     break;
   case "execute":
     await run();
+    break;
 }
 async function getAgent() {
   const agent2 = `../agents/${buildAgent}/agent.js`;

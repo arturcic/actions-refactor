@@ -1,4 +1,3 @@
-import { getAgent } from '@agents/common'
 import { parseCliArgs } from '@tools/common'
 
 // const { agentName } = await getAgent()

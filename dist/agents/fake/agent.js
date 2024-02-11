@@ -1,9 +1,9 @@
-import * as os from 'os';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as process from 'process';
-import * as util from 'util';
-import { exec } from 'child_process';
+import * as os from 'node:os';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as process from 'node:process';
+import * as util from 'node:util';
+import { exec } from 'node:child_process';
 
 const isFilePath = (cmd) => {
   return cmd.includes(path.sep) ? path.resolve(cmd) : void 0;

@@ -1,8 +1,8 @@
-import os__default from 'os';
-import fs__default from 'fs';
-import path__default from 'path';
-import crypto from 'crypto';
-import { s as semver } from './vendor.js';
+import os__default from 'node:os';
+import fs__default from 'node:fs';
+import path__default from 'node:path';
+import crypto from 'node:crypto';
+import { s as semver } from '../agents/vendor.js';
 import { parseArgs } from 'util';
 
 var SetupFields = /* @__PURE__ */ ((SetupFields2) => {

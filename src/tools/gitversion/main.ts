@@ -1,6 +1,6 @@
 import { parseCliArgs } from '@tools/common'
-import { GitVersionTool } from './tool'
 import { IBuildAgent } from '@agents/common'
+import { GitVersionTool } from './tool'
 
 const { command, buildAgent } = parseCliArgs()
 
@@ -13,6 +13,7 @@ switch (command) {
         break
     case 'execute':
         await run()
+        break
 }
 
 async function getAgent(): Promise<IBuildAgent> {

@@ -1,8 +1,8 @@
 import { ISettingsProvider } from './models'
-import os from 'os'
-import fs from 'fs'
-import path from 'path'
-import crypto from 'crypto'
+import os from 'node:os'
+import fs from 'node:fs'
+import path from 'node:path'
+import crypto from 'node:crypto'
 
 import * as semver from 'semver'
 import { IBuildAgent, IExecResult } from '@agents/common'

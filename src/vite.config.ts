@@ -5,12 +5,12 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 const output = {
     globals: {
-        'node:stream': 'stream',
+/*        'node:stream': 'stream',
         'node:buffer': 'buffer',
         'node:util': 'util',
         'node:net': 'net',
         'node:url': 'url',
-        'node:os': 'os',
+        'node:os': 'os',*/
         perf_hooks: 'perf_hooks'
     }
 }
@@ -51,16 +51,12 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
                     chunkFileNames: '[name].js',
                     manualChunks(id: string) {
                         // console.log(`id: ${id}`)
-                        if (id.includes('node_modules/azure-pipelines')) {
-                            return `agents/azure/toolkit`
-                        } else if (id.includes('node_modules/@actions')) {
-                            return `agents/github/toolkit`
+                        if (id.includes('node_modules/semver')) {
+                            return `agents/vendor`
                         } else if (id.includes('node_modules')) {
-                            return `tools/vendor`
+                            return `agents/${agent}/vendor`
                         } else if (id.includes('tools/common')) {
                             return `tools/tools-common`
-                        } else if (id.includes('agents/common')) {
-                            return `agents/${agent}/adapter`
                         }
                     }
                 }

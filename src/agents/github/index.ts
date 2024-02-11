@@ -1,10 +1,8 @@
-
-
 import * as core from '@actions/core'
 import * as exe from '@actions/exec'
 import * as io from '@actions/io'
 import * as toolCache from '@actions/tool-cache'
-import fs from 'fs'
+import fs from 'node:fs'
 import { IBuildAgent, IExecResult } from '@agents/common'
 
 export class BuildAgent implements IBuildAgent {
