@@ -3,17 +3,6 @@ import { builtinModules } from 'node:module'
 import { defineConfig, loadEnv, UserConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
-const output = {
-    globals: {
-/*        'node:stream': 'stream',
-        'node:buffer': 'buffer',
-        'node:util': 'util',
-        'node:net': 'net',
-        'node:url': 'url',
-        'node:os': 'os',*/
-        perf_hooks: 'perf_hooks'
-    }
-}
 const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
     console.log(`Building for mode: ${agent}`)
 
@@ -47,7 +36,6 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
             rollupOptions: {
                 external: [...builtinModules, ...builtinModules.map(module => `node:${module}`)],
                 output: {
-                    ...output,
                     chunkFileNames: '[name].js',
                     manualChunks(id: string) {
                         // console.log(`id: ${id}`)
