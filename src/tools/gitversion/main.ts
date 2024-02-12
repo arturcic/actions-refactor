@@ -4,7 +4,7 @@ import { GitVersionTool } from './tool'
 
 const { command, buildAgent } = parseCliArgs()
 
-const agent = await getAgent()
+const agent = await getAgent(buildAgent)
 const gitVersionTool = new GitVersionTool(agent)
 
 switch (command) {
@@ -16,7 +16,7 @@ switch (command) {
         break
 }
 
-async function getAgent(): Promise<IBuildAgent> {
+async function getAgent(buildAgent: string | undefined): Promise<IBuildAgent> {
     const agent = `../agents/${buildAgent}/agent.js`
     const module: { BuildAgent: new () => IBuildAgent } = await import(agent)
     return new module.BuildAgent()

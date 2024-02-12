@@ -162,7 +162,7 @@ class GitVersionTool extends DotnetTool {
 }
 
 const { command, buildAgent } = parseCliArgs();
-const agent = await getAgent();
+const agent = await getAgent(buildAgent);
 const gitVersionTool = new GitVersionTool(agent);
 switch (command) {
   case "setup":
@@ -172,8 +172,8 @@ switch (command) {
     await run();
     break;
 }
-async function getAgent() {
-  const agent2 = `../agents/${buildAgent}/agent.js`;
+async function getAgent(buildAgent2) {
+  const agent2 = `../agents/${buildAgent2}/agent.js`;
   const module = await import(agent2);
   return new module.BuildAgent();
 }

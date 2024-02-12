@@ -6,7 +6,7 @@ import * as util from 'node:util'
 import { exec as execNonPromise } from 'node:child_process'
 
 import { lookPath } from './internal/lookPath'
-import { IBuildAgent, IExecResult } from '@agents/common'
+import type { IBuildAgent, IExecResult } from '@agents/common'
 
 export class BuildAgent implements IBuildAgent {
     get agentName(): string {

@@ -3,7 +3,7 @@ import * as exe from '@actions/exec'
 import * as io from '@actions/io'
 import * as toolCache from '@actions/tool-cache'
 import fs from 'node:fs'
-import { IBuildAgent, IExecResult } from '@agents/common'
+import type { IBuildAgent, IExecResult } from '@agents/common'
 
 export class BuildAgent implements IBuildAgent {
     get agentName(): string {
