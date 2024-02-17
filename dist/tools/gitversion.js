@@ -1,4 +1,5 @@
 import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs } from './common.js';
+import { g as getAgent } from '../agents/common.js';
 import 'util';
 
 var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
@@ -171,11 +172,6 @@ switch (command) {
   case "execute":
     await run();
     break;
-}
-async function getAgent(buildAgent2) {
-  const agent2 = `../agents/${buildAgent2}/agent.js`;
-  const module = await import(agent2);
-  return new module.BuildAgent();
 }
 async function setup() {
   try {
