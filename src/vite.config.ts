@@ -42,6 +42,9 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
                         if (id.includes('node_modules/semver') || id.includes('node_modules/lru-cache') || id.includes('node_modules/yallist')) {
                             return `tools/semver`
                         }
+                        if (id.includes('tools/common')) {
+                            return `tools/common`
+                        }
                         if (id.includes('node_modules')) {
                             return `tools/vendor`
                         }
