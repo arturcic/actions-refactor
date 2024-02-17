@@ -29,8 +29,8 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
             lib: {
                 formats: ['es'],
                 entry: {
-                    ...tools,
-                    [`agents/${agent}/agent`]: resolve(dirname, `agents/${agent}/index.ts`)
+                    ...tools
+                    // [`agents/${agent}/agent`]: resolve(dirname, `agents/${agent}/index.ts`)
                 }
             },
             rollupOptions: {
@@ -39,10 +39,11 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
                     chunkFileNames: '[name].js',
                     manualChunks(id: string) {
                         // console.log(`id: ${id}`)
-                        if (id.includes('tools/common') || id.includes('node_modules/semver')) {
-                            return `tools/tools-common`
-                        } else if (id.includes('node_modules')) {
-                            return `agents/${agent}/vendor`
+                        if (id.includes('node_modules/semver') || id.includes('node_modules/lru-cache') || id.includes('node_modules/yallist')) {
+                            return `tools/semver`
+                        }
+                        if (id.includes('node_modules')) {
+                            return `tools/vendor`
                         }
                     }
                 }

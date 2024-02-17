@@ -48,7 +48,7 @@ export interface IBuildAgent {
     which(tool: string, check?: boolean): Promise<string>
 }
 
-export async function getAgent(): Promise<IBuildAgent> {
+/*export async function getAgent(): Promise<IBuildAgent> {
     const agentType = import.meta.env.MODE
     console.log(`Agent Type loading: ${agentType}`)
     let agent: typeof import('@agents/azure') | typeof import('@agents/github') | typeof import('@agents/fake')
@@ -60,7 +60,7 @@ export async function getAgent(): Promise<IBuildAgent> {
         agent = await import('@agents/fake')
     }
     return new agent.BuildAgent()
-}
+}*/
 
 export interface IExecResult {
     stdout: string
