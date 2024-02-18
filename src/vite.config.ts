@@ -49,7 +49,7 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
                             return `common/semver`
                         }
                         if (id.includes('node_modules')) {
-                            return `common/vendor`
+                            return `agents/${agent}/vendor`
                         }
                     }
                 }
