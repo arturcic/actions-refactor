@@ -1,6 +1,6 @@
-import os from 'node:os';
-import fs from 'node:fs';
-import path from 'node:path';
+import os__default from 'node:os';
+import fs__default from 'node:fs';
+import path__default from 'node:path';
 import crypto from 'node:crypto';
 import { s as semver } from './semver.js';
 import { parseArgs } from 'util';
@@ -58,10 +58,10 @@ class DotnetTool {
     return toolPath;
   }
   async setDotnetRoot() {
-    if (os.platform() !== "win32" && !this.buildAgent.getVariable("DOTNET_ROOT")) {
+    if (os__default.platform() !== "win32" && !this.buildAgent.getVariable("DOTNET_ROOT")) {
       let dotnetPath = await this.buildAgent.which("dotnet", true);
-      dotnetPath = fs.readlinkSync(dotnetPath) || dotnetPath;
-      const dotnetRoot = path.dirname(dotnetPath);
+      dotnetPath = fs__default.readlinkSync(dotnetPath) || dotnetPath;
+      const dotnetRoot = path__default.dirname(dotnetPath);
       this.buildAgent.setVariable("DOTNET_ROOT", dotnetRoot);
     }
   }
@@ -69,7 +69,7 @@ class DotnetTool {
     return this.filePathSupplied(input) && this.buildAgent.fileExists(file);
   }
   filePathSupplied(file) {
-    const pathValue = path.resolve(this.buildAgent.getInput(file) || "");
+    const pathValue = path__default.resolve(this.buildAgent.getInput(file) || "");
     const repoRoot = this.buildAgent.getSourceDir();
     return pathValue !== repoRoot;
   }
@@ -128,9 +128,9 @@ class DotnetTool {
       throw new Error("Temp directory not set");
     }
     const uuid = crypto.randomUUID();
-    const tempPath = path.join(tempRootDir, uuid);
+    const tempPath = path__default.join(tempRootDir, uuid);
     this.buildAgent.debug(`Creating temp directory ${tempPath}`);
-    fs.mkdirSync(tempPath);
+    fs__default.mkdirSync(tempPath);
     return Promise.resolve(tempPath);
   }
   isExplicitVersion(versionSpec) {
@@ -169,4 +169,4 @@ class SettingsProvider {
 }
 
 export { DotnetTool as D, SettingsProvider as S, parseCliArgs as p };
-//# sourceMappingURL=common.js.map
+//# sourceMappingURL=tools.js.map

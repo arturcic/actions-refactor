@@ -1,5 +1,5 @@
-import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs } from './common.js';
-import { g as getAgent } from '../agents/common.js';
+import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs } from '../common/tools.js';
+import { g as getAgent } from '../common/agents.js';
 import 'util';
 
 var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
