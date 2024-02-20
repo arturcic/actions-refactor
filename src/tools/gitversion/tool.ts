@@ -43,7 +43,7 @@ export class GitVersionTool extends DotnetTool {
     private getRepoDir(targetPath: string): string {
         let workDir: string
         if (!targetPath) {
-            workDir = this.buildAgent.getSourceDir() || '.'
+            workDir = this.buildAgent.sourceDir || '.'
         } else {
             if (this.buildAgent.dirExists(targetPath)) {
                 workDir = targetPath

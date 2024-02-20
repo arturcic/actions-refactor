@@ -66,7 +66,7 @@ class BuildAgentBase {
   fileExists(file) {
     return fs__default.existsSync(file) && fs__default.statSync(file).isFile();
   }
-  async cacheDir(sourceDir, tool, version, arch) {
+  async cacheToolDir(sourceDir, tool, version, arch) {
     arch = arch || os.arch();
     if (!tool) {
       throw new Error("tool is a required parameter");
@@ -77,7 +77,7 @@ class BuildAgentBase {
     if (!sourceDir) {
       throw new Error("sourceDir is a required parameter");
     }
-    const cacheRoot = this.getCacheRootDir();
+    const cacheRoot = this.cacheDir;
     if (!cacheRoot) {
       this.debug("cache root not set");
       return Promise.resolve("");
@@ -102,7 +102,7 @@ class BuildAgentBase {
     if (!versionSpec) {
       throw new Error("versionSpec is a required parameter");
     }
-    const cacheRoot = this.getCacheRootDir();
+    const cacheRoot = this.cacheDir;
     if (!cacheRoot) {
       this.debug("cache root not set");
       return null;
@@ -123,6 +123,15 @@ class BuildAgentBase {
 class BuildAgent extends BuildAgentBase {
   get agentName() {
     return "Local";
+  }
+  get sourceDir() {
+    return this.getVariableAsPath("AGENT_SOURCE_DIR");
+  }
+  get tempDir() {
+    return this.getVariableAsPath("AGENT_TEMP_DIR");
+  }
+  get cacheDir() {
+    return this.getVariableAsPath("AGENT_TOOLS_DIR");
   }
   addPath(toolPath) {
     const newPath = toolPath + path.delimiter + process.env["PATH"];
@@ -154,9 +163,6 @@ class BuildAgent extends BuildAgentBase {
       });
     }
   }
-  getSourceDir = () => this.getVariableAsPath("AGENT_SOURCE_DIR");
-  getTempRootDir = () => this.getVariableAsPath("AGENT_TEMP_DIR");
-  getCacheRootDir = () => this.getVariableAsPath("AGENT_TOOLS_DIR");
   setFailed = (message, done) => this.error(`setFailed - ${message} - ${done}`);
   setOutput = (name, value) => this.debug(`setOutput - ${name} - ${value}`);
   setSucceeded = (message, done) => this.info(`setSucceeded - ${message} - ${done}`);

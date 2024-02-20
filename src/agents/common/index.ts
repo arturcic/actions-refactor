@@ -8,6 +8,9 @@ import process from 'node:process'
 
 export interface IBuildAgent {
     agentName: string
+    sourceDir: string
+    tempDir: string
+    cacheDir: string
 
     addPath(inputPath: string): void
 
@@ -21,19 +24,13 @@ export interface IBuildAgent {
 
     exec(exec: string, args: string[]): Promise<IExecResult>
 
-    cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string>
+    cacheToolDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string>
 
     dirExists(file: string): boolean
 
     fileExists(file: string): boolean
 
     findLocalTool(toolName: string, versionSpec: string, arch?: string): string | null
-
-    getSourceDir(): string | undefined
-
-    getTempRootDir(): string | undefined
-
-    getCacheRootDir(): string | undefined
 
     getInput(input: string, required?: boolean): string
 
@@ -58,6 +55,9 @@ export interface IBuildAgent {
 
 export abstract class BuildAgentBase implements IBuildAgent {
     abstract agentName: string
+    abstract sourceDir: string
+    abstract tempDir: string
+    abstract cacheDir: string
 
     abstract addPath(inputPath: string): void
 
@@ -70,12 +70,6 @@ export abstract class BuildAgentBase implements IBuildAgent {
     abstract error(message: string): void
 
     abstract exec(exec: string, args: string[]): Promise<IExecResult>
-
-    abstract getSourceDir(): string | undefined
-
-    abstract getTempRootDir(): string | undefined
-
-    abstract getCacheRootDir(): string | undefined
 
     abstract setFailed(message: string, done?: boolean | undefined): void
 
@@ -125,7 +119,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
         return fs.existsSync(file) && fs.statSync(file).isFile()
     }
 
-    async cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string> {
+    async cacheToolDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string> {
         arch = arch || os.arch()
         if (!tool) {
             throw new Error('tool is a required parameter')
@@ -137,7 +131,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
             throw new Error('sourceDir is a required parameter')
         }
 
-        const cacheRoot = this.getCacheRootDir()
+        const cacheRoot = this.cacheDir
         if (!cacheRoot) {
             this.debug('cache root not set')
             return Promise.resolve('')
@@ -167,7 +161,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
             throw new Error('versionSpec is a required parameter')
         }
 
-        const cacheRoot = this.getCacheRootDir()
+        const cacheRoot = this.cacheDir
         if (!cacheRoot) {
             this.debug('cache root not set')
             return null

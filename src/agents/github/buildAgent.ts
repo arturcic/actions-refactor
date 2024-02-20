@@ -8,6 +8,18 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         return 'GitHub Actions'
     }
 
+    get sourceDir(): string {
+        return this.getVariableAsPath('GITHUB_WORKSPACE')
+    }
+
+    get tempDir(): string {
+        return this.getVariableAsPath('RUNNER_TEMP')
+    }
+
+    get cacheDir(): string {
+        return this.getVariableAsPath('RUNNER_TOOL_CACHE')
+    }
+
     addPath = (inputPath: string): void => core.addPath(inputPath)
 
     debug = (message: string): void => core.debug(message)
@@ -28,12 +40,6 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
             stdout
         }
     }
-
-    getSourceDir = (): string => this.getVariableAsPath('GITHUB_WORKSPACE')
-
-    getTempRootDir = (): string => this.getVariableAsPath('RUNNER_TEMP')
-
-    getCacheRootDir = (): string => this.getVariableAsPath('RUNNER_TOOL_CACHE')
 
     setFailed = (message: string, _: boolean): void => core.setFailed(message)
 

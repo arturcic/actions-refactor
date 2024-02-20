@@ -21,7 +21,7 @@ class GitVersionSettingsProvider extends SettingsProvider {
     const updateAssemblyInfo = this.buildAgent.getBooleanInput(ExecuteFields.updateAssemblyInfo);
     const updateAssemblyInfoFilename = this.buildAgent.getInput(ExecuteFields.updateAssemblyInfoFilename);
     const additionalArguments = this.buildAgent.getInput(ExecuteFields.additionalArguments);
-    const srcDir = this.buildAgent.getSourceDir()?.replace(/\\/g, "/");
+    const srcDir = this.buildAgent.sourceDir?.replace(/\\/g, "/");
     return {
       targetPath,
       useConfigFile,
@@ -68,7 +68,7 @@ class GitVersionTool extends DotnetTool {
   getRepoDir(targetPath) {
     let workDir;
     if (!targetPath) {
-      workDir = this.buildAgent.getSourceDir() || ".";
+      workDir = this.buildAgent.sourceDir || ".";
     } else {
       if (this.buildAgent.dirExists(targetPath)) {
         workDir = targetPath;

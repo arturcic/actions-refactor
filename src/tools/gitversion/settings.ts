@@ -18,7 +18,7 @@ export class GitVersionSettingsProvider extends SettingsProvider implements IGit
 
         const additionalArguments = this.buildAgent.getInput(ExecuteFields.additionalArguments)
 
-        const srcDir = this.buildAgent.getSourceDir()?.replace(/\\/g, '/')
+        const srcDir = this.buildAgent.sourceDir?.replace(/\\/g, '/')
 
         return {
             targetPath,

@@ -11,6 +11,18 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         return 'Local'
     }
 
+    get sourceDir(): string {
+        return this.getVariableAsPath('AGENT_SOURCE_DIR')
+    }
+
+    get tempDir(): string {
+        return this.getVariableAsPath('AGENT_TEMP_DIR')
+    }
+
+    get cacheDir(): string {
+        return this.getVariableAsPath('AGENT_TOOLS_DIR')
+    }
+
     addPath(toolPath: string): void {
         const newPath = toolPath + path.delimiter + process.env['PATH']
         this.debug(`new Path: ${newPath}`)
@@ -47,12 +59,6 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
             })
         }
     }
-
-    getSourceDir = (): string => this.getVariableAsPath('AGENT_SOURCE_DIR')
-
-    getTempRootDir = (): string => this.getVariableAsPath('AGENT_TEMP_DIR')
-
-    getCacheRootDir = (): string => this.getVariableAsPath('AGENT_TOOLS_DIR')
 
     setFailed = (message: string, done?: boolean): void => this.error(`setFailed - ${message} - ${done}`)
 

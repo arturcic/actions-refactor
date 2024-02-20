@@ -8,6 +8,18 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         return 'Azure Pipelines'
     }
 
+    get sourceDir(): string {
+        return this.getVariableAsPath('Build.SourcesDirectory')
+    }
+
+    get tempDir(): string {
+        return this.getVariableAsPath('Agent.TempDirectory')
+    }
+
+    get cacheDir(): string {
+        return this.getVariableAsPath('Agent.ToolsDirectory')
+    }
+
     addPath = (inputPath: string): void => toolLib.prependPath(inputPath)
 
     debug = (message: string): void => taskLib.debug(message)
@@ -30,12 +42,6 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
             stdout: result.stdout
         })
     }
-
-    getSourceDir = (): string | undefined => this.getVariableAsPath('Build.SourcesDirectory')
-
-    getTempRootDir = (): string | undefined => this.getVariableAsPath('Agent.TempDirectory')
-
-    getCacheRootDir = (): string | undefined => this.getVariableAsPath('Agent.ToolsDirectory')
 
     setFailed = (message: string, done?: boolean): void => taskLib.setResult(taskLib.TaskResult.Failed, message, done)
 

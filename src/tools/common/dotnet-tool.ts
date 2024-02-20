@@ -92,7 +92,7 @@ export abstract class DotnetTool implements IDotnetTool {
 
     protected filePathSupplied(file: string): boolean {
         const pathValue = path.resolve(this.buildAgent.getInput(file) || '')
-        const repoRoot = this.buildAgent.getSourceDir()
+        const repoRoot = this.buildAgent.sourceDir
         return pathValue !== repoRoot
     }
 
@@ -158,11 +158,11 @@ export abstract class DotnetTool implements IDotnetTool {
         }
         this.buildAgent.info(message)
 
-        return await this.buildAgent.cacheDir(tempDirectory, toolName, semverVersion)
+        return await this.buildAgent.cacheToolDir(tempDirectory, toolName, semverVersion)
     }
 
     async createTempDir(): Promise<string> {
-        const tempRootDir = this.buildAgent.getTempRootDir()
+        const tempRootDir = this.buildAgent.tempDir
         if (!tempRootDir) {
             throw new Error('Temp directory not set')
         }

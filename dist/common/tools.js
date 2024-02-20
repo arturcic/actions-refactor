@@ -70,7 +70,7 @@ class DotnetTool {
   }
   filePathSupplied(file) {
     const pathValue = path.resolve(this.buildAgent.getInput(file) || "");
-    const repoRoot = this.buildAgent.getSourceDir();
+    const repoRoot = this.buildAgent.sourceDir;
     return pathValue !== repoRoot;
   }
   async queryLatestMatch(toolName, versionSpec, includePrerelease) {
@@ -120,10 +120,10 @@ class DotnetTool {
       throw new Error(message);
     }
     this.buildAgent.info(message);
-    return await this.buildAgent.cacheDir(tempDirectory, toolName, semverVersion);
+    return await this.buildAgent.cacheToolDir(tempDirectory, toolName, semverVersion);
   }
   async createTempDir() {
-    const tempRootDir = this.buildAgent.getTempRootDir();
+    const tempRootDir = this.buildAgent.tempDir;
     if (!tempRootDir) {
       throw new Error("Temp directory not set");
     }
