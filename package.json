@@ -7,9 +7,11 @@
         "node": ">=20.0.0"
     },
     "scripts": {
-        "build:fake": "vite build --config src/vite.config.ts --mode fake",
-        "build:azure": "vite build --config src/vite.config.ts --mode azure",
-        "build:github": "vite build --config src/vite.config.ts --mode github",
+        "build:tools": "vite build --config src/vite.tools.config.ts",
+        "build:agent:fake": "vite build --config src/vite.agent.config.ts --mode fake",
+        "build:agent:azure": "vite build --config src/vite.agent.config.ts --mode azure",
+        "build:agent:github": "vite build --config src/vite.agent.config.ts --mode github",
+        "build:agents": "npm run build:agent:fake && npm run build:agent:azure && npm run build:agent:github",
         "run:fake:gitversion": "node dist/tools/gitversion.js --buildAgent fake",
         "run:azure:gitversion": "node dist/azure/gitversion.js",
         "run:github:gitversion": "node dist/github/gitversion.js",
@@ -18,7 +20,7 @@
         "run:github:gitreleasemanager": "node dist/github/gitreleasemanager.js",
         "lint": "eslint --ext .ts src",
         "format": "npx prettier src/**/*.ts --write",
-        "test": "vitest --config src/vite.config.ts"
+        "test": "vitest --config src/vite.tools.config.ts"
     },
     "devDependencies": {
         "@types/node": "^20.11.17",

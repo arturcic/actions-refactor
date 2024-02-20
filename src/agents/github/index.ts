@@ -8,25 +8,15 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         return 'GitHub Actions'
     }
 
-    addPath(inputPath: string): void {
-        core.addPath(inputPath)
-    }
+    addPath = (inputPath: string): void => core.addPath(inputPath)
 
-    debug(message: string): void {
-        core.debug(message)
-    }
+    debug = (message: string): void => core.debug(message)
 
-    info(message: string): void {
-        core.info(message)
-    }
+    info = (message: string): void => core.info(message)
 
-    warn(message: string): void {
-        core.warning(message)
-    }
+    warn = (message: string): void => core.warning(message)
 
-    error(message: string): void {
-        core.error(message)
-    }
+    error = (message: string): void => core.error(message)
 
     async exec(exec: string, args: string[]): Promise<IExecResult> {
         const dotnetPath = await io.which(exec, true)
@@ -39,35 +29,21 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         }
     }
 
-    getSourceDir(): string {
-        return this.getVariable('GITHUB_WORKSPACE')
-    }
+    getSourceDir = (): string => this.getVariable('GITHUB_WORKSPACE')
 
-    getTempRootDir(): string {
-        return this.getVariable('RUNNER_TEMP')
-    }
+    getTempRootDir = (): string => this.getVariable('RUNNER_TEMP')
 
-    getCacheRootDir(): string {
-        return this.getVariable('RUNNER_TOOL_CACHE')
-    }
+    getCacheRootDir = (): string => this.getVariable('RUNNER_TOOL_CACHE')
 
-    setFailed(message: string, _: boolean): void {
-        core.setFailed(message)
-    }
+    setFailed = (message: string, _: boolean): void => core.setFailed(message)
 
-    setOutput(name: string, value: string): void {
-        core.setOutput(name, value)
-    }
+    setOutput = (name: string, value: string): void => core.setOutput(name, value)
 
     setSucceeded(_message: string, _done?: boolean): void {
         //
     }
 
-    setVariable(name: string, value: string): void {
-        core.exportVariable(name, value)
-    }
+    setVariable = (name: string, value: string): void => core.exportVariable(name, value)
 
-    async which(tool: string, check?: boolean): Promise<string> {
-        return io.which(tool, check)
-    }
+    which = async (tool: string, check?: boolean): Promise<string> => io.which(tool, check)
 }

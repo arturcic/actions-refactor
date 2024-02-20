@@ -2,7 +2,7 @@ import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { a as semver } from './semver.js';
+import { s as semver } from './semver.js';
 import { parseArgs } from 'util';
 
 var SetupFields = /* @__PURE__ */ ((SetupFields2) => {

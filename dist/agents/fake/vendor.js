@@ -3019,4 +3019,4 @@ var semver = {
 };
 
 export { semver as s };
-//# sourceMappingURL=semver.js.map
+//# sourceMappingURL=vendor.js.map

@@ -18,21 +18,13 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         this.info(`Updated PATH: ${process.env['PATH']}`)
     }
 
-    debug(message: string): void {
-        console.log(`[debug] ${message}`)
-    }
+    debug = (message: string): void => console.log(`[debug] ${message}`)
 
-    info(message: string): void {
-        console.log(`[info] - ${message}`)
-    }
+    info = (message: string): void => console.log(`[info] - ${message}`)
 
-    warn(message: string): void {
-        console.warn(`[warn] - ${message}`)
-    }
+    warn = (message: string): void => console.warn(`[warn] - ${message}`)
 
-    error(message: string): void {
-        console.error(`[error] - ${message}`)
-    }
+    error = (message: string): void => console.error(`[error] - ${message}`)
 
     async exec(cmd: string, args: string[]): Promise<IExecResult> {
         const exec = util.promisify(execNonPromise)
@@ -56,29 +48,17 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         }
     }
 
-    getSourceDir(): string {
-        return this.getVariable('AGENT_SOURCE_DIR')
-    }
+    getSourceDir = (): string => this.getVariable('AGENT_SOURCE_DIR')
 
-    getTempRootDir(): string {
-        return this.getVariable('AGENT_TEMP_DIR')
-    }
+    getTempRootDir = (): string => this.getVariable('AGENT_TEMP_DIR')
 
-    getCacheRootDir(): string {
-        return this.getVariable('AGENT_TOOLS_DIR')
-    }
+    getCacheRootDir = (): string => this.getVariable('AGENT_TOOLS_DIR')
 
-    setFailed(message: string, done?: boolean): void {
-        console.log(`setFailed - ${message} - ${done}`)
-    }
+    setFailed = (message: string, done?: boolean): void => console.log(`setFailed - ${message} - ${done}`)
 
-    setOutput(name: string, value: string): void {
-        console.log(`setOutput - ${name} - ${value}`)
-    }
+    setOutput = (name: string, value: string): void => console.log(`setOutput - ${name} - ${value}`)
 
-    setSucceeded(message: string, done?: boolean): void {
-        console.log(`setSucceeded - ${message} - ${done}`)
-    }
+    setSucceeded = (message: string, done?: boolean): void => console.log(`setSucceeded - ${message} - ${done}`)
 
     setVariable(name: string, value: string): void {
         this.debug(`setVariable - ${name} - ${value}`)
