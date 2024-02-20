@@ -1,10 +1,10 @@
-import { ISettingsProvider, ISetupSettings, SetupFields } from './models'
+import { ISettingsProvider, SetupSettings, SetupFields } from './models'
 import { IBuildAgent } from '@agents/common'
 
 export class SettingsProvider implements ISettingsProvider {
     constructor(protected buildAgent: IBuildAgent) {}
 
-    getSetupSettings(): ISetupSettings {
+    getSetupSettings(): SetupSettings {
         const versionSpec = this.buildAgent.getInput(SetupFields.versionSpec)
         const includePrerelease = this.buildAgent.getBooleanInput(SetupFields.includePrerelease)
         const ignoreFailedSources = this.buildAgent.getBooleanInput(SetupFields.ignoreFailedSources)

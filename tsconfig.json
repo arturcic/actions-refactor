@@ -6,9 +6,7 @@
         "moduleResolution": "bundler",
         "useDefineForClassFields": true,
         "lib": [
-            "ES2020",
-            /*TODO check is ts 5.3 has fetch API types defined, and then remove*/
-            "dom"
+            "ES2020"
         ],
         "types": [
             "node",
@@ -29,15 +27,6 @@
         "paths": {
             "@agents/common": [
                 "./agents/common"
-            ],
-            "@agents/fake": [
-                "./agents/fake"
-            ],
-            "@agents/azure": [
-                "./agents/azure"
-            ],
-            "@agents/github": [
-                "./agents/github"
             ],
             "@tools/common": [
                 "./tools/common"

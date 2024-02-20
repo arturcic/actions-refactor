@@ -10,7 +10,7 @@ export interface CliArgs {
     buildAgent: string | undefined
 }
 
-export interface ISetupSettings {
+export interface SetupSettings {
     [SetupFields.versionSpec]: string
     [SetupFields.includePrerelease]: boolean
     [SetupFields.ignoreFailedSources]: boolean
@@ -18,5 +18,5 @@ export interface ISetupSettings {
 }
 
 export interface ISettingsProvider {
-    getSetupSettings(): ISetupSettings
+    getSetupSettings(): SetupSettings
 }

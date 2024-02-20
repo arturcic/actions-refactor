@@ -4,6 +4,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { s as semver } from './semver.js';
 import { parseArgs } from 'util';
+import 'node:process';
 
 var SetupFields = /* @__PURE__ */ ((SetupFields2) => {
   SetupFields2["includePrerelease"] = "includePrerelease";
@@ -150,6 +151,12 @@ function parseCliArgs() {
   }).values;
 }
 
+async function getAgent(buildAgent) {
+  const agent = `../agents/${buildAgent}/buildAgent.js`;
+  const module = await import(agent);
+  return new module.BuildAgent();
+}
+
 class SettingsProvider {
   constructor(buildAgent) {
     this.buildAgent = buildAgent;
@@ -168,5 +175,5 @@ class SettingsProvider {
   }
 }
 
-export { DotnetTool as D, SettingsProvider as S, parseCliArgs as p };
+export { DotnetTool as D, SettingsProvider as S, getAgent as g, parseCliArgs as p };
 //# sourceMappingURL=tools.js.map

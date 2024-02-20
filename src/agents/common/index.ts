@@ -1,10 +1,10 @@
 /// <reference types="vite/client" />
 
 import os from 'node:os'
-import * as semver from 'semver'
 import path from 'node:path'
 import fs from 'node:fs'
 import process from 'node:process'
+import * as semver from 'semver'
 
 export interface IBuildAgent {
     agentName: string

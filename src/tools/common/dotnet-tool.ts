@@ -15,6 +15,8 @@ export interface IDotnetTool {
     install(): Promise<string>
 }
 
+type NugetVersions = { data: { versions: { version: string }[] }[] }
+
 export abstract class DotnetTool implements IDotnetTool {
     private static readonly nugetRoot: string = 'https://azuresearch-usnc.nuget.org/'
 
@@ -112,7 +114,7 @@ export abstract class DotnetTool implements IDotnetTool {
             return null
         }
 
-        const { data }: { data: { versions: { version: string }[] }[] } = await response.json()
+        const { data }: NugetVersions = (await response.json()) as NugetVersions
 
         const versions = data[0].versions.map(x => x.version)
         if (!versions || !versions.length) {
