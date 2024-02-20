@@ -1,14 +1,12 @@
-import * as os from 'node:os'
-import * as fs from 'node:fs'
 import * as path from 'node:path'
 import * as process from 'node:process'
 import * as util from 'node:util'
 import { exec as execNonPromise } from 'node:child_process'
 
 import { lookPath } from './internal/lookPath'
-import type { IBuildAgent, IExecResult } from '@agents/common'
+import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
 
-export class BuildAgent implements IBuildAgent {
+export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     get agentName(): string {
         return 'Local'
     }
@@ -58,105 +56,16 @@ export class BuildAgent implements IBuildAgent {
         }
     }
 
-    async cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string> {
-        arch = arch || os.arch()
-        if (!tool) {
-            throw new Error('tool is a required parameter')
-        }
-        if (!version) {
-            throw new Error('version is a required parameter')
-        }
-        if (!sourceDir) {
-            throw new Error('sourceDir is a required parameter')
-        }
-
-        const cacheRoot = this.getCacheRootDir()
-        if (!cacheRoot) {
-            this.debug('cache root not set')
-            return Promise.resolve('')
-        }
-
-        const destPath = path.join(cacheRoot, tool, version, arch)
-        if (this.dirExists(destPath)) {
-            this.debug(`Destination directory ${destPath} already exists, removing`)
-            fs.rmSync(destPath, { recursive: true, force: true, maxRetries: 3, retryDelay: 1000 })
-        }
-
-        this.debug(`Copying ${sourceDir} to ${destPath}`)
-        fs.mkdirSync(destPath, { recursive: true })
-        fs.cpSync(sourceDir, destPath, { recursive: true, force: true })
-
-        this.debug(`Caching ${tool}@${version} (${arch}) from ${sourceDir}`)
-        return Promise.resolve(destPath)
-    }
-
-    dirExists(file: string): boolean {
-        return fs.existsSync(file) && fs.statSync(file).isDirectory()
-    }
-
-    fileExists(file: string): boolean {
-        return fs.existsSync(file) && fs.statSync(file).isFile()
-    }
-
-    findLocalTool(toolName: string, versionSpec: string, arch?: string): string | null {
-        arch = arch || os.arch()
-        if (!toolName) {
-            throw new Error('toolName is a required parameter')
-        }
-        if (!versionSpec) {
-            throw new Error('versionSpec is a required parameter')
-        }
-
-        const cacheRoot = this.getCacheRootDir()
-        if (!cacheRoot) {
-            this.debug('cache root not set')
-            return null
-        }
-
-        this.info(`Looking for local tool ${toolName}@${versionSpec} (${arch})`)
-        const toolPath = path.join(cacheRoot, toolName, versionSpec, arch)
-        if (!this.dirExists(toolPath)) {
-            this.info(`Directory ${toolPath} not found`)
-            return null
-        } else {
-            this.info(`Found tool ${toolName}@${versionSpec} (${arch})`)
-        }
-
-        return toolPath
-    }
-
     getSourceDir(): string {
-        const val = process.env['AGENT_SOURCE_DIR'] || ''
-        return path.normalize(val.trim())
+        return this.getVariable('AGENT_SOURCE_DIR')
     }
 
     getTempRootDir(): string {
-        const val = process.env['AGENT_TEMP_DIR'] || ''
-        return path.normalize(val.trim())
+        return this.getVariable('AGENT_TEMP_DIR')
     }
 
     getCacheRootDir(): string {
-        const val = process.env['AGENT_TOOLS_DIR'] || ''
-        return path.normalize(val.trim())
-    }
-
-    getBooleanInput(input: string, required?: boolean): boolean {
-        const inputValue = this.getInput(input, required)
-        return (inputValue || 'false').toLowerCase() === 'true'
-    }
-
-    getInput(input: string, required?: boolean): string {
-        const val = process.env[`INPUT_${input.replace(/ /g, '_').toUpperCase()}`] || ''
-        if (required && !val) {
-            throw new Error(`Input required and not supplied: ${input}`)
-        }
-        return val.trim()
-    }
-
-    getListInput(input: string, required?: boolean): string[] {
-        return this.getInput(input, required)
-            .split('\n')
-            .filter(x => x !== '')
+        return this.getVariable('AGENT_TOOLS_DIR')
     }
 
     setFailed(message: string, done?: boolean): void {
@@ -169,11 +78,6 @@ export class BuildAgent implements IBuildAgent {
 
     setSucceeded(message: string, done?: boolean): void {
         console.log(`setSucceeded - ${message} - ${done}`)
-    }
-
-    getVariable(name: string): string {
-        this.debug(`getVariable - ${name}`)
-        return process.env[name] || ''
     }
 
     setVariable(name: string, value: string): void {

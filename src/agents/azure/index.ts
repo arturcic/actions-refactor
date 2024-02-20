@@ -1,9 +1,9 @@
 import * as taskLib from 'azure-pipelines-task-lib/task'
 import * as toolLib from 'azure-pipelines-tool-lib/tool'
 
-import type { IBuildAgent, IExecResult } from '@agents/common'
+import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
 
-export class BuildAgent implements IBuildAgent {
+export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     get agentName(): string {
         return 'Azure Pipelines'
     }
@@ -41,22 +41,6 @@ export class BuildAgent implements IBuildAgent {
         })
     }
 
-    async cacheDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string> {
-        return toolLib.cacheDir(sourceDir, tool, version, arch)
-    }
-
-    dirExists(file: string): boolean {
-        return taskLib.exist(file) && taskLib.stats(file).isDirectory()
-    }
-
-    fileExists(file: string): boolean {
-        return taskLib.exist(file) && taskLib.stats(file).isFile()
-    }
-
-    findLocalTool(toolName: string, versionSpec: string, arch?: string): string | null {
-        return toolLib.findLocalTool(toolName, versionSpec, arch)
-    }
-
     getSourceDir(): string | undefined {
         return this.getVariable('Build.SourcesDirectory')
     }
@@ -69,20 +53,6 @@ export class BuildAgent implements IBuildAgent {
         return this.getVariable('Agent.ToolsDirectory')
     }
 
-    getBooleanInput(input: string, required?: boolean): boolean {
-        return taskLib.getBoolInput(input, required)
-    }
-
-    getInput(input: string, required?: boolean): string {
-        return taskLib.getInput(input, required)?.trim() ?? ''
-    }
-
-    getListInput(input: string, required?: boolean): string[] {
-        return this.getInput(input, required)
-            .split('\n')
-            .filter(x => x !== '')
-    }
-
     setFailed(message: string, done?: boolean): void {
         taskLib.setResult(taskLib.TaskResult.Failed, message, done)
     }
@@ -93,10 +63,6 @@ export class BuildAgent implements IBuildAgent {
 
     setSucceeded(message: string, done?: boolean): void {
         taskLib.setResult(taskLib.TaskResult.Succeeded, message, done)
-    }
-
-    getVariable(name: string): string | undefined {
-        return taskLib.getVariable(name)
     }
 
     setVariable(name: string, value: string): void {
