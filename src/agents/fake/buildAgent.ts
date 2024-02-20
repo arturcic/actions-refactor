@@ -48,17 +48,17 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         }
     }
 
-    getSourceDir = (): string => this.getVariable('AGENT_SOURCE_DIR')
+    getSourceDir = (): string => this.getVariableAsPath('AGENT_SOURCE_DIR')
 
-    getTempRootDir = (): string => this.getVariable('AGENT_TEMP_DIR')
+    getTempRootDir = (): string => this.getVariableAsPath('AGENT_TEMP_DIR')
 
-    getCacheRootDir = (): string => this.getVariable('AGENT_TOOLS_DIR')
+    getCacheRootDir = (): string => this.getVariableAsPath('AGENT_TOOLS_DIR')
 
-    setFailed = (message: string, done?: boolean): void => console.log(`setFailed - ${message} - ${done}`)
+    setFailed = (message: string, done?: boolean): void => this.error(`setFailed - ${message} - ${done}`)
 
-    setOutput = (name: string, value: string): void => console.log(`setOutput - ${name} - ${value}`)
+    setOutput = (name: string, value: string): void => this.debug(`setOutput - ${name} - ${value}`)
 
-    setSucceeded = (message: string, done?: boolean): void => console.log(`setSucceeded - ${message} - ${done}`)
+    setSucceeded = (message: string, done?: boolean): void => this.info(`setSucceeded - ${message} - ${done}`)
 
     setVariable(name: string, value: string): void {
         this.debug(`setVariable - ${name} - ${value}`)
@@ -67,8 +67,9 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
 
     async which(tool: string, _check?: boolean): Promise<string> {
         this.debug(`looking for tool '${tool}' in PATH`)
-        const toolPath = await lookPath(tool)
+        let toolPath = await lookPath(tool)
         if (toolPath) {
+            toolPath = path.resolve(toolPath)
             this.debug(`found tool '${tool}' in PATH: ${toolPath}`)
             return Promise.resolve(toolPath)
         }

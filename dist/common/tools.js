@@ -48,10 +48,10 @@ class DotnetTool {
     }
     if (!toolPath) {
       toolPath = await this.installTool(this.toolName, version, setupSettings.ignoreFailedSources);
+      this.buildAgent.info("--------------------------");
+      this.buildAgent.info(`${this.toolName} version: ${version} installed.`);
+      this.buildAgent.info("--------------------------");
     }
-    this.buildAgent.info("--------------------------");
-    this.buildAgent.info(`${this.toolName} version: ${version} installed.`);
-    this.buildAgent.info("--------------------------");
     this.buildAgent.info(`Prepending ${toolPath} to PATH`);
     this.buildAgent.debug(`toolPath: ${toolPath}`);
     this.buildAgent.addPath(toolPath);
@@ -130,7 +130,7 @@ class DotnetTool {
     const uuid = crypto.randomUUID();
     const tempPath = path.join(tempRootDir, uuid);
     this.buildAgent.debug(`Creating temp directory ${tempPath}`);
-    fs.mkdirSync(tempPath);
+    fs.mkdirSync(tempPath, { recursive: true });
     return Promise.resolve(tempPath);
   }
   isExplicitVersion(versionSpec) {

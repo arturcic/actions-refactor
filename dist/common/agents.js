@@ -5,7 +5,7 @@ import 'node:fs';
 import 'node:process';
 
 async function getAgent(buildAgent) {
-  const agent = `../agents/${buildAgent}/agent.js`;
+  const agent = `../agents/${buildAgent}/buildAgent.js`;
   const module = await import(agent);
   return new module.BuildAgent();
 }

@@ -49,6 +49,8 @@ export interface IBuildAgent {
 
     getVariable(name: string): string | undefined
 
+    getVariableAsPath(name: string): string
+
     setVariable(name: string, value: string): void
 
     which(tool: string, check?: boolean): Promise<string>
@@ -108,7 +110,11 @@ export abstract class BuildAgentBase implements IBuildAgent {
     getVariable(name: string): string {
         this.debug(`getVariable - ${name}`)
         const val = process.env[name] || ''
-        return path.normalize(val.trim())
+        return val.trim()
+    }
+
+    getVariableAsPath(name: string): string {
+        return path.resolve(path.normalize(this.getVariable(name)))
     }
 
     dirExists(file: string): boolean {
@@ -189,7 +195,7 @@ export interface IExecResult {
 }
 
 export async function getAgent(buildAgent: string | undefined): Promise<IBuildAgent> {
-    const agent = `../agents/${buildAgent}/agent.js`
+    const agent = `../agents/${buildAgent}/buildAgent.js`
     const module: { BuildAgent: new () => IBuildAgent } = await import(agent)
     return new module.BuildAgent()
 }

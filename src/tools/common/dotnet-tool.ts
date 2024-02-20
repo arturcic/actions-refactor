@@ -62,11 +62,10 @@ export abstract class DotnetTool implements IDotnetTool {
         if (!toolPath) {
             // Download, extract, cache
             toolPath = await this.installTool(this.toolName, version, setupSettings.ignoreFailedSources)
+            this.buildAgent.info('--------------------------')
+            this.buildAgent.info(`${this.toolName} version: ${version} installed.`)
+            this.buildAgent.info('--------------------------')
         }
-
-        this.buildAgent.info('--------------------------')
-        this.buildAgent.info(`${this.toolName} version: ${version} installed.`)
-        this.buildAgent.info('--------------------------')
 
         // Prepend the tool's path. This prepends the PATH for the current process and
         // instructs the agent to prepend for each task that follows.
@@ -171,7 +170,7 @@ export abstract class DotnetTool implements IDotnetTool {
         const uuid = crypto.randomUUID()
         const tempPath = path.join(tempRootDir, uuid)
         this.buildAgent.debug(`Creating temp directory ${tempPath}`)
-        fs.mkdirSync(tempPath)
+        fs.mkdirSync(tempPath, { recursive: true })
         return Promise.resolve(tempPath)
     }
 

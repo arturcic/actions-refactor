@@ -29,11 +29,11 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         }
     }
 
-    getSourceDir = (): string => this.getVariable('GITHUB_WORKSPACE')
+    getSourceDir = (): string => this.getVariableAsPath('GITHUB_WORKSPACE')
 
-    getTempRootDir = (): string => this.getVariable('RUNNER_TEMP')
+    getTempRootDir = (): string => this.getVariableAsPath('RUNNER_TEMP')
 
-    getCacheRootDir = (): string => this.getVariable('RUNNER_TOOL_CACHE')
+    getCacheRootDir = (): string => this.getVariableAsPath('RUNNER_TOOL_CACHE')
 
     setFailed = (message: string, _: boolean): void => core.setFailed(message)
 

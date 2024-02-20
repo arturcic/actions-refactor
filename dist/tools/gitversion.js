@@ -57,19 +57,18 @@ class GitVersionTool extends DotnetTool {
       try {
         const value = output[property]?.toString();
         this.buildAgent.setOutput(name, value);
-        this.buildAgent.setOutput(`GitVersion_${name}`, value);
+        this.buildAgent.setOutput(`GitVersion_${property}`, value);
         this.buildAgent.setVariable(name, value);
-        this.buildAgent.setVariable(`GitVersion_${name}`, value);
+        this.buildAgent.setVariable(`GitVersion_${property}`, value);
       } catch (error) {
-        this.buildAgent.error(`Unable to set output/variable for ${name}`);
+        this.buildAgent.error(`Unable to set output/variable for ${property}`);
       }
     }
   }
   getRepoDir(targetPath) {
     let workDir;
-    const srcDir = this.buildAgent.getSourceDir() || ".";
     if (!targetPath) {
-      workDir = srcDir;
+      workDir = this.buildAgent.getSourceDir() || ".";
     } else {
       if (this.buildAgent.dirExists(targetPath)) {
         workDir = targetPath;

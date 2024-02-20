@@ -31,11 +31,11 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         })
     }
 
-    getSourceDir = (): string | undefined => this.getVariable('Build.SourcesDirectory')
+    getSourceDir = (): string | undefined => this.getVariableAsPath('Build.SourcesDirectory')
 
-    getTempRootDir = (): string | undefined => this.getVariable('Agent.TempDirectory')
+    getTempRootDir = (): string | undefined => this.getVariableAsPath('Agent.TempDirectory')
 
-    getCacheRootDir = (): string | undefined => this.getVariable('Agent.ToolsDirectory')
+    getCacheRootDir = (): string | undefined => this.getVariableAsPath('Agent.ToolsDirectory')
 
     setFailed = (message: string, done?: boolean): void => taskLib.setResult(taskLib.TaskResult.Failed, message, done)
 

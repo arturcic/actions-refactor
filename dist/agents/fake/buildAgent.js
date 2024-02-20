@@ -55,7 +55,10 @@ class BuildAgentBase {
   getVariable(name) {
     this.debug(`getVariable - ${name}`);
     const val = process__default.env[name] || "";
-    return path__default.normalize(val.trim());
+    return val.trim();
+  }
+  getVariableAsPath(name) {
+    return path__default.resolve(path__default.normalize(this.getVariable(name)));
   }
   dirExists(file) {
     return fs__default.existsSync(file) && fs__default.statSync(file).isDirectory();
@@ -151,20 +154,21 @@ class BuildAgent extends BuildAgentBase {
       });
     }
   }
-  getSourceDir = () => this.getVariable("AGENT_SOURCE_DIR");
-  getTempRootDir = () => this.getVariable("AGENT_TEMP_DIR");
-  getCacheRootDir = () => this.getVariable("AGENT_TOOLS_DIR");
-  setFailed = (message, done) => console.log(`setFailed - ${message} - ${done}`);
-  setOutput = (name, value) => console.log(`setOutput - ${name} - ${value}`);
-  setSucceeded = (message, done) => console.log(`setSucceeded - ${message} - ${done}`);
+  getSourceDir = () => this.getVariableAsPath("AGENT_SOURCE_DIR");
+  getTempRootDir = () => this.getVariableAsPath("AGENT_TEMP_DIR");
+  getCacheRootDir = () => this.getVariableAsPath("AGENT_TOOLS_DIR");
+  setFailed = (message, done) => this.error(`setFailed - ${message} - ${done}`);
+  setOutput = (name, value) => this.debug(`setOutput - ${name} - ${value}`);
+  setSucceeded = (message, done) => this.info(`setSucceeded - ${message} - ${done}`);
   setVariable(name, value) {
     this.debug(`setVariable - ${name} - ${value}`);
     process.env[name] = value;
   }
   async which(tool, _check) {
     this.debug(`looking for tool '${tool}' in PATH`);
-    const toolPath = await lookPath(tool);
+    let toolPath = await lookPath(tool);
     if (toolPath) {
+      toolPath = path.resolve(toolPath);
       this.debug(`found tool '${tool}' in PATH: ${toolPath}`);
       return Promise.resolve(toolPath);
     }
@@ -173,4 +177,4 @@ class BuildAgent extends BuildAgentBase {
 }
 
 export { BuildAgent };
-//# sourceMappingURL=agent.js.map
+//# sourceMappingURL=buildAgent.js.map
