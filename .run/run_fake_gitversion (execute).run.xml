@@ -1,23 +1,19 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="run:fake:gitversion (execute)" type="js.build_tools.npm" folderName="run"
-                   activateToolWindowBeforeRun="false">
-        <package-json value="$PROJECT_DIR$/package.json"/>
-        <command value="run"/>
-        <scripts>
-            <script value="run:fake:gitversion"/>
-        </scripts>
-        <arguments value="-- --command execute"/>
-        <node-interpreter value="project"/>
-        <envs>
-            <env name="AGENT_SOURCE_DIR" value="."/>
-            <env name="AGENT_TEMP_DIR" value="./.debug/temp"/>
-            <env name="AGENT_TOOLS_DIR" value="./.debug/tools"/>
-            <env name="DOTNET_ROOT" value="C:\Program Files\dotnet"/>
-            <env name="PATH" value="./.debug/tools/GitVersion.Tool/5.12.0/x64"/>
-        </envs>
-        <method v="2">
-            <option name="RunConfigurationTask" enabled="true" run_configuration_name="build:fake"
-                    run_configuration_type="js.build_tools.npm"/>
-        </method>
-    </configuration>
+  <configuration default="false" name="run:fake:gitversion (execute)" type="js.build_tools.npm" folderName="run" activateToolWindowBeforeRun="false">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="run:fake:gitversion" />
+    </scripts>
+    <arguments value="-- --command execute" />
+    <node-interpreter value="project" />
+    <node-options value="-r dotenv/config" />
+    <envs>
+      <env name="DOTENV_CONFIG_PATH" value="./envs/gitversion/execute/fake.env" />
+    </envs>
+    <method v="2">
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="build:tools" run_configuration_type="js.build_tools.npm" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="build:agent:fake" run_configuration_type="js.build_tools.npm" />
+    </method>
+  </configuration>
 </component>
