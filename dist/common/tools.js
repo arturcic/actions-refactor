@@ -1,9 +1,9 @@
 import 'node:process';
-import path from 'node:path';
-import fs from 'node:fs/promises';
-import os from 'node:os';
+import * as path from 'node:path';
+import * as fs from 'node:fs/promises';
+import * as os from 'node:os';
 import { s as semver } from './semver.js';
-import crypto from 'node:crypto';
+import * as crypto from 'node:crypto';
 import { parseArgs } from 'util';
 
 async function getAgent(buildAgent) {
@@ -52,6 +52,11 @@ class DotnetTool {
     let toolPath = null;
     if (!setupSettings.preferLatestVersion) {
       toolPath = await this.buildAgent.findLocalTool(this.toolName, version);
+      if (toolPath) {
+        this.buildAgent.info("--------------------------");
+        this.buildAgent.info(`${this.toolName} version: ${version} found in local cache at ${toolPath}.`);
+        this.buildAgent.info("--------------------------");
+      }
     }
     if (!toolPath) {
       toolPath = await this.installTool(this.toolName, version, setupSettings.ignoreFailedSources);
@@ -60,7 +65,6 @@ class DotnetTool {
       this.buildAgent.info("--------------------------");
     }
     this.buildAgent.info(`Prepending ${toolPath} to PATH`);
-    this.buildAgent.debug(`toolPath: ${toolPath}`);
     this.buildAgent.addPath(toolPath);
     return toolPath;
   }
@@ -142,7 +146,7 @@ class DotnetTool {
     const tempPath = path.join(tempRootDir, uuid);
     this.buildAgent.debug(`Creating temp directory ${tempPath}`);
     await fs.mkdir(tempPath, { recursive: true });
-    return Promise.resolve(tempPath);
+    return tempPath;
   }
   isExplicitVersion(versionSpec) {
     const cleanedVersionSpec = semver.clean(versionSpec);

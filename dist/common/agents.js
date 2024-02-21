@@ -1,8 +1,8 @@
-import process__default from 'node:process';
-import path__default from 'node:path';
+import * as process from 'node:process';
+import * as path from 'node:path';
 import * as fs from 'node:fs/promises';
-import os from 'node:os';
-import { s as semver } from './semver.js';
+import * as os from 'node:os';
+import { d as semver } from './semver.js';
 
 class BuildAgentBase {
   getInput(input, required) {
@@ -22,11 +22,11 @@ class BuildAgentBase {
   }
   getVariable(name) {
     this.debug(`getVariable - ${name}`);
-    const val = process__default.env[name] || "";
+    const val = process.env[name] || "";
     return val.trim();
   }
   getVariableAsPath(name) {
-    return path__default.resolve(path__default.normalize(this.getVariable(name)));
+    return path.resolve(path.normalize(this.getVariable(name)));
   }
   async dirExists(file) {
     try {
@@ -61,10 +61,10 @@ class BuildAgentBase {
     const cacheRoot = this.cacheDir;
     if (!cacheRoot) {
       this.debug("cache root not set");
-      return Promise.resolve("");
+      return "";
     }
     version = semver.clean(version) || version;
-    const destPath = path__default.join(cacheRoot, tool, version, arch);
+    const destPath = path.join(cacheRoot, tool, version, arch);
     if (await this.dirExists(destPath)) {
       this.debug(`Destination directory ${destPath} already exists, removing`);
       await fs.rm(destPath, { recursive: true, force: true, maxRetries: 3, retryDelay: 1e3 });
@@ -73,7 +73,7 @@ class BuildAgentBase {
     await fs.mkdir(destPath, { recursive: true });
     await fs.cp(sourceDir, destPath, { recursive: true, force: true });
     this.debug(`Caching ${tool}@${version} (${arch}) from ${sourceDir}`);
-    return Promise.resolve(destPath);
+    return destPath;
   }
   async findLocalTool(toolName, versionSpec, arch) {
     arch = arch || os.arch();
@@ -90,7 +90,7 @@ class BuildAgentBase {
     }
     versionSpec = semver.clean(versionSpec) || versionSpec;
     this.info(`Looking for local tool ${toolName}@${versionSpec} (${arch})`);
-    const toolPath = path__default.join(cacheRoot, toolName, versionSpec, arch);
+    const toolPath = path.join(cacheRoot, toolName, versionSpec, arch);
     if (!await this.dirExists(toolPath)) {
       this.info(`Directory ${toolPath} not found`);
       return null;

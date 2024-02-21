@@ -59,20 +59,20 @@ class BuildAgent extends BuildAgentBase {
     const exec$1 = util.promisify(exec);
     try {
       const { stdout, stderr } = await exec$1(`${cmd} ${args.join(" ")}`);
-      return Promise.resolve({
+      return {
         code: 0,
         error: null,
         stderr,
         stdout
-      });
+      };
     } catch (e) {
       const error = e;
-      return Promise.resolve({
+      return {
         code: error.code,
         error,
         stderr: error.stderr,
         stdout: error.stdout
-      });
+      };
     }
   }
   setFailed = (message, done) => this.error(`setFailed - ${message} - ${done}`);
@@ -88,7 +88,7 @@ class BuildAgent extends BuildAgentBase {
     if (toolPath) {
       toolPath = path.resolve(toolPath);
       this.debug(`found tool '${tool}' in PATH: ${toolPath}`);
-      return Promise.resolve(toolPath);
+      return toolPath;
     }
     throw new Error(`Unable to locate executable file: ${tool}`);
   }

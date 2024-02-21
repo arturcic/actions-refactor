@@ -1,7 +1,7 @@
-import process from 'node:process'
-import path from 'node:path'
+import * as process from 'node:process'
+import * as path from 'node:path'
 import * as fs from 'node:fs/promises'
-import os from 'node:os'
+import * as os from 'node:os'
 import * as semver from 'semver'
 import { IExecResult } from './models'
 

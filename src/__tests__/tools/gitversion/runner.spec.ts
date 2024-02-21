@@ -1,11 +1,11 @@
-import process from 'node:process'
-import path from 'node:path'
+import * as process from 'node:process'
+import * as path from 'node:path'
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { Runner } from '@tools/gitversion'
 import { BuildAgent } from '@agents/local'
-import fs from 'node:fs'
-import os from 'node:os'
+import * as fs from 'node:fs'
+import * as os from 'node:os'
 
 describe('GitVersion Runner', () => {
     const baseDir = path.resolve(__dirname, '../../../../.test')
