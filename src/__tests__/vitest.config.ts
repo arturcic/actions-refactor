@@ -2,7 +2,7 @@ import { defineConfig } from 'vitest/config'
 import { resolve } from 'path'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
-export default defineConfig({
+const config = defineConfig({
     root: resolve(__dirname, '../..'),
     esbuild: {
         target: 'node20'
@@ -19,3 +19,4 @@ export default defineConfig({
         testTimeout: 20000
     }
 })
+export default config
