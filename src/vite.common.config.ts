@@ -6,6 +6,9 @@ import { builtinModules } from 'node:module'
 export function viteConfig(entry: { [p: string]: string }, manualChunks: (id: string) => string | undefined): UserConfig {
     return defineConfig({
         root: resolve(__dirname, '..'),
+        esbuild: {
+            target: 'node20'
+        },
         plugins: [
             tsconfigPaths({
                 root: '..'
@@ -27,10 +30,6 @@ export function viteConfig(entry: { [p: string]: string }, manualChunks: (id: st
             emptyOutDir: false,
             sourcemap: true,
             minify: false
-        },
-        test: {
-            globals: true,
-            include: ['**/*.test.ts']
         }
     } as UserConfig)
 }

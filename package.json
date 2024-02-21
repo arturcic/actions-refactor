@@ -12,16 +12,13 @@
         "build:agent:azure": "vite build --config src/agents/vite.config.ts --mode azure",
         "build:agent:github": "vite build --config src/agents/vite.config.ts --mode github",
         "build:agents": "npm run build:agent:fake && npm run build:agent:azure && npm run build:agent:github",
-
         "run:fake:gitversion": "node dist/tools/gitversion.js --buildAgent fake",
         "run:azure:gitversion": "node dist/tools/gitversion.js --buildAgent azure",
         "run:github:gitversion": "node dist/tools/gitversion.js --buildAgent github",
         "run:fake:gitreleasemanager": "node dist/fake/gitreleasemanager.js",
         "run:azure:gitreleasemanager": "node dist/azure/gitreleasemanager.js",
         "run:github:gitreleasemanager": "node dist/github/gitreleasemanager.js",
-
         "test:tools": "vitest --run tools --config src/tools/vite.config.ts",
-
         "lint": "eslint --ext .ts src",
         "format": "npx prettier src/**/*.ts --write"
     },
@@ -38,6 +35,7 @@
         "eslint-plugin-n": "^16.6.2",
         "eslint-plugin-prettier": "^5.1.3",
         "eslint-plugin-promise": "^6.1.1",
+        "eslint-plugin-vitest": "^0.3.22",
         "prettier": "^3.2.5",
         "typescript": "^5.3.3",
         "vite": "^5.1.1",

@@ -2,10 +2,12 @@
     "root": true,
     "plugins": [
         "@typescript-eslint",
+        "vitest",
         "prettier"
     ],
     "extends": [
         "plugin:github/recommended",
+        "plugin:vitest/recommended",
         "plugin:prettier/recommended"
     ],
     "parser": "@typescript-eslint/parser",
