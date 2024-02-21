@@ -10468,7 +10468,7 @@ vault.Vault = Vault;
 
 (function (exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports._exposeCertSettings = exports._exposeProxySettings = exports._normalizeSeparators = exports._isRooted = exports._getDirectoryName = exports._ensureRooted = exports._isUncPath = exports._loadData = exports._ensurePatternRooted = exports._getFindInfoFromPattern = exports._cloneMatchOptions = exports._legacyFindFiles_convertPatternToRegExp = exports._which = exports._checkPath = exports._exist = exports._debug = exports._error = exports._warning = exports._command = exports._getVariableKey = exports._getVariable = exports._loc = exports._setResourcePath = exports._setErrStream = exports._setStdStream = exports._writeLine = exports._endsWith = exports._startsWith = exports.IssueSource = exports._vault = exports._knownVariableMap = void 0;
+	exports._exposeCertSettings = exports._exposeProxySettings = exports._normalizeSeparators = exports._isRooted = exports._getDirectoryName = exports._ensureRooted = exports._isUncPath = exports._loadData = exports._ensurePatternRooted = exports._getFindInfoFromPattern = exports._cloneMatchOptions = exports._legacyFindFiles_convertPatternToRegExp = exports._which = exports._checkPath = exports._exist = exports._debug = exports._error = exports._warning = exports._command = exports._getVariableKey = exports._getVariable = exports._loc = exports._setResourcePath = exports._setErrStream = exports._setStdStream = exports._writeLine = exports._truncateBeforeSensitiveKeyword = exports._endsWith = exports._startsWith = exports.IssueSource = exports._vault = exports._knownVariableMap = void 0;
 	var fs = require$$1;
 	var path = require$$0$1;
 	var os = require$$0$2;
@@ -10514,6 +10514,17 @@ vault.Vault = Vault;
 	    return str.slice(-end.length) == end;
 	}
 	exports._endsWith = _endsWith;
+	function _truncateBeforeSensitiveKeyword(str, sensitiveKeywordsPattern) {
+	    if (!str) {
+	        return str;
+	    }
+	    var index = str.search(sensitiveKeywordsPattern);
+	    if (index <= 0) {
+	        return str;
+	    }
+	    return str.substring(0, index) + "...";
+	}
+	exports._truncateBeforeSensitiveKeyword = _truncateBeforeSensitiveKeyword;
 	//-----------------------------------------------------
 	// General Helpers
 	//-----------------------------------------------------
@@ -14653,7 +14664,7 @@ var ExecState = /** @class */ (function (_super) {
 
 (function (exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.updateReleaseName = exports.addBuildTag = exports.updateBuildNumber = exports.uploadBuildLog = exports.associateArtifact = exports.uploadArtifact = exports.logIssue = exports.logDetail = exports.setProgress = exports.setEndpoint = exports.addAttachment = exports.uploadSummary = exports.prependPath = exports.uploadFile = exports.CodeCoverageEnabler = exports.CodeCoveragePublisher = exports.TestPublisher = exports.getHttpCertConfiguration = exports.getHttpProxyConfiguration = exports.findMatch = exports.filter = exports.match = exports.tool = exports.execSync = exports.exec = exports.execAsync = exports.rmRF = exports.legacyFindFiles = exports.find = exports.retry = exports.mv = exports.cp = exports.ls = exports.which = exports.resolve = exports.mkdirP = exports.popd = exports.pushd = exports.cd = exports.checkPath = exports.cwd = exports.getAgentMode = exports.getNodeMajorVersion = exports.getPlatform = exports.osType = exports.writeFile = exports.exist = exports.stats = exports.debug = exports.error = exports.warning = exports.command = exports.setTaskVariable = exports.getTaskVariable = exports.getSecureFileTicket = exports.getSecureFileName = exports.getEndpointAuthorization = exports.getEndpointAuthorizationParameterRequired = exports.getEndpointAuthorizationParameter = exports.getEndpointAuthorizationSchemeRequired = exports.getEndpointAuthorizationScheme = exports.getEndpointDataParameterRequired = exports.getEndpointDataParameter = exports.getEndpointUrlRequired = exports.getEndpointUrl = exports.getPathInputRequired = exports.getPathInput = exports.filePathSupplied = exports.getDelimitedInput = exports.getPipelineFeature = exports.getBoolFeatureFlag = exports.getBoolInput = exports.getInputRequired = exports.getInput = exports.setSecret = exports.setVariable = exports.getVariables = exports.assertAgent = exports.getVariable = exports.loc = exports.setResourcePath = exports.setResult = exports.setErrStream = exports.setStdStream = exports.AgentHostedMode = exports.Platform = exports.IssueSource = exports.FieldType = exports.ArtifactType = exports.IssueType = exports.TaskState = exports.TaskResult = void 0;
+	exports.updateReleaseName = exports.addBuildTag = exports.updateBuildNumber = exports.uploadBuildLog = exports.associateArtifact = exports.uploadArtifact = exports.logIssue = exports.logDetail = exports.setProgress = exports.setEndpoint = exports.addAttachment = exports.uploadSummary = exports.prependPath = exports.uploadFile = exports.CodeCoverageEnabler = exports.CodeCoveragePublisher = exports.TestPublisher = exports.getHttpCertConfiguration = exports.getHttpProxyConfiguration = exports.findMatch = exports.filter = exports.match = exports.tool = exports.execSync = exports.exec = exports.execAsync = exports.rmRF = exports.legacyFindFiles = exports.find = exports.retry = exports.mv = exports.cp = exports.ls = exports.which = exports.resolve = exports.mkdirP = exports.popd = exports.pushd = exports.cd = exports.checkPath = exports.cwd = exports.getAgentMode = exports.getNodeMajorVersion = exports.getPlatform = exports.osType = exports.writeFile = exports.exist = exports.stats = exports.debug = exports.error = exports.warning = exports.command = exports.setTaskVariable = exports.getTaskVariable = exports.getSecureFileTicket = exports.getSecureFileName = exports.getEndpointAuthorization = exports.getEndpointAuthorizationParameterRequired = exports.getEndpointAuthorizationParameter = exports.getEndpointAuthorizationSchemeRequired = exports.getEndpointAuthorizationScheme = exports.getEndpointDataParameterRequired = exports.getEndpointDataParameter = exports.getEndpointUrlRequired = exports.getEndpointUrl = exports.getPathInputRequired = exports.getPathInput = exports.filePathSupplied = exports.getDelimitedInput = exports.getPipelineFeature = exports.getBoolFeatureFlag = exports.getBoolInput = exports.getInputRequired = exports.getInput = exports.setSecret = exports.setVariable = exports.getVariables = exports.assertAgent = exports.getVariable = exports.loc = exports.setResourcePath = exports.setSanitizedResult = exports.setResult = exports.setErrStream = exports.setStdStream = exports.AgentHostedMode = exports.Platform = exports.IssueSource = exports.FieldType = exports.ArtifactType = exports.IssueType = exports.TaskState = exports.TaskResult = void 0;
 	var shell = requireShell();
 	var childProcess = require$$1$1;
 	var fs = require$$1;
@@ -14734,6 +14745,23 @@ var ExecState = /** @class */ (function (_super) {
 	    exports.command('task.complete', properties, message);
 	}
 	exports.setResult = setResult;
+	/**
+	 * Sets the result of the task with sanitized message.
+	 *
+	 * @param result    TaskResult enum of Succeeded, SucceededWithIssues, Failed, Cancelled or Skipped.
+	 * @param message   A message which will be logged as an error issue if the result is Failed. Message will be truncated
+	 *                  before first occurence of wellknown sensitive keyword.
+	 * @param done      Optional. Instructs the agent the task is done. This is helpful when child processes
+	 *                  may still be running and prevent node from fully exiting. This argument is supported
+	 *                  from agent version 2.142.0 or higher (otherwise will no-op).
+	 * @returns         void
+	 */
+	function setSanitizedResult(result, message, done) {
+	    var pattern = /password|key|secret|bearer|authorization|token|pat/i;
+	    var sanitizedMessage = im._truncateBeforeSensitiveKeyword(message, pattern);
+	    setResult(result, sanitizedMessage, done);
+	}
+	exports.setSanitizedResult = setSanitizedResult;
 	//
 	// Catching all exceptions
 	//

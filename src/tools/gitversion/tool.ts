@@ -40,7 +40,7 @@ export class GitVersionTool extends DotnetTool {
         }
     }
 
-    private getRepoDir(targetPath: string): string {
+    protected getRepoDir(targetPath: string): string {
         let workDir: string
         if (!targetPath) {
             workDir = this.buildAgent.sourceDir || '.'
@@ -85,7 +85,7 @@ export class GitVersionTool extends DotnetTool {
         return args
     }
 
-    protected argStringToArray(argString: string): string[] {
+    private argStringToArray(argString: string): string[] {
         const args: string[] = []
 
         let inQuotes = false
@@ -147,7 +147,7 @@ export class GitVersionTool extends DotnetTool {
         return args
     }
 
-    protected toCamelCase(input: string): string {
+    private toCamelCase(input: string): string {
         return input.replace(/^\w|[A-Z]|\b\w|\s+/g, function (match, index) {
             if (+match === 0) return '' // or if (/\s+/.test(match)) for white spaces
             return index === 0 ? match.toLowerCase() : match.toUpperCase()
