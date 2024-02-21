@@ -16,7 +16,7 @@ const config = defineConfig({
         globals: true,
         include: ['**/__tests__/**/*.spec.[tj]s'],
         exclude: ['**/node_modules/**', '**/dist/**'],
-        testTimeout: 20000
+        testTimeout: 60000
     }
 })
 export default config

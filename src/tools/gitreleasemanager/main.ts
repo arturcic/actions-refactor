@@ -1,6 +1,6 @@
 import { getAgent } from '@agents/common'
 import { parseCliArgs } from '@tools/common'
-import { Commands, Runner } from '@tools/gitreleasemanager'
+import { type Commands, Runner } from '@tools/gitreleasemanager'
 
 const { command, buildAgent } = parseCliArgs()
 const agent = await getAgent(buildAgent)

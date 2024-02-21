@@ -14,8 +14,8 @@ export class GitVersionTool extends DotnetTool {
 
     async run(): Promise<IExecResult> {
         const settings = this.settingsProvider.getGitVersionSettings()
-        const workDir = this.getRepoDir(settings.targetPath)
-        const args = this.getArguments(workDir, settings)
+        const workDir = await this.getRepoDir(settings.targetPath)
+        const args = await this.getArguments(workDir, settings)
 
         await this.setDotnetRoot()
 
@@ -40,12 +40,12 @@ export class GitVersionTool extends DotnetTool {
         }
     }
 
-    protected getRepoDir(targetPath: string): string {
+    protected async getRepoDir(targetPath: string): Promise<string> {
         let workDir: string
         if (!targetPath) {
             workDir = this.buildAgent.sourceDir || '.'
         } else {
-            if (this.buildAgent.dirExists(targetPath)) {
+            if (await this.buildAgent.dirExists(targetPath)) {
                 workDir = targetPath
             } else {
                 throw new Error(`Directory not found at ${targetPath}`)
@@ -54,13 +54,13 @@ export class GitVersionTool extends DotnetTool {
         return workDir.replace(/\\/g, '/')
     }
 
-    protected getArguments(workDir: string, options: GitVersionSettings): string[] {
+    protected async getArguments(workDir: string, options: GitVersionSettings): Promise<string[]> {
         let args = [workDir, '/output', 'json', '/output', 'buildserver']
 
         const { useConfigFile, configFilePath, updateAssemblyInfo, updateAssemblyInfoFilename, additionalArguments } = options
 
         if (useConfigFile) {
-            if (this.isValidInputFile('configFilePath', configFilePath)) {
+            if (await this.isValidInputFile('configFilePath', configFilePath)) {
                 args.push('/config', configFilePath)
             } else {
                 throw new Error(`GitVersion configuration file not found at ${configFilePath}`)
@@ -71,7 +71,7 @@ export class GitVersionTool extends DotnetTool {
 
             // You can specify 'updateAssemblyInfo' without 'updateAssemblyInfoFilename'.
             if (updateAssemblyInfoFilename?.length > 0) {
-                if (this.isValidInputFile('updateAssemblyInfoFilename', updateAssemblyInfoFilename)) {
+                if (await this.isValidInputFile('updateAssemblyInfoFilename', updateAssemblyInfoFilename)) {
                     args.push(updateAssemblyInfoFilename)
                 } else {
                     throw new Error(`AssemblyInfoFilename file not found at ${updateAssemblyInfoFilename}`)

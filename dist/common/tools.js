@@ -1,10 +1,16 @@
-import os from 'node:os';
-import fs from 'node:fs';
-import path from 'node:path';
-import crypto from 'node:crypto';
-import { s as semver } from './semver.js';
-import { parseArgs } from 'util';
 import 'node:process';
+import path from 'node:path';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import { s as semver } from './semver.js';
+import crypto from 'node:crypto';
+import { parseArgs } from 'util';
+
+async function getAgent(buildAgent) {
+  const agent = `../agents/${buildAgent}/build-agent.js`;
+  const module = await import(agent);
+  return new module.BuildAgent();
+}
 
 var SetupFields = /* @__PURE__ */ ((SetupFields2) => {
   SetupFields2["includePrerelease"] = "includePrerelease";
@@ -45,7 +51,7 @@ class DotnetTool {
     }
     let toolPath = null;
     if (!setupSettings.preferLatestVersion) {
-      toolPath = this.buildAgent.findLocalTool(this.toolName, version);
+      toolPath = await this.buildAgent.findLocalTool(this.toolName, version);
     }
     if (!toolPath) {
       toolPath = await this.installTool(this.toolName, version, setupSettings.ignoreFailedSources);
@@ -61,13 +67,13 @@ class DotnetTool {
   async setDotnetRoot() {
     if (os.platform() !== "win32" && !this.buildAgent.getVariable("DOTNET_ROOT")) {
       let dotnetPath = await this.buildAgent.which("dotnet", true);
-      dotnetPath = fs.readlinkSync(dotnetPath) || dotnetPath;
+      dotnetPath = await fs.readlink(dotnetPath) || dotnetPath;
       const dotnetRoot = path.dirname(dotnetPath);
       this.buildAgent.setVariable("DOTNET_ROOT", dotnetRoot);
     }
   }
-  isValidInputFile(input, file) {
-    return this.filePathSupplied(input) && this.buildAgent.fileExists(file);
+  async isValidInputFile(input, file) {
+    return this.filePathSupplied(input) && await this.buildAgent.fileExists(file);
   }
   filePathSupplied(file) {
     const pathValue = path.resolve(this.buildAgent.getInput(file) || "");
@@ -121,7 +127,11 @@ class DotnetTool {
       throw new Error(message);
     }
     this.buildAgent.info(message);
-    return await this.buildAgent.cacheToolDir(tempDirectory, toolName, semverVersion);
+    const toolPath = await this.buildAgent.cacheToolDir(tempDirectory, toolName, semverVersion);
+    this.buildAgent.debug(`Cached tool path: ${toolPath}`);
+    this.buildAgent.debug(`Cleaning up temp directory: ${tempDirectory}`);
+    this.buildAgent.dirRemove(tempDirectory);
+    return toolPath;
   }
   async createTempDir() {
     const tempRootDir = this.buildAgent.tempDir;
@@ -131,7 +141,7 @@ class DotnetTool {
     const uuid = crypto.randomUUID();
     const tempPath = path.join(tempRootDir, uuid);
     this.buildAgent.debug(`Creating temp directory ${tempPath}`);
-    fs.mkdirSync(tempPath, { recursive: true });
+    await fs.mkdir(tempPath, { recursive: true });
     return Promise.resolve(tempPath);
   }
   isExplicitVersion(versionSpec) {
@@ -167,12 +177,6 @@ function parseCliArgs() {
       buildAgent: { type: "string", short: "a" }
     }
   }).values;
-}
-
-async function getAgent(buildAgent) {
-  const agent = `../agents/${buildAgent}/build-agent.js`;
-  const module = await import(agent);
-  return new module.BuildAgent();
 }
 
 export { DotnetTool as D, SettingsProvider as S, getAgent as g, parseCliArgs as p };

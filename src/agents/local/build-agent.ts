@@ -44,20 +44,20 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
 
         try {
             const { stdout, stderr } = await exec(`${cmd} ${args.join(' ')}`)
-            return Promise.resolve({
+            return {
                 code: 0,
                 error: null,
                 stderr,
                 stdout
-            })
+            }
         } catch (e) {
             const error = e as Error & { code: number; stderr: string; stdout: string }
-            return Promise.resolve({
+            return {
                 code: error.code,
                 error,
                 stderr: error.stderr,
                 stdout: error.stdout
-            })
+            }
         }
     }
 
@@ -78,7 +78,7 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         if (toolPath) {
             toolPath = path.resolve(toolPath)
             this.debug(`found tool '${tool}' in PATH: ${toolPath}`)
-            return Promise.resolve(toolPath)
+            return toolPath
         }
         throw new Error(`Unable to locate executable file: ${tool}`)
     }

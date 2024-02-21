@@ -1,5 +1,5 @@
 import os from 'node:os'
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 import path from 'node:path'
 import crypto from 'node:crypto'
 
@@ -59,7 +59,12 @@ export abstract class DotnetTool implements IDotnetTool {
         let toolPath: string | null = null
         if (!setupSettings.preferLatestVersion) {
             // Let's try and resolve the version spec locally first
-            toolPath = this.buildAgent.findLocalTool(this.toolName, version)
+            toolPath = await this.buildAgent.findLocalTool(this.toolName, version)
+            if (toolPath) {
+                this.buildAgent.info('--------------------------')
+                this.buildAgent.info(`${this.toolName} version: ${version} found in local cache at ${toolPath}.`)
+                this.buildAgent.info('--------------------------')
+            }
         }
         if (!toolPath) {
             // Download, extract, cache
@@ -72,8 +77,6 @@ export abstract class DotnetTool implements IDotnetTool {
         // Prepend the tool's path. This prepends the PATH for the current process and
         // instructs the agent to prepend for each task that follows.
         this.buildAgent.info(`Prepending ${toolPath} to PATH`)
-        this.buildAgent.debug(`toolPath: ${toolPath}`)
-
         this.buildAgent.addPath(toolPath)
 
         return toolPath
@@ -82,14 +85,14 @@ export abstract class DotnetTool implements IDotnetTool {
     protected async setDotnetRoot(): Promise<void> {
         if (os.platform() !== 'win32' && !this.buildAgent.getVariable('DOTNET_ROOT')) {
             let dotnetPath = await this.buildAgent.which('dotnet', true)
-            dotnetPath = fs.readlinkSync(dotnetPath) || dotnetPath
+            dotnetPath = (await fs.readlink(dotnetPath)) || dotnetPath
             const dotnetRoot = path.dirname(dotnetPath)
             this.buildAgent.setVariable('DOTNET_ROOT', dotnetRoot)
         }
     }
 
-    protected isValidInputFile(input: string, file: string): boolean {
-        return this.filePathSupplied(input) && this.buildAgent.fileExists(file)
+    protected async isValidInputFile(input: string, file: string): Promise<boolean> {
+        return this.filePathSupplied(input) && (await this.buildAgent.fileExists(file))
     }
 
     protected filePathSupplied(file: string): boolean {
@@ -160,7 +163,12 @@ export abstract class DotnetTool implements IDotnetTool {
         }
         this.buildAgent.info(message)
 
-        return await this.buildAgent.cacheToolDir(tempDirectory, toolName, semverVersion)
+        const toolPath = await this.buildAgent.cacheToolDir(tempDirectory, toolName, semverVersion)
+        this.buildAgent.debug(`Cached tool path: ${toolPath}`)
+        this.buildAgent.debug(`Cleaning up temp directory: ${tempDirectory}`)
+        this.buildAgent.dirRemove(tempDirectory)
+
+        return toolPath
     }
 
     async createTempDir(): Promise<string> {
@@ -172,8 +180,8 @@ export abstract class DotnetTool implements IDotnetTool {
         const uuid = crypto.randomUUID()
         const tempPath = path.join(tempRootDir, uuid)
         this.buildAgent.debug(`Creating temp directory ${tempPath}`)
-        fs.mkdirSync(tempPath, { recursive: true })
-        return Promise.resolve(tempPath)
+        await fs.mkdir(tempPath, { recursive: true })
+        return tempPath
     }
 
     private isExplicitVersion(versionSpec: string): boolean {

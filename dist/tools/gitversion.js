@@ -1,7 +1,7 @@
 import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs, g as getAgent } from '../common/tools.js';
 import 'util';
 import 'node:os';
-import 'node:fs';
+import 'node:fs/promises';
 import 'node:path';
 import 'node:crypto';
 import '../common/semver.js';
@@ -47,8 +47,8 @@ class GitVersionTool extends DotnetTool {
   }
   async run() {
     const settings = this.settingsProvider.getGitVersionSettings();
-    const workDir = this.getRepoDir(settings.targetPath);
-    const args = this.getArguments(workDir, settings);
+    const workDir = await this.getRepoDir(settings.targetPath);
+    const args = await this.getArguments(workDir, settings);
     await this.setDotnetRoot();
     const toolPath = await this.buildAgent.which("dotnet-gitversion", true);
     return this.execute(toolPath, args);
@@ -69,12 +69,12 @@ class GitVersionTool extends DotnetTool {
       }
     }
   }
-  getRepoDir(targetPath) {
+  async getRepoDir(targetPath) {
     let workDir;
     if (!targetPath) {
       workDir = this.buildAgent.sourceDir || ".";
     } else {
-      if (this.buildAgent.dirExists(targetPath)) {
+      if (await this.buildAgent.dirExists(targetPath)) {
         workDir = targetPath;
       } else {
         throw new Error(`Directory not found at ${targetPath}`);
@@ -82,11 +82,11 @@ class GitVersionTool extends DotnetTool {
     }
     return workDir.replace(/\\/g, "/");
   }
-  getArguments(workDir, options) {
+  async getArguments(workDir, options) {
     let args = [workDir, "/output", "json", "/output", "buildserver"];
     const { useConfigFile, configFilePath, updateAssemblyInfo, updateAssemblyInfoFilename, additionalArguments } = options;
     if (useConfigFile) {
-      if (this.isValidInputFile("configFilePath", configFilePath)) {
+      if (await this.isValidInputFile("configFilePath", configFilePath)) {
         args.push("/config", configFilePath);
       } else {
         throw new Error(`GitVersion configuration file not found at ${configFilePath}`);
@@ -95,7 +95,7 @@ class GitVersionTool extends DotnetTool {
     if (updateAssemblyInfo) {
       args.push("/updateassemblyinfo");
       if (updateAssemblyInfoFilename?.length > 0) {
-        if (this.isValidInputFile("updateAssemblyInfoFilename", updateAssemblyInfoFilename)) {
+        if (await this.isValidInputFile("updateAssemblyInfoFilename", updateAssemblyInfoFilename)) {
           args.push(updateAssemblyInfoFilename);
         } else {
           throw new Error(`AssemblyInfoFilename file not found at ${updateAssemblyInfoFilename}`);
