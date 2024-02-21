@@ -5,7 +5,7 @@ import { viteConfig } from '../vite.common.config'
 const config = (): UserConfig => {
     const tools = ['gitversion', 'gitreleasemanager']
         .map(tool => ({
-            [`tools/${tool}`]: resolve(__dirname, `${tool}/runner.ts`)
+            [`tools/${tool}`]: resolve(__dirname, `${tool}/main.ts`)
         }))
         .reduce((acc, cur) => ({ ...acc, ...cur }), {})
 

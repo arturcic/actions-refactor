@@ -1,10 +1,10 @@
-import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs, g as getAgent } from '../common/tools.js';
 import 'util';
 import 'node:os';
 import 'node:fs';
 import 'node:path';
 import 'node:crypto';
 import '../common/semver.js';
+import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs, g as getAgent } from '../common/tools.js';
 
 var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
   ExecuteFields2["targetPath"] = "targetPath";
@@ -165,59 +165,68 @@ class GitVersionTool extends DotnetTool {
   }
 }
 
-const { command, buildAgent } = parseCliArgs();
-const agent = await getAgent(buildAgent);
-const gitVersionTool = new GitVersionTool(agent);
-switch (command) {
-  case "setup":
-    await setup();
-    break;
-  case "execute":
-    await run();
-    break;
-}
-async function setup() {
-  try {
-    agent.info(`Running on: '${agent.agentName}'`);
-    agent.debug("Disabling telemetry");
-    gitVersionTool.disableTelemetry();
-    agent.debug("Installing GitVersion");
-    await gitVersionTool.install();
-  } catch (error) {
-    console.log(error);
+class Runner {
+  agent;
+  gitVersionTool;
+  async execute() {
+    const { command, buildAgent } = parseCliArgs();
+    this.agent = await getAgent(buildAgent);
+    this.gitVersionTool = new GitVersionTool(this.agent);
+    switch (command) {
+      case "setup":
+        await this.setup();
+        break;
+      case "execute":
+        await this.run();
+        break;
+    }
   }
-}
-async function run() {
-  try {
-    agent.debug(`Agent: '${agent.agentName}'`);
-    agent.debug("Disabling telemetry");
-    gitVersionTool.disableTelemetry();
-    agent.debug("Executing GitVersion");
-    const result = await gitVersionTool.run();
-    if (result.code === 0) {
-      agent.debug("GitVersion executed successfully");
-      const { stdout } = result;
-      if (stdout.lastIndexOf("{") === -1 || stdout.lastIndexOf("}") === -1) {
-        agent.debug("GitVersion output is not valid JSON");
-        agent.setFailed("GitVersion output is not valid JSON", true);
-        return;
+  async setup() {
+    try {
+      this.agent.info(`Running on: '${this.agent.agentName}'`);
+      this.agent.debug("Disabling telemetry");
+      this.gitVersionTool.disableTelemetry();
+      this.agent.debug("Installing GitVersion");
+      await this.gitVersionTool.install();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async run() {
+    try {
+      this.agent.debug(`Agent: '${this.agent.agentName}'`);
+      this.agent.debug("Disabling telemetry");
+      this.gitVersionTool.disableTelemetry();
+      this.agent.debug("Executing GitVersion");
+      const result = await this.gitVersionTool.run();
+      if (result.code === 0) {
+        this.agent.debug("GitVersion executed successfully");
+        const { stdout } = result;
+        if (stdout.lastIndexOf("{") === -1 || stdout.lastIndexOf("}") === -1) {
+          this.agent.debug("GitVersion output is not valid JSON");
+          this.agent.setFailed("GitVersion output is not valid JSON", true);
+          return;
+        } else {
+          const jsonOutput = stdout.substring(stdout.lastIndexOf("{"), stdout.lastIndexOf("}") + 1);
+          const gitVersionOutput = JSON.parse(jsonOutput);
+          this.gitVersionTool.writeGitVersionToAgent(gitVersionOutput);
+          this.agent.setSucceeded("GitVersion executed successfully", true);
+        }
       } else {
-        const jsonOutput = stdout.substring(stdout.lastIndexOf("{"), stdout.lastIndexOf("}") + 1);
-        const gitVersionOutput = JSON.parse(jsonOutput);
-        gitVersionTool.writeGitVersionToAgent(gitVersionOutput);
-        agent.setSucceeded("GitVersion executed successfully", true);
+        this.agent.debug("GitVersion failed");
+        const error = result.error;
+        if (error instanceof Error) {
+          this.agent.setFailed(error?.message, true);
+        }
       }
-    } else {
-      agent.debug("GitVersion failed");
-      const error = result.error;
+    } catch (error) {
       if (error instanceof Error) {
-        agent.setFailed(error?.message, true);
+        this.agent.setFailed(error?.message, true);
       }
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      agent.setFailed(error?.message, true);
     }
   }
 }
+
+const runner = new Runner();
+await runner.execute();
 //# sourceMappingURL=gitversion.js.map
