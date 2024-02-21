@@ -1,5 +1,10 @@
 import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs, g as getAgent } from '../common/tools.js';
 import 'util';
+import 'node:os';
+import 'node:fs';
+import 'node:path';
+import 'node:crypto';
+import '../common/semver.js';
 
 var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
   ExecuteFields2["targetPath"] = "targetPath";

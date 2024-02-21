@@ -1,7 +1,7 @@
+import { IExecResult } from '@agents/common'
 import { DotnetTool } from '@tools/common'
 import { GitVersionSettingsProvider, IGitVersionSettingsProvider } from './settings'
 import { GitVersionOutput, GitVersionSettings } from './models'
-import { IExecResult } from '@agents/common'
 
 export class GitVersionTool extends DotnetTool {
     get toolName(): string {
@@ -54,7 +54,7 @@ export class GitVersionTool extends DotnetTool {
         return workDir.replace(/\\/g, '/')
     }
 
-    private getArguments(workDir: string, options: GitVersionSettings): string[] {
+    protected getArguments(workDir: string, options: GitVersionSettings): string[] {
         let args = [workDir, '/output', 'json', '/output', 'buildserver']
 
         const { useConfigFile, configFilePath, updateAssemblyInfo, updateAssemblyInfoFilename, additionalArguments } = options
@@ -85,7 +85,7 @@ export class GitVersionTool extends DotnetTool {
         return args
     }
 
-    private argStringToArray(argString: string): string[] {
+    protected argStringToArray(argString: string): string[] {
         const args: string[] = []
 
         let inQuotes = false
@@ -147,7 +147,7 @@ export class GitVersionTool extends DotnetTool {
         return args
     }
 
-    private toCamelCase(input: string): string {
+    protected toCamelCase(input: string): string {
         return input.replace(/^\w|[A-Z]|\b\w|\s+/g, function (match, index) {
             if (+match === 0) return '' // or if (/\s+/.test(match)) for white spaces
             return index === 0 ? match.toLowerCase() : match.toUpperCase()

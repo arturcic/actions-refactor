@@ -1,6 +1,5 @@
-import { ISettingsProvider } from '@tools/common'
+import { ISettingsProvider, SettingsProvider } from '@tools/common'
 import { ExecuteFields, GitVersionSettings } from './models'
-import { SettingsProvider } from '../common/settings'
 
 export interface IGitVersionSettingsProvider extends ISettingsProvider {
     getGitVersionSettings(): GitVersionSettings

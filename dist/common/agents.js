@@ -1,7 +1,7 @@
+import process__default from 'node:process';
+import path__default from 'node:path';
+import fs__default from 'node:fs';
 import os from 'node:os';
-import path from 'node:path';
-import fs from 'node:fs';
-import process from 'node:process';
 import { s as semver } from './semver.js';
 
 class BuildAgentBase {
@@ -22,17 +22,17 @@ class BuildAgentBase {
   }
   getVariable(name) {
     this.debug(`getVariable - ${name}`);
-    const val = process.env[name] || "";
+    const val = process__default.env[name] || "";
     return val.trim();
   }
   getVariableAsPath(name) {
-    return path.resolve(path.normalize(this.getVariable(name)));
+    return path__default.resolve(path__default.normalize(this.getVariable(name)));
   }
   dirExists(file) {
-    return fs.existsSync(file) && fs.statSync(file).isDirectory();
+    return fs__default.existsSync(file) && fs__default.statSync(file).isDirectory();
   }
   fileExists(file) {
-    return fs.existsSync(file) && fs.statSync(file).isFile();
+    return fs__default.existsSync(file) && fs__default.statSync(file).isFile();
   }
   async cacheToolDir(sourceDir, tool, version, arch) {
     arch = arch || os.arch();
@@ -51,14 +51,14 @@ class BuildAgentBase {
       return Promise.resolve("");
     }
     version = semver.clean(version) || version;
-    const destPath = path.join(cacheRoot, tool, version, arch);
+    const destPath = path__default.join(cacheRoot, tool, version, arch);
     if (this.dirExists(destPath)) {
       this.debug(`Destination directory ${destPath} already exists, removing`);
-      fs.rmSync(destPath, { recursive: true, force: true, maxRetries: 3, retryDelay: 1e3 });
+      fs__default.rmSync(destPath, { recursive: true, force: true, maxRetries: 3, retryDelay: 1e3 });
     }
     this.debug(`Copying ${sourceDir} to ${destPath}`);
-    fs.mkdirSync(destPath, { recursive: true });
-    fs.cpSync(sourceDir, destPath, { recursive: true, force: true });
+    fs__default.mkdirSync(destPath, { recursive: true });
+    fs__default.cpSync(sourceDir, destPath, { recursive: true, force: true });
     this.debug(`Caching ${tool}@${version} (${arch}) from ${sourceDir}`);
     return Promise.resolve(destPath);
   }
@@ -77,7 +77,7 @@ class BuildAgentBase {
     }
     versionSpec = semver.clean(versionSpec) || versionSpec;
     this.info(`Looking for local tool ${toolName}@${versionSpec} (${arch})`);
-    const toolPath = path.join(cacheRoot, toolName, versionSpec, arch);
+    const toolPath = path__default.join(cacheRoot, toolName, versionSpec, arch);
     if (!this.dirExists(toolPath)) {
       this.info(`Directory ${toolPath} not found`);
       return null;

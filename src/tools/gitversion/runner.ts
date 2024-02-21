@@ -1,5 +1,5 @@
-import { parseCliArgs } from '@tools/common'
 import { getAgent } from '@agents/common'
+import { parseCliArgs } from '@tools/common'
 import { GitVersionTool } from './tool'
 
 const { command, buildAgent } = parseCliArgs()

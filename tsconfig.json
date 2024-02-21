@@ -30,6 +30,12 @@
             ],
             "@tools/common": [
                 "./tools/common"
+            ],
+            "@tools/gitreleasemanager": [
+                "./tools/gitreleasemanager"
+            ],
+            "@tools/gitversion": [
+                "./tools/gitversion"
             ]
         }
     },

@@ -10,7 +10,7 @@ const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
     }
 
     const entry = {
-        [`agents/${agent}/buildAgent`]: resolve(__dirname, `${agent}/buildAgent.ts`)
+        [`agents/${agent}/build-agent`]: resolve(__dirname, `${agent}/build-agent.ts`)
     }
 
     const manualChunks = (id: string): string | undefined => {

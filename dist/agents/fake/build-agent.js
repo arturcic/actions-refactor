@@ -2,8 +2,8 @@ import * as path from 'node:path';
 import * as process from 'node:process';
 import * as util from 'node:util';
 import { exec } from 'node:child_process';
-import * as fs from 'node:fs';
 import { B as BuildAgentBase } from '../../common/agents.js';
+import * as fs from 'node:fs';
 
 const isFilePath = (cmd) => {
   return cmd.includes(path.sep) ? path.resolve(cmd) : void 0;
@@ -95,4 +95,4 @@ class BuildAgent extends BuildAgentBase {
 }
 
 export { BuildAgent };
-//# sourceMappingURL=buildAgent.js.map
+//# sourceMappingURL=build-agent.js.map

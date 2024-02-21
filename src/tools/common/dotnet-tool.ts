@@ -1,4 +1,3 @@
-import { ISettingsProvider } from './models'
 import os from 'node:os'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -6,6 +5,7 @@ import crypto from 'node:crypto'
 
 import * as semver from 'semver'
 import { IBuildAgent, IExecResult } from '@agents/common'
+import { ISettingsProvider } from './models'
 
 export interface IDotnetTool {
     get toolName(): string

@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { IBuildAgent } from '@agents/common'
-import { SetupSettings } from '@tools/common'
-import { SettingsProvider } from './settings'
+import { SettingsProvider, SetupSettings } from '@tools/common'
 
 describe('SettingsProvider', () => {
     it('should return SetupSettings', () => {

@@ -1,5 +1,5 @@
-import { ISettingsProvider, SetupSettings, SetupFields } from './models'
 import { IBuildAgent } from '@agents/common'
+import { ISettingsProvider, SetupSettings, SetupFields } from './models'
 
 export class SettingsProvider implements ISettingsProvider {
     constructor(protected buildAgent: IBuildAgent) {}

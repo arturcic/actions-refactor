@@ -38,4 +38,4 @@ class BuildAgent extends BuildAgentBase {
 }
 
 export { BuildAgent };
-//# sourceMappingURL=buildAgent.js.map
+//# sourceMappingURL=build-agent.js.map

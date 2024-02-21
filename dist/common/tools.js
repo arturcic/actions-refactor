@@ -1,10 +1,16 @@
-import os from 'node:os';
-import fs from 'node:fs';
-import path from 'node:path';
-import crypto from 'node:crypto';
-import { s as semver } from './semver.js';
-import { parseArgs } from 'util';
 import 'node:process';
+import path from 'node:path';
+import fs from 'node:fs';
+import os from 'node:os';
+import { s as semver } from './semver.js';
+import crypto from 'node:crypto';
+import { parseArgs } from 'util';
+
+async function getAgent(buildAgent) {
+  const agent = `../agents/${buildAgent}/build-agent.js`;
+  const module = await import(agent);
+  return new module.BuildAgent();
+}
 
 var SetupFields = /* @__PURE__ */ ((SetupFields2) => {
   SetupFields2["includePrerelease"] = "includePrerelease";
@@ -142,21 +148,6 @@ class DotnetTool {
   }
 }
 
-function parseCliArgs() {
-  return parseArgs({
-    options: {
-      command: { type: "string", short: "c" },
-      buildAgent: { type: "string", short: "a" }
-    }
-  }).values;
-}
-
-async function getAgent(buildAgent) {
-  const agent = `../agents/${buildAgent}/buildAgent.js`;
-  const module = await import(agent);
-  return new module.BuildAgent();
-}
-
 class SettingsProvider {
   constructor(buildAgent) {
     this.buildAgent = buildAgent;
@@ -173,6 +164,15 @@ class SettingsProvider {
       preferLatestVersion
     };
   }
+}
+
+function parseCliArgs() {
+  return parseArgs({
+    options: {
+      command: { type: "string", short: "c" },
+      buildAgent: { type: "string", short: "a" }
+    }
+  }).values;
 }
 
 export { DotnetTool as D, SettingsProvider as S, getAgent as g, parseCliArgs as p };

@@ -3,8 +3,9 @@ import * as process from 'node:process'
 import * as util from 'node:util'
 import { exec as execNonPromise } from 'node:child_process'
 
-import { lookPath } from './internal/lookPath'
 import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
+
+import { lookPath } from './internal/lookPath'
 
 export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     get agentName(): string {
