@@ -1,13 +1,12 @@
 import { resolve } from 'path'
-import { loadEnv, UserConfig } from 'vite'
+import { UserConfig } from 'vite'
 import { viteConfig } from '../vite.common.config'
 
 const config = ({ mode: agent }: Partial<UserConfig>): UserConfig => {
-    console.log(`Building for agent: ${agent}`)
-
-    if (agent != null) {
-        process.env = { ...process.env, ...loadEnv(agent, process.cwd()) }
+    if (agent === 'local-agent') {
+        agent = 'local'
     }
+    console.log(`Building for agent: ${agent}`)
 
     const entry = {
         [`agents/${agent}/build-agent`]: resolve(__dirname, `${agent}/build-agent.ts`)

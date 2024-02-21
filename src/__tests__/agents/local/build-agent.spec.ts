@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-describe('fake/build-agent', () => {
+describe('build-agent/local', () => {
     it('should build the agent', () => {
         expect(true).toBe(true)
     })

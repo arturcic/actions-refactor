@@ -1,9 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="run fake" type="CompoundRunConfigurationType">
-        <toRun name="run:fake:gitreleasemanager (execute)" type="js.build_tools.npm"/>
-        <toRun name="run:fake:gitreleasemanager (setup)" type="js.build_tools.npm"/>
-        <toRun name="run:fake:gitversion (execute)" type="js.build_tools.npm"/>
-        <toRun name="run:fake:gitversion (setup)" type="js.build_tools.npm"/>
-        <method v="2"/>
-    </configuration>
-</component>
