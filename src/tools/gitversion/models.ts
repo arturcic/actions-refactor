@@ -1,3 +1,4 @@
+export type Commands = 'setup' | 'execute'
 export enum ExecuteFields {
     targetPath = 'targetPath',
     useConfigFile = 'useConfigFile',

@@ -1,17 +1,15 @@
-import { getAgent, IBuildAgent } from '@agents/common'
-import { parseCliArgs } from '@tools/common'
-import { GitVersionTool } from '@tools/gitversion'
+import { IBuildAgent } from '@agents/common'
+import { GitVersionTool } from './tool'
+import { Commands } from './models'
 
 export class Runner {
-    private agent!: IBuildAgent
-    private gitVersionTool!: GitVersionTool
+    private readonly gitVersionTool: GitVersionTool
 
-    async execute(): Promise<void> {
-        const { command, buildAgent } = parseCliArgs()
-
-        this.agent = await getAgent(buildAgent)
+    constructor(private readonly agent: IBuildAgent) {
         this.gitVersionTool = new GitVersionTool(this.agent)
+    }
 
+    async execute(command: Commands): Promise<void> {
         switch (command) {
             case 'setup':
                 await this.setup()

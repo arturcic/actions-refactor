@@ -1,14 +1,10 @@
-import { getAgent, IBuildAgent } from '@agents/common'
-import { parseCliArgs } from '@tools/common'
+import { IBuildAgent } from '@agents/common'
+import { Commands } from './models'
 
 export class Runner {
-    private agent!: IBuildAgent
+    constructor(private readonly agent: IBuildAgent) {}
 
-    async execute(): Promise<void> {
-        const { command, buildAgent } = parseCliArgs()
-
-        this.agent = await getAgent(buildAgent)
-
+    async execute(command: Commands): Promise<void> {
         switch (command) {
             case 'setup':
                 await this.setup()

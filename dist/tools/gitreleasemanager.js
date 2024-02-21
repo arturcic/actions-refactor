@@ -1,10 +1,10 @@
 import { p as parseCliArgs, g as getAgent } from '../common/tools.js';
 
 class Runner {
-  agent;
-  async execute() {
-    const { command, buildAgent } = parseCliArgs();
-    this.agent = await getAgent(buildAgent);
+  constructor(agent) {
+    this.agent = agent;
+  }
+  async execute(command) {
     switch (command) {
       case "setup":
         await this.setup();
@@ -21,6 +21,8 @@ class Runner {
   }
 }
 
-const runner = new Runner();
-await runner.execute();
+const { command, buildAgent } = parseCliArgs();
+const agent = await getAgent(buildAgent);
+const runner = new Runner(agent);
+await runner.execute(command);
 //# sourceMappingURL=gitreleasemanager.js.map

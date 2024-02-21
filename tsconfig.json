@@ -28,6 +28,15 @@
             "@agents/common": [
                 "./agents/common"
             ],
+            "@agents/azure": [
+                "./agents/azure/build-agent"
+            ],
+            "@agents/local": [
+                "./agents/local/build-agent"
+            ],
+            "@agents/github": [
+                "./agents/github/build-agent"
+            ],
             "@tools/common": [
                 "./tools/common"
             ],
@@ -41,7 +50,7 @@
     },
     "include": [
         "src/**/*.ts",
-        "tests/**/*.ts",
+        "tests/**/*.ts"
     ],
     "exclude": [
         "node_modules",

@@ -6,8 +6,8 @@ export enum SetupFields {
 }
 
 export interface CliArgs {
-    command: string | undefined
-    buildAgent: string | undefined
+    command: string
+    buildAgent: string
 }
 
 export interface SetupSettings {

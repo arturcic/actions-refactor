@@ -1,10 +1,10 @@
+import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs, g as getAgent } from '../common/tools.js';
 import 'util';
 import 'node:os';
 import 'node:fs';
 import 'node:path';
 import 'node:crypto';
 import '../common/semver.js';
-import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs, g as getAgent } from '../common/tools.js';
 
 var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
   ExecuteFields2["targetPath"] = "targetPath";
@@ -166,12 +166,12 @@ class GitVersionTool extends DotnetTool {
 }
 
 class Runner {
-  agent;
-  gitVersionTool;
-  async execute() {
-    const { command, buildAgent } = parseCliArgs();
-    this.agent = await getAgent(buildAgent);
+  constructor(agent) {
+    this.agent = agent;
     this.gitVersionTool = new GitVersionTool(this.agent);
+  }
+  gitVersionTool;
+  async execute(command) {
     switch (command) {
       case "setup":
         await this.setup();
@@ -227,6 +227,8 @@ class Runner {
   }
 }
 
-const runner = new Runner();
-await runner.execute();
+const { command, buildAgent } = parseCliArgs();
+const agent = await getAgent(buildAgent);
+const runner = new Runner(agent);
+await runner.execute(command);
 //# sourceMappingURL=gitversion.js.map
