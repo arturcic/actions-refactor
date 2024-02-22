@@ -1,4 +1,4 @@
-import { c as coreExports, w as which_1, g as getExecOutput_1 } from './vendor.js';
+import { c as coreExports, g as getExecOutput_1 } from './vendor.js';
 import { B as BuildAgentBase } from '../../common/agents.js';
 
 class BuildAgent extends BuildAgentBase {
@@ -6,13 +6,16 @@ class BuildAgent extends BuildAgentBase {
   sourceDirVariable = "GITHUB_WORKSPACE";
   tempDirVariable = "RUNNER_TEMP";
   cacheDirVariable = "RUNNER_TOOL_CACHE";
-  addPath = (inputPath) => coreExports.addPath(inputPath);
+  addPath(inputPath) {
+    super.addPath(inputPath);
+    return coreExports.addPath(inputPath);
+  }
   debug = (message) => coreExports.debug(message);
   info = (message) => coreExports.info(message);
   warn = (message) => coreExports.warning(message);
   error = (message) => coreExports.error(message);
   async exec(exec, args) {
-    const dotnetPath = await which_1(exec, true);
+    const dotnetPath = await super.which(exec, true);
     const { exitCode, stdout, stderr } = await getExecOutput_1(`"${dotnetPath}"`, args);
     return {
       code: exitCode,
@@ -26,7 +29,6 @@ class BuildAgent extends BuildAgentBase {
   setSucceeded(_message, _done) {
   }
   setVariable = (name, value) => coreExports.exportVariable(name, value);
-  which = async (tool, check) => which_1(tool, check);
 }
 
 export { BuildAgent };

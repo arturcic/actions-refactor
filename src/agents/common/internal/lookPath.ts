@@ -1,6 +1,7 @@
-import * as fs from 'node:fs'
+// import * as fs from 'node:fs'
 import * as path from 'node:path'
 import * as process from 'node:process'
+import * as fs from 'node:fs/promises'
 
 /**
  * Sometimes, people want to look for local executable files
@@ -20,7 +21,12 @@ const isFilePath = (cmd: string): string | undefined => {
  * @return {Promise<string>} Resolves absolute path or empty string.
  */
 const access = async (filePath: string): Promise<string | undefined> => {
-    return new Promise(resolve => fs.access(filePath, fs.constants.X_OK, err => resolve(err ? undefined : filePath)))
+    try {
+        await fs.access(filePath)
+        return filePath
+    } catch (e) {
+        return undefined
+    }
 }
 
 /**

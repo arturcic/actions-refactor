@@ -29,7 +29,6 @@ class BuildAgent extends BuildAgentBase {
   setOutput = (name, value) => task.setVariable(name, value, false, true);
   setSucceeded = (message, done) => task.setResult(task.TaskResult.Succeeded, message, done);
   setVariable = (name, value) => task.setVariable(name, value);
-  which = async (tool, check) => Promise.resolve(task.which(tool, check));
 }
 
 export { BuildAgent };

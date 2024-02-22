@@ -4,6 +4,38 @@ import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
 import { b as semver } from './semver.js';
 
+const isFilePath = (cmd) => {
+  return cmd.includes(path.sep) ? path.resolve(cmd) : void 0;
+};
+const access = async (filePath) => {
+  try {
+    await fs.access(filePath);
+    return filePath;
+  } catch (e) {
+    return void 0;
+  }
+};
+const isExecutable = async (absPath, options = {}) => {
+  const envVars = options.env || process.env;
+  const extension = (envVars.PATHEXT || "").split(path.delimiter).concat("");
+  const bins = await Promise.all(extension.map(async (ext) => access(absPath + ext.toLowerCase())));
+  return bins.find((bin) => !!bin);
+};
+const getDirsToWalkThrough = (options) => {
+  const envVars = options.env || process.env;
+  const envName = process.platform === "win32" ? "Path" : "PATH";
+  const envPath = envVars[envName] || "";
+  return envPath.split(path.delimiter).concat(options.include || []).filter((p) => !(options.exclude || []).includes(p));
+};
+async function lookPath(command, opt = {}) {
+  const directPath = isFilePath(command);
+  if (directPath)
+    return isExecutable(directPath, opt);
+  const dirs = getDirsToWalkThrough(opt);
+  const bins = await Promise.all(dirs.map(async (dir) => isExecutable(path.join(dir, command), opt)));
+  return bins.find((bin) => !!bin);
+}
+
 class BuildAgentBase {
   get sourceDir() {
     return this.getVariableAsPath(this.sourceDirVariable);
@@ -19,7 +51,7 @@ class BuildAgentBase {
     const newPath = inputPath + path.delimiter + process.env[envName];
     this.debug(`new Path: ${newPath}`);
     process.env[envName] = newPath;
-    process.env["PATH"] = newPath;
+    process.env.Path = newPath;
     this.info(`Updated PATH: ${process.env[envName]}`);
   }
   getInput(input, required) {
@@ -115,6 +147,16 @@ class BuildAgentBase {
       this.info(`Found tool ${toolName}@${versionSpec} (${arch}) at ${toolPath}`);
     }
     return toolPath;
+  }
+  async which(tool, _check) {
+    this.debug(`looking for tool '${tool}' in PATH`);
+    let toolPath = await lookPath(tool);
+    if (toolPath) {
+      toolPath = path.resolve(toolPath);
+      this.debug(`found tool '${tool}' in PATH: ${toolPath}`);
+      return toolPath;
+    }
+    throw new Error(`Unable to locate executable file: ${tool}`);
   }
 }
 

@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
 import * as exe from '@actions/exec'
-import * as io from '@actions/io'
 import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
 
 export class BuildAgent extends BuildAgentBase implements IBuildAgent {
@@ -10,7 +9,10 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     tempDirVariable = 'RUNNER_TEMP'
     cacheDirVariable = 'RUNNER_TOOL_CACHE'
 
-    addPath = (inputPath: string): void => core.addPath(inputPath)
+    addPath(inputPath: string): void {
+        super.addPath(inputPath)
+        return core.addPath(inputPath)
+    }
 
     debug = (message: string): void => core.debug(message)
 
@@ -21,7 +23,7 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     error = (message: string): void => core.error(message)
 
     async exec(exec: string, args: string[]): Promise<IExecResult> {
-        const dotnetPath = await io.which(exec, true)
+        const dotnetPath = await super.which(exec, true)
         const { exitCode, stdout, stderr } = await exe.getExecOutput(`"${dotnetPath}"`, args)
         return {
             code: exitCode,
@@ -40,6 +42,4 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     }
 
     setVariable = (name: string, value: string): void => core.exportVariable(name, value)
-
-    which = async (tool: string, check?: boolean): Promise<string> => io.which(tool, check)
 }

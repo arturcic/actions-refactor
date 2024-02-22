@@ -42,6 +42,4 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     setSucceeded = (message: string, done?: boolean): void => taskLib.setResult(taskLib.TaskResult.Succeeded, message, done)
 
     setVariable = (name: string, value: string): void => taskLib.setVariable(name, value)
-
-    which = async (tool: string, check?: boolean): Promise<string> => Promise.resolve(taskLib.which(tool, check))
 }

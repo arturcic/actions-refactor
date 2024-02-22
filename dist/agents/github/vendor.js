@@ -2902,7 +2902,7 @@ var __awaiter$2 = (commonjsGlobal && commonjsGlobal.__awaiter) || function (this
     });
 };
 Object.defineProperty(io$1, "__esModule", { value: true });
-io$1.findInPath = which_1 = io$1.which = io$1.mkdirP = io$1.rmRF = io$1.mv = io$1.cp = void 0;
+io$1.findInPath = io$1.which = io$1.mkdirP = io$1.rmRF = io$1.mv = io$1.cp = void 0;
 const assert_1 = require$$5;
 const path$1 = __importStar$2(require$$1$1);
 const ioUtil$1 = __importStar$2(ioUtil$2);
@@ -3054,7 +3054,7 @@ function which(tool, check) {
         return '';
     });
 }
-var which_1 = io$1.which = which;
+io$1.which = which;
 /**
  * Returns a list of all occurrences of the given tool on the system path.
  *
@@ -3890,5 +3890,5 @@ function getExecOutput(commandLine, args, options) {
 }
 getExecOutput_1 = exec$1.getExecOutput = getExecOutput;
 
-export { coreExports as c, getExecOutput_1 as g, which_1 as w };
+export { coreExports as c, getExecOutput_1 as g };
 //# sourceMappingURL=vendor.js.map

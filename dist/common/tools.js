@@ -1,5 +1,5 @@
-import 'node:process';
 import * as path from 'node:path';
+import 'node:process';
 import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
 import { s as semver } from './semver.js';

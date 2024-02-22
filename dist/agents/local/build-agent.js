@@ -1,36 +1,7 @@
-import * as path from 'node:path';
 import * as process from 'node:process';
 import * as util from 'node:util';
 import { exec } from 'node:child_process';
 import { B as BuildAgentBase } from '../../common/agents.js';
-import * as fs from 'node:fs';
-
-const isFilePath = (cmd) => {
-  return cmd.includes(path.sep) ? path.resolve(cmd) : void 0;
-};
-const access = async (filePath) => {
-  return new Promise((resolve) => fs.access(filePath, fs.constants.X_OK, (err) => resolve(err ? void 0 : filePath)));
-};
-const isExecutable = async (absPath, options = {}) => {
-  const envVars = options.env || process.env;
-  const extension = (envVars.PATHEXT || "").split(path.delimiter).concat("");
-  const bins = await Promise.all(extension.map(async (ext) => access(absPath + ext.toLowerCase())));
-  return bins.find((bin) => !!bin);
-};
-const getDirsToWalkThrough = (options) => {
-  const envVars = options.env || process.env;
-  const envName = process.platform === "win32" ? "Path" : "PATH";
-  const envPath = envVars[envName] || "";
-  return envPath.split(path.delimiter).concat(options.include || []).filter((p) => !(options.exclude || []).includes(p));
-};
-async function lookPath(command, opt = {}) {
-  const directPath = isFilePath(command);
-  if (directPath)
-    return isExecutable(directPath, opt);
-  const dirs = getDirsToWalkThrough(opt);
-  const bins = await Promise.all(dirs.map(async (dir) => isExecutable(path.join(dir, command), opt)));
-  return bins.find((bin) => !!bin);
-}
 
 class BuildAgent extends BuildAgentBase {
   agentName = "Local";
@@ -67,16 +38,6 @@ class BuildAgent extends BuildAgentBase {
   setVariable(name, value) {
     this.debug(`setVariable - ${name} - ${value}`);
     process.env[name] = value;
-  }
-  async which(tool, _check) {
-    this.debug(`looking for tool '${tool}' in PATH`);
-    let toolPath = await lookPath(tool);
-    if (toolPath) {
-      toolPath = path.resolve(toolPath);
-      this.debug(`found tool '${tool}' in PATH: ${toolPath}`);
-      return toolPath;
-    }
-    throw new Error(`Unable to locate executable file: ${tool}`);
   }
 }
 

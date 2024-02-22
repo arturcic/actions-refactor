@@ -1,11 +1,8 @@
-import * as path from 'node:path'
 import * as process from 'node:process'
 import * as util from 'node:util'
 import { exec as execNonPromise } from 'node:child_process'
 
 import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
-
-import { lookPath } from './internal/lookPath'
 
 export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     agentName = 'Local'
@@ -53,16 +50,5 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     setVariable(name: string, value: string): void {
         this.debug(`setVariable - ${name} - ${value}`)
         process.env[name] = value
-    }
-
-    async which(tool: string, _check?: boolean): Promise<string> {
-        this.debug(`looking for tool '${tool}' in PATH`)
-        let toolPath = await lookPath(tool)
-        if (toolPath) {
-            toolPath = path.resolve(toolPath)
-            this.debug(`found tool '${tool}' in PATH: ${toolPath}`)
-            return toolPath
-        }
-        throw new Error(`Unable to locate executable file: ${tool}`)
     }
 }

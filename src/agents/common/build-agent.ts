@@ -4,6 +4,7 @@ import * as fs from 'node:fs/promises'
 import * as os from 'node:os'
 import * as semver from 'semver'
 import { IExecResult } from './models'
+import { lookPath } from './internal/lookPath'
 
 export interface IBuildAgent {
     agentName: string
@@ -82,8 +83,6 @@ export abstract class BuildAgentBase implements IBuildAgent {
 
     abstract setVariable(name: string, value: string): void
 
-    abstract which(tool: string, check?: boolean | undefined): Promise<string>
-
     get sourceDir(): string {
         return this.getVariableAsPath(this.sourceDirVariable)
     }
@@ -101,7 +100,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
         const newPath = inputPath + path.delimiter + process.env[envName]
         this.debug(`new Path: ${newPath}`)
         process.env[envName] = newPath
-        process.env['PATH'] = newPath
+        process.env.Path = newPath
         this.info(`Updated PATH: ${process.env[envName]}`)
     }
 
@@ -216,5 +215,16 @@ export abstract class BuildAgentBase implements IBuildAgent {
         }
 
         return toolPath
+    }
+
+    async which(tool: string, _check?: boolean): Promise<string> {
+        this.debug(`looking for tool '${tool}' in PATH`)
+        let toolPath = await lookPath(tool)
+        if (toolPath) {
+            toolPath = path.resolve(toolPath)
+            this.debug(`found tool '${tool}' in PATH: ${toolPath}`)
+            return toolPath
+        }
+        throw new Error(`Unable to locate executable file: ${tool}`)
     }
 }
