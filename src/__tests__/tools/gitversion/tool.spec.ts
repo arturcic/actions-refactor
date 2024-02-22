@@ -70,7 +70,7 @@ describe('GitVersionTool', () => {
             expect(repoDir).toBe('targetDir')
         })
 
-        it('should throw error for non-existing target path', () => {
+        it('should throw error for non-existing target path', async () => {
             const wrongDir = 'wrongdir'
             const buildAgent = {
                 async dirExists(_file: string): Promise<boolean> {
@@ -78,7 +78,7 @@ describe('GitVersionTool', () => {
                 }
             } as IBuildAgent
             tool = new TestGitVersionTool(buildAgent)
-            expect(async () => await tool.getRepoDir(wrongDir)).toThrowError(`Directory not found at ${wrongDir}`)
+            await expect(tool.getRepoDir(wrongDir)).rejects.toThrowError(`Directory not found at ${wrongDir}`)
         })
     })
 
@@ -97,16 +97,15 @@ describe('GitVersionTool', () => {
             expect(args).toEqual(['workdir', '/output', 'json', '/output', 'buildserver', '/config', 'workdir/GitVersion.yml'])
         })
 
-        it('should return correct arguments for settings with wrong config file', () => {
+        it('should return correct arguments for settings with wrong config file', async () => {
             tool.init(false)
             const configFile = 'workdir/WrongConfig.yml'
-            expect(
-                async () =>
-                    await tool.getArguments('workdir', {
-                        useConfigFile: true,
-                        configFilePath: configFile
-                    } as GitVersionSettings)
-            ).toThrowError(`GitVersion configuration file not found at ${configFile}`)
+            await expect(
+                tool.getArguments('workdir', {
+                    useConfigFile: true,
+                    configFilePath: configFile
+                } as GitVersionSettings)
+            ).rejects.toThrowError(`GitVersion configuration file not found at ${configFile}`)
         })
 
         it('should return correct arguments for settings with assembly info', async () => {
@@ -118,16 +117,15 @@ describe('GitVersionTool', () => {
             expect(args).toEqual(['workdir', '/output', 'json', '/output', 'buildserver', '/updateassemblyinfo', 'AssemblyInfo.cs'])
         })
 
-        it('should return correct arguments for settings with wrong assembly info', () => {
+        it('should return correct arguments for settings with wrong assembly info', async () => {
             tool.init(false)
             const assemblyInfoFile = 'WrongAssemblyInfo.cs'
-            expect(
-                async () =>
-                    await tool.getArguments('workdir', {
-                        updateAssemblyInfo: true,
-                        updateAssemblyInfoFilename: assemblyInfoFile
-                    } as GitVersionSettings)
-            ).toThrowError(`AssemblyInfoFilename file not found at ${assemblyInfoFile}`)
+            await expect(
+                tool.getArguments('workdir', {
+                    updateAssemblyInfo: true,
+                    updateAssemblyInfoFilename: assemblyInfoFile
+                } as GitVersionSettings)
+            ).rejects.toThrowError(`AssemblyInfoFilename file not found at ${assemblyInfoFile}`)
         })
 
         it('should return correct arguments for settings with config and assembly info', async () => {

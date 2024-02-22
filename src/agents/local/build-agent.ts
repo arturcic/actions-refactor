@@ -25,10 +25,11 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     }
 
     addPath(toolPath: string): void {
-        const newPath = toolPath + path.delimiter + process.env['PATH']
+        const envName = process.platform === 'win32' ? 'Path' : 'PATH'
+        const newPath = toolPath + path.delimiter + process.env[envName]
         this.debug(`new Path: ${newPath}`)
-        process.env['PATH'] = newPath
-        this.info(`Updated PATH: ${process.env['PATH']}`)
+        process.env[envName] = newPath
+        this.info(`Updated PATH: ${process.env[envName]}`)
     }
 
     debug = (message: string): void => console.log(`[debug] ${message}`)

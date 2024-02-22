@@ -1,17 +1,24 @@
 import * as process from 'node:process'
 import * as path from 'node:path'
-
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { Runner } from '@tools/gitversion'
-import { BuildAgent } from '@agents/local'
 import * as fs from 'node:fs'
 import * as os from 'node:os'
 
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { Runner } from '@tools/gitversion'
+import { BuildAgent as LocalBuildAgent } from '@agents/local'
+
 describe('GitVersion Runner', () => {
     const baseDir = path.resolve(__dirname, '../../../../.test')
+    const envName = process.platform === 'win32' ? 'Path' : 'PATH'
+    const version = '5.12.0'
+    const toolPath = path.resolve(baseDir, 'tools', 'GitVersion.Tool', version, os.arch())
 
     function setEnv(key: string, value: string): void {
         process.env[key.toUpperCase()] = value
+    }
+
+    function getEnv(key: string): string {
+        return process.env[key] || ''
     }
 
     function setInputs(inputs: Record<string, string>): void {
@@ -35,17 +42,16 @@ describe('GitVersion Runner', () => {
 
     beforeEach(() => {
         resetEnv()
+        setEnv('AGENT_SOURCE_DIR', path.resolve(baseDir))
+        setEnv('AGENT_TEMP_DIR', path.resolve(baseDir, 'temp'))
+        setEnv('AGENT_TOOLS_DIR', path.resolve(baseDir, 'tools'))
     })
 
     afterEach(() => {
         resetEnv()
     })
 
-    it('should run GitVersion', async () => {
-        setEnv('AGENT_SOURCE_DIR', path.resolve(baseDir))
-        setEnv('AGENT_TEMP_DIR', path.resolve(baseDir, '.temp'))
-        setEnv('AGENT_TOOLS_DIR', path.resolve(baseDir, '.tools'))
-
+    it('should run setup GitVersion', async () => {
         setInputs({
             versionSpec: '5.12.x',
             includePrerelease: 'false',
@@ -53,15 +59,34 @@ describe('GitVersion Runner', () => {
             preferLatestVersion: 'false'
         })
 
-        const agent = new BuildAgent()
+        const agent = new LocalBuildAgent()
         const runner = new Runner(agent)
-        await runner.execute('setup')
+        const exitCode = await runner.run('setup')
 
+        expect(exitCode).toBe(0)
         expect(fs.existsSync(path.resolve(baseDir))).toBe(true)
-        expect(fs.existsSync(path.resolve(baseDir, '.tools'))).toBe(true)
-        expect(fs.existsSync(path.resolve(baseDir, '.tools', 'GitVersion.Tool', '5.12.0'))).toBe(true)
+        expect(fs.existsSync(path.resolve(baseDir, 'tools'))).toBe(true)
+        expect(fs.existsSync(toolPath)).toBe(true)
 
-        const toolPath = await agent.which('GitVersion.Tool')
-        expect(toolPath).toBe(path.resolve(baseDir, '.tools', 'GitVersion.Tool', '5.12.0', os.arch()))
+        const foundToolPath = await agent.which('dotnet-gitversion', true)
+        expect(foundToolPath).contain(toolPath)
+    })
+
+    it('should execute GitVersion', async () => {
+        process.env[envName] = `${toolPath}${path.delimiter}${process.env[envName]}`
+
+        const agent = new LocalBuildAgent()
+        const runner = new Runner(agent)
+        const exitCode = await runner.run('execute')
+
+        expect(exitCode).toBe(0)
+
+        expect(getEnv('GitVersion_Major')).toBeDefined()
+        expect(getEnv('GitVersion_Minor')).toBeDefined()
+        expect(getEnv('GitVersion_Patch')).toBeDefined()
+
+        expect(getEnv('major')).toBeDefined()
+        expect(getEnv('minor')).toBeDefined()
+        expect(getEnv('patch')).toBeDefined()
     })
 })

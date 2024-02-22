@@ -171,14 +171,12 @@ class Runner {
     this.gitVersionTool = new GitVersionTool(this.agent);
   }
   gitVersionTool;
-  async execute(command) {
+  async run(command) {
     switch (command) {
       case "setup":
-        await this.setup();
-        break;
+        return await this.setup();
       case "execute":
-        await this.run();
-        break;
+        return await this.execute();
     }
   }
   async setup() {
@@ -188,11 +186,16 @@ class Runner {
       this.gitVersionTool.disableTelemetry();
       this.agent.debug("Installing GitVersion");
       await this.gitVersionTool.install();
+      return 0;
     } catch (error) {
       console.log(error);
+      if (error instanceof Error) {
+        this.agent.setFailed(error?.message, true);
+      }
+      return -1;
     }
   }
-  async run() {
+  async execute() {
     try {
       this.agent.debug(`Agent: '${this.agent.agentName}'`);
       this.agent.debug("Disabling telemetry");
@@ -205,12 +208,13 @@ class Runner {
         if (stdout.lastIndexOf("{") === -1 || stdout.lastIndexOf("}") === -1) {
           this.agent.debug("GitVersion output is not valid JSON");
           this.agent.setFailed("GitVersion output is not valid JSON", true);
-          return;
+          return -1;
         } else {
           const jsonOutput = stdout.substring(stdout.lastIndexOf("{"), stdout.lastIndexOf("}") + 1);
           const gitVersionOutput = JSON.parse(jsonOutput);
           this.gitVersionTool.writeGitVersionToAgent(gitVersionOutput);
           this.agent.setSucceeded("GitVersion executed successfully", true);
+          return 0;
         }
       } else {
         this.agent.debug("GitVersion failed");
@@ -218,11 +222,13 @@ class Runner {
         if (error instanceof Error) {
           this.agent.setFailed(error?.message, true);
         }
+        return -1;
       }
     } catch (error) {
       if (error instanceof Error) {
         this.agent.setFailed(error?.message, true);
       }
+      return -1;
     }
   }
 }
@@ -230,5 +236,5 @@ class Runner {
 const { command, buildAgent } = parseCliArgs();
 const agent = await getAgent(buildAgent);
 const runner = new Runner(agent);
-await runner.execute(command);
+await runner.run(command);
 //# sourceMappingURL=gitversion.js.map
