@@ -6,6 +6,7 @@ import * as os from 'node:os'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { IBuildAgent } from '@agents/common'
 import { Runner } from '@tools/gitversion'
+import { BuildAgent as AzurePipelinesAgent } from '@agents/azure'
 import { BuildAgent as LocalBuildAgent } from '@agents/local'
 import { BuildAgent as GitHubActionsAgent } from '@agents/github'
 
@@ -101,5 +102,9 @@ describe('GitVersion Runner', () => {
 
     describe('GitHub Actions Agent', () => {
         testOnAgent(new GitHubActionsAgent())
+    })
+
+    describe('Azure Pipelines Agent', () => {
+        testOnAgent(new AzurePipelinesAgent())
     })
 })

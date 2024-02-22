@@ -6,9 +6,9 @@ import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
 export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     agentName = 'Azure Pipelines'
 
-    sourceDirVariable = 'Build.SourcesDirectory'
-    tempDirVariable = 'Agent.TempDirectory'
-    cacheDirVariable = 'Agent.ToolsDirectory'
+    sourceDirVariable = 'BUILD_SOURCESDIRECTORY'
+    tempDirVariable = 'AGENT_TEMPDIRECTORY'
+    cacheDirVariable = 'AGENT_TOOLSDIRECTORY'
 
     addPath = (inputPath: string): void => toolLib.prependPath(inputPath)
 

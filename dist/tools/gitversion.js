@@ -55,11 +55,7 @@ class GitVersionTool extends DotnetTool {
     let toolPath;
     const gitVersionPath = this.buildAgent.getVariableAsPath("GITVERSION_PATH");
     if (gitVersionPath) {
-      if (os.platform() === "win32") {
-        toolPath = path.join(gitVersionPath, "dotnet-gitversion.exe");
-      } else {
-        toolPath = path.join(gitVersionPath, "dotnet-gitversion");
-      }
+      toolPath = path.join(gitVersionPath, os.platform() === "win32" ? "dotnet-gitversion.exe" : "dotnet-gitversion");
     }
     if (!toolPath) {
       toolPath = await this.buildAgent.which("dotnet-gitversion", true);

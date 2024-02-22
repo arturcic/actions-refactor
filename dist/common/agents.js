@@ -2,7 +2,7 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
-import { s as semver } from './semver.js';
+import { d as semver } from './semver.js';
 
 class BuildAgentBase {
   get sourceDir() {

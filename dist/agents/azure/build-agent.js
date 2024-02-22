@@ -2,18 +2,10 @@ import { p as prependPath_1, t as task } from './vendor.js';
 import { B as BuildAgentBase } from '../../common/agents.js';
 
 class BuildAgent extends BuildAgentBase {
-  get agentName() {
-    return "Azure Pipelines";
-  }
-  get sourceDir() {
-    return this.getVariableAsPath("Build.SourcesDirectory");
-  }
-  get tempDir() {
-    return this.getVariableAsPath("Agent.TempDirectory");
-  }
-  get cacheDir() {
-    return this.getVariableAsPath("Agent.ToolsDirectory");
-  }
+  agentName = "Azure Pipelines";
+  sourceDirVariable = "BUILD_SOURCESDIRECTORY";
+  tempDirVariable = "AGENT_TEMPDIRECTORY";
+  cacheDirVariable = "AGENT_TOOLSDIRECTORY";
   addPath = (inputPath) => prependPath_1(inputPath);
   debug = (message) => task.debug(message);
   info = (message) => task.debug(message);
