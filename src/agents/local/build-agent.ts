@@ -8,21 +8,11 @@ import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
 import { lookPath } from './internal/lookPath'
 
 export class BuildAgent extends BuildAgentBase implements IBuildAgent {
-    get agentName(): string {
-        return 'Local'
-    }
+    agentName = 'Local'
 
-    get sourceDir(): string {
-        return this.getVariableAsPath('AGENT_SOURCE_DIR')
-    }
-
-    get tempDir(): string {
-        return this.getVariableAsPath('AGENT_TEMP_DIR')
-    }
-
-    get cacheDir(): string {
-        return this.getVariableAsPath('AGENT_TOOLS_DIR')
-    }
+    sourceDirVariable = 'AGENT_SOURCE_DIR'
+    tempDirVariable = 'AGENT_TEMP_DIR'
+    cacheDirVariable = 'AGENT_TOOLS_DIR'
 
     addPath(toolPath: string): void {
         const envName = process.platform === 'win32' ? 'Path' : 'PATH'

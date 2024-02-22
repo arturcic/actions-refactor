@@ -33,7 +33,7 @@ const access = async (filePath: string): Promise<string | undefined> => {
 const isExecutable = async (absPath: string, options: LookPathOption = {}): Promise<string | undefined> => {
     const envVars = options.env || process.env
     const extension = (envVars.PATHEXT || '').split(path.delimiter).concat('')
-    const bins = await Promise.all(extension.map(async ext => access(absPath + ext)))
+    const bins = await Promise.all(extension.map(async ext => access(absPath + ext.toLowerCase())))
     return bins.find(bin => !!bin)
 }
 

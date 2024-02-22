@@ -14,7 +14,7 @@ const access = async (filePath) => {
 const isExecutable = async (absPath, options = {}) => {
   const envVars = options.env || process.env;
   const extension = (envVars.PATHEXT || "").split(path.delimiter).concat("");
-  const bins = await Promise.all(extension.map(async (ext) => access(absPath + ext)));
+  const bins = await Promise.all(extension.map(async (ext) => access(absPath + ext.toLowerCase())));
   return bins.find((bin) => !!bin);
 };
 const getDirsToWalkThrough = (options) => {
@@ -33,18 +33,10 @@ async function lookPath(command, opt = {}) {
 }
 
 class BuildAgent extends BuildAgentBase {
-  get agentName() {
-    return "Local";
-  }
-  get sourceDir() {
-    return this.getVariableAsPath("AGENT_SOURCE_DIR");
-  }
-  get tempDir() {
-    return this.getVariableAsPath("AGENT_TEMP_DIR");
-  }
-  get cacheDir() {
-    return this.getVariableAsPath("AGENT_TOOLS_DIR");
-  }
+  agentName = "Local";
+  sourceDirVariable = "AGENT_SOURCE_DIR";
+  tempDirVariable = "AGENT_TEMP_DIR";
+  cacheDirVariable = "AGENT_TOOLS_DIR";
   addPath(toolPath) {
     const envName = process.platform === "win32" ? "Path" : "PATH";
     const newPath = toolPath + path.delimiter + process.env[envName];

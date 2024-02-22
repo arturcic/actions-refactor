@@ -4,9 +4,10 @@ import * as fs from 'node:fs'
 import * as os from 'node:os'
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { IBuildAgent } from '@agents/common'
 import { Runner } from '@tools/gitversion'
 import { BuildAgent as LocalBuildAgent } from '@agents/local'
-import { IBuildAgent } from '@agents/common'
+import { BuildAgent as GitHubActionsAgent } from '@agents/github'
 
 describe('GitVersion Runner', () => {
     const baseDir = path.resolve(__dirname, '../../../../.test')
@@ -27,12 +28,13 @@ describe('GitVersion Runner', () => {
             setEnv(`INPUT_${key}`, inputs[key])
         }
     }
-
-    describe('Local Agent', () => {
+    function testOnAgent(agent: IBuildAgent): void {
         function resetEnv(): void {
-            setEnv('AGENT_SOURCE_DIR', '')
-            setEnv('AGENT_TEMP_DIR', '')
-            setEnv('AGENT_TOOLS_DIR', '')
+            process.env.PATH = process.env[envName] // workaround for windows
+            setEnv('GITVERSION_PATH', '')
+            setEnv(agent.sourceDirVariable, '')
+            setEnv(agent.tempDirVariable, '')
+            setEnv(agent.cacheDirVariable, '')
 
             setInputs({
                 versionSpec: '',
@@ -42,15 +44,13 @@ describe('GitVersion Runner', () => {
             })
         }
 
-        let agent!: IBuildAgent
         let runner!: Runner
         beforeEach(() => {
-            resetEnv()
-            setEnv('AGENT_SOURCE_DIR', path.resolve(baseDir))
-            setEnv('AGENT_TEMP_DIR', path.resolve(baseDir, 'temp'))
-            setEnv('AGENT_TOOLS_DIR', path.resolve(baseDir, 'tools'))
-            agent = new LocalBuildAgent()
             runner = new Runner(agent)
+            resetEnv()
+            setEnv(agent.sourceDirVariable, path.resolve(baseDir))
+            setEnv(agent.tempDirVariable, path.resolve(baseDir, 'temp'))
+            setEnv(agent.cacheDirVariable, path.resolve(baseDir, 'tools'))
         })
 
         afterEach(() => {
@@ -72,12 +72,14 @@ describe('GitVersion Runner', () => {
             expect(fs.existsSync(path.resolve(baseDir, 'tools'))).toBe(true)
             expect(fs.existsSync(toolPath)).toBe(true)
 
+            expect(getEnv('GITVERSION_PATH')).toBe(toolPath)
+
             const foundToolPath = await agent.which('dotnet-gitversion', true)
             expect(foundToolPath).contain(toolPath)
         })
 
         it.sequential('should execute GitVersion', async () => {
-            process.env[envName] = `${toolPath}${path.delimiter}${process.env[envName]}`
+            setEnv('GITVERSION_PATH', toolPath)
 
             const exitCode = await runner.run('execute')
 
@@ -91,5 +93,13 @@ describe('GitVersion Runner', () => {
             expect(getEnv('minor')).toBeDefined()
             expect(getEnv('patch')).toBeDefined()
         })
+    }
+
+    describe('Local Agent', () => {
+        testOnAgent(new LocalBuildAgent())
+    })
+
+    describe('GitHub Actions Agent', () => {
+        testOnAgent(new GitHubActionsAgent())
     })
 })

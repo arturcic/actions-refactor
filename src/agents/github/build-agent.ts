@@ -4,21 +4,11 @@ import * as io from '@actions/io'
 import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
 
 export class BuildAgent extends BuildAgentBase implements IBuildAgent {
-    get agentName(): string {
-        return 'GitHub Actions'
-    }
+    agentName = 'GitHub Actions'
 
-    get sourceDir(): string {
-        return this.getVariableAsPath('GITHUB_WORKSPACE')
-    }
-
-    get tempDir(): string {
-        return this.getVariableAsPath('RUNNER_TEMP')
-    }
-
-    get cacheDir(): string {
-        return this.getVariableAsPath('RUNNER_TOOL_CACHE')
-    }
+    sourceDirVariable = 'GITHUB_WORKSPACE'
+    tempDirVariable = 'RUNNER_TEMP'
+    cacheDirVariable = 'RUNNER_TOOL_CACHE'
 
     addPath = (inputPath: string): void => core.addPath(inputPath)
 

@@ -2,9 +2,18 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
-import { d as semver } from './semver.js';
+import { s as semver } from './semver.js';
 
 class BuildAgentBase {
+  get sourceDir() {
+    return this.getVariableAsPath(this.sourceDirVariable);
+  }
+  get tempDir() {
+    return this.getVariableAsPath(this.tempDirVariable);
+  }
+  get cacheDir() {
+    return this.getVariableAsPath(this.cacheDirVariable);
+  }
   getInput(input, required) {
     input = input.replace(/ /g, "_").toUpperCase();
     const val = this.getVariable(`INPUT_${input}`);
@@ -95,7 +104,7 @@ class BuildAgentBase {
       this.info(`Directory ${toolPath} not found`);
       return null;
     } else {
-      this.info(`Found tool ${toolName}@${versionSpec} (${arch})`);
+      this.info(`Found tool ${toolName}@${versionSpec} (${arch}) at ${toolPath}`);
     }
     return toolPath;
   }

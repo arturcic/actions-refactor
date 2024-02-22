@@ -2,18 +2,10 @@ import { c as coreExports, w as which_1, g as getExecOutput_1 } from './vendor.j
 import { B as BuildAgentBase } from '../../common/agents.js';
 
 class BuildAgent extends BuildAgentBase {
-  get agentName() {
-    return "GitHub Actions";
-  }
-  get sourceDir() {
-    return this.getVariableAsPath("GITHUB_WORKSPACE");
-  }
-  get tempDir() {
-    return this.getVariableAsPath("RUNNER_TEMP");
-  }
-  get cacheDir() {
-    return this.getVariableAsPath("RUNNER_TOOL_CACHE");
-  }
+  agentName = "GitHub Actions";
+  sourceDirVariable = "GITHUB_WORKSPACE";
+  tempDirVariable = "RUNNER_TEMP";
+  cacheDirVariable = "RUNNER_TOOL_CACHE";
   addPath = (inputPath) => coreExports.addPath(inputPath);
   debug = (message) => coreExports.debug(message);
   info = (message) => coreExports.info(message);

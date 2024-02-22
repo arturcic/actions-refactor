@@ -1,4 +1,6 @@
 import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs, g as getAgent } from '../common/tools.js';
+import * as path from 'path';
+import * as os from 'os';
 import 'util';
 import 'node:os';
 import 'node:fs/promises';
@@ -50,7 +52,18 @@ class GitVersionTool extends DotnetTool {
     const workDir = await this.getRepoDir(settings.targetPath);
     const args = await this.getArguments(workDir, settings);
     await this.setDotnetRoot();
-    const toolPath = await this.buildAgent.which("dotnet-gitversion", true);
+    let toolPath;
+    const gitVersionPath = this.buildAgent.getVariableAsPath("GITVERSION_PATH");
+    if (gitVersionPath) {
+      if (os.platform() === "win32") {
+        toolPath = path.join(gitVersionPath, "dotnet-gitversion.exe");
+      } else {
+        toolPath = path.join(gitVersionPath, "dotnet-gitversion");
+      }
+    }
+    if (!toolPath) {
+      toolPath = await this.buildAgent.which("dotnet-gitversion", true);
+    }
     return this.execute(toolPath, args);
   }
   writeGitVersionToAgent(output) {
@@ -185,7 +198,9 @@ class Runner {
       this.agent.debug("Disabling telemetry");
       this.gitVersionTool.disableTelemetry();
       this.agent.debug("Installing GitVersion");
-      await this.gitVersionTool.install();
+      const toolPath = await this.gitVersionTool.install();
+      this.agent.info(`Set GITVERSION_PATH to ${toolPath}`);
+      this.agent.setVariable("GITVERSION_PATH", toolPath);
       return 0;
     } catch (error) {
       console.log(error);

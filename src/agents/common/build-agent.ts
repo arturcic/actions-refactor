@@ -7,6 +7,10 @@ import { IExecResult } from './models'
 
 export interface IBuildAgent {
     agentName: string
+    sourceDirVariable: string
+    tempDirVariable: string
+    cacheDirVariable: string
+
     sourceDir: string
     tempDir: string
     cacheDir: string
@@ -56,9 +60,9 @@ export interface IBuildAgent {
 
 export abstract class BuildAgentBase implements IBuildAgent {
     abstract agentName: string
-    abstract sourceDir: string
-    abstract tempDir: string
-    abstract cacheDir: string
+    abstract sourceDirVariable: string
+    abstract tempDirVariable: string
+    abstract cacheDirVariable: string
 
     abstract addPath(inputPath: string): void
 
@@ -81,6 +85,18 @@ export abstract class BuildAgentBase implements IBuildAgent {
     abstract setVariable(name: string, value: string): void
 
     abstract which(tool: string, check?: boolean | undefined): Promise<string>
+
+    get sourceDir(): string {
+        return this.getVariableAsPath(this.sourceDirVariable)
+    }
+
+    get tempDir(): string {
+        return this.getVariableAsPath(this.tempDirVariable)
+    }
+
+    get cacheDir(): string {
+        return this.getVariableAsPath(this.cacheDirVariable)
+    }
 
     getInput(input: string, required?: boolean): string {
         input = input.replace(/ /g, '_').toUpperCase()

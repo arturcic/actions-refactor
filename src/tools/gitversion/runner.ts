@@ -25,7 +25,10 @@ export class Runner {
             this.gitVersionTool.disableTelemetry()
 
             this.agent.debug('Installing GitVersion')
-            await this.gitVersionTool.install()
+            const toolPath = await this.gitVersionTool.install()
+
+            this.agent.info(`Set GITVERSION_PATH to ${toolPath}`)
+            this.agent.setVariable('GITVERSION_PATH', toolPath)
             return 0
         } catch (error) {
             console.log(error)

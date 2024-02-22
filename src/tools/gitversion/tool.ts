@@ -2,6 +2,8 @@ import { IExecResult } from '@agents/common'
 import { DotnetTool } from '@tools/common'
 import { GitVersionSettingsProvider, IGitVersionSettingsProvider } from './settings'
 import { GitVersionOutput, GitVersionSettings } from './models'
+import * as path from 'path'
+import * as os from 'os'
 
 export class GitVersionTool extends DotnetTool {
     get toolName(): string {
@@ -19,7 +21,14 @@ export class GitVersionTool extends DotnetTool {
 
         await this.setDotnetRoot()
 
-        const toolPath = await this.buildAgent.which('dotnet-gitversion', true)
+        let toolPath: string | undefined
+        const gitVersionPath = this.buildAgent.getVariableAsPath('GITVERSION_PATH')
+        if (gitVersionPath) {
+            toolPath = path.join(gitVersionPath, os.platform() === 'win32' ? 'dotnet-gitversion.exe' : 'dotnet-gitversion')
+        }
+        if (!toolPath) {
+            toolPath = await this.buildAgent.which('dotnet-gitversion', true)
+        }
         return this.execute(toolPath, args)
     }
 

@@ -4,21 +4,11 @@ import * as toolLib from 'azure-pipelines-tool-lib/tool'
 import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
 
 export class BuildAgent extends BuildAgentBase implements IBuildAgent {
-    get agentName(): string {
-        return 'Azure Pipelines'
-    }
+    agentName = 'Azure Pipelines'
 
-    get sourceDir(): string {
-        return this.getVariableAsPath('Build.SourcesDirectory')
-    }
-
-    get tempDir(): string {
-        return this.getVariableAsPath('Agent.TempDirectory')
-    }
-
-    get cacheDir(): string {
-        return this.getVariableAsPath('Agent.ToolsDirectory')
-    }
+    sourceDirVariable = 'Build.SourcesDirectory'
+    tempDirVariable = 'Agent.TempDirectory'
+    cacheDirVariable = 'Agent.ToolsDirectory'
 
     addPath = (inputPath: string): void => toolLib.prependPath(inputPath)
 
