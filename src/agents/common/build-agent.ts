@@ -189,7 +189,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
             this.info(`Directory ${toolPath} not found`)
             return null
         } else {
-            this.info(`Found tool ${toolName}@${versionSpec} (${arch})`)
+            this.info(`Found tool ${toolName}@${versionSpec} (${arch}) at ${toolPath}`)
         }
 
         return toolPath

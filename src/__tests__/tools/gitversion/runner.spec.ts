@@ -6,6 +6,7 @@ import * as os from 'node:os'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { Runner } from '@tools/gitversion'
 import { BuildAgent as LocalBuildAgent } from '@agents/local'
+import { IBuildAgent } from '@agents/common'
 
 describe('GitVersion Runner', () => {
     const baseDir = path.resolve(__dirname, '../../../../.test')
@@ -27,66 +28,68 @@ describe('GitVersion Runner', () => {
         }
     }
 
-    function resetEnv(): void {
-        setEnv('AGENT_SOURCE_DIR', '')
-        setEnv('AGENT_TEMP_DIR', '')
-        setEnv('AGENT_TOOLS_DIR', '')
+    describe('Local Agent', () => {
+        function resetEnv(): void {
+            setEnv('AGENT_SOURCE_DIR', '')
+            setEnv('AGENT_TEMP_DIR', '')
+            setEnv('AGENT_TOOLS_DIR', '')
 
-        setInputs({
-            versionSpec: '',
-            includePrerelease: '',
-            ignoreFailedSources: '',
-            preferLatestVersion: ''
-        })
-    }
+            setInputs({
+                versionSpec: '',
+                includePrerelease: '',
+                ignoreFailedSources: '',
+                preferLatestVersion: ''
+            })
+        }
 
-    beforeEach(() => {
-        resetEnv()
-        setEnv('AGENT_SOURCE_DIR', path.resolve(baseDir))
-        setEnv('AGENT_TEMP_DIR', path.resolve(baseDir, 'temp'))
-        setEnv('AGENT_TOOLS_DIR', path.resolve(baseDir, 'tools'))
-    })
-
-    afterEach(() => {
-        resetEnv()
-    })
-
-    it('should run setup GitVersion', async () => {
-        setInputs({
-            versionSpec: '5.12.x',
-            includePrerelease: 'false',
-            ignoreFailedSources: 'false',
-            preferLatestVersion: 'false'
+        let agent!: IBuildAgent
+        let runner!: Runner
+        beforeEach(() => {
+            resetEnv()
+            setEnv('AGENT_SOURCE_DIR', path.resolve(baseDir))
+            setEnv('AGENT_TEMP_DIR', path.resolve(baseDir, 'temp'))
+            setEnv('AGENT_TOOLS_DIR', path.resolve(baseDir, 'tools'))
+            agent = new LocalBuildAgent()
+            runner = new Runner(agent)
         })
 
-        const agent = new LocalBuildAgent()
-        const runner = new Runner(agent)
-        const exitCode = await runner.run('setup')
+        afterEach(() => {
+            resetEnv()
+        })
 
-        expect(exitCode).toBe(0)
-        expect(fs.existsSync(path.resolve(baseDir))).toBe(true)
-        expect(fs.existsSync(path.resolve(baseDir, 'tools'))).toBe(true)
-        expect(fs.existsSync(toolPath)).toBe(true)
+        it.sequential('should run setup GitVersion', async () => {
+            setInputs({
+                versionSpec: '5.12.x',
+                includePrerelease: 'false',
+                ignoreFailedSources: 'false',
+                preferLatestVersion: 'false'
+            })
 
-        const foundToolPath = await agent.which('dotnet-gitversion', true)
-        expect(foundToolPath).contain(toolPath)
-    })
+            const exitCode = await runner.run('setup')
 
-    it('should execute GitVersion', async () => {
-        process.env[envName] = `${toolPath}${path.delimiter}${process.env[envName]}`
+            expect(exitCode).toBe(0)
+            expect(fs.existsSync(path.resolve(baseDir))).toBe(true)
+            expect(fs.existsSync(path.resolve(baseDir, 'tools'))).toBe(true)
+            expect(fs.existsSync(toolPath)).toBe(true)
 
-        const agent = new LocalBuildAgent()
-        const runner = new Runner(agent)
-        const exitCode = await runner.run('execute')
+            const foundToolPath = await agent.which('dotnet-gitversion', true)
+            expect(foundToolPath).contain(toolPath)
+        })
 
-        expect(exitCode).toBe(0)
+        it.sequential('should execute GitVersion', async () => {
+            process.env[envName] = `${toolPath}${path.delimiter}${process.env[envName]}`
 
-        expect(getEnv('GitVersion_Major')).toBeDefined()
-        expect(getEnv('GitVersion_Minor')).toBeDefined()
-        expect(getEnv('GitVersion_Patch')).toBeDefined()
+            const exitCode = await runner.run('execute')
 
-        expect(getEnv('major')).toBeDefined()
-        expect(getEnv('minor')).toBeDefined()
-        expect(getEnv('patch')).toBeDefined()
+            expect(exitCode).toBe(0)
+
+            expect(getEnv('GitVersion_Major')).toBeDefined()
+            expect(getEnv('GitVersion_Minor')).toBeDefined()
+            expect(getEnv('GitVersion_Patch')).toBeDefined()
+
+            expect(getEnv('major')).toBeDefined()
+            expect(getEnv('minor')).toBeDefined()
+            expect(getEnv('patch')).toBeDefined()
+        })
     })
 })
