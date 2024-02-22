@@ -14,14 +14,6 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     tempDirVariable = 'AGENT_TEMP_DIR'
     cacheDirVariable = 'AGENT_TOOLS_DIR'
 
-    addPath(toolPath: string): void {
-        const envName = process.platform === 'win32' ? 'Path' : 'PATH'
-        const newPath = toolPath + path.delimiter + process.env[envName]
-        this.debug(`new Path: ${newPath}`)
-        process.env[envName] = newPath
-        this.info(`Updated PATH: ${process.env[envName]}`)
-    }
-
     debug = (message: string): void => console.log(`[debug] ${message}`)
 
     info = (message: string): void => console.log(`[info] - ${message}`)

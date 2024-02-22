@@ -2,7 +2,7 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
-import { d as semver } from './semver.js';
+import { b as semver } from './semver.js';
 
 class BuildAgentBase {
   get sourceDir() {
@@ -13,6 +13,14 @@ class BuildAgentBase {
   }
   get cacheDir() {
     return this.getVariableAsPath(this.cacheDirVariable);
+  }
+  addPath(inputPath) {
+    const envName = process.platform === "win32" ? "Path" : "PATH";
+    const newPath = inputPath + path.delimiter + process.env[envName];
+    this.debug(`new Path: ${newPath}`);
+    process.env[envName] = newPath;
+    process.env["PATH"] = newPath;
+    this.info(`Updated PATH: ${process.env[envName]}`);
   }
   getInput(input, required) {
     input = input.replace(/ /g, "_").toUpperCase();

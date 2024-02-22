@@ -64,8 +64,6 @@ export abstract class BuildAgentBase implements IBuildAgent {
     abstract tempDirVariable: string
     abstract cacheDirVariable: string
 
-    abstract addPath(inputPath: string): void
-
     abstract debug(message: string): void
 
     abstract info(message: string): void
@@ -96,6 +94,15 @@ export abstract class BuildAgentBase implements IBuildAgent {
 
     get cacheDir(): string {
         return this.getVariableAsPath(this.cacheDirVariable)
+    }
+
+    addPath(inputPath: string): void {
+        const envName = process.platform === 'win32' ? 'Path' : 'PATH'
+        const newPath = inputPath + path.delimiter + process.env[envName]
+        this.debug(`new Path: ${newPath}`)
+        process.env[envName] = newPath
+        process.env['PATH'] = newPath
+        this.info(`Updated PATH: ${process.env[envName]}`)
     }
 
     getInput(input: string, required?: boolean): string {

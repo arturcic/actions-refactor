@@ -37,13 +37,6 @@ class BuildAgent extends BuildAgentBase {
   sourceDirVariable = "AGENT_SOURCE_DIR";
   tempDirVariable = "AGENT_TEMP_DIR";
   cacheDirVariable = "AGENT_TOOLS_DIR";
-  addPath(toolPath) {
-    const envName = process.platform === "win32" ? "Path" : "PATH";
-    const newPath = toolPath + path.delimiter + process.env[envName];
-    this.debug(`new Path: ${newPath}`);
-    process.env[envName] = newPath;
-    this.info(`Updated PATH: ${process.env[envName]}`);
-  }
   debug = (message) => console.log(`[debug] ${message}`);
   info = (message) => console.log(`[info] - ${message}`);
   warn = (message) => console.warn(`[warn] - ${message}`);

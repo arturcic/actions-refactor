@@ -1,5 +1,4 @@
 import * as taskLib from 'azure-pipelines-task-lib/task'
-import * as toolLib from 'azure-pipelines-tool-lib/tool'
 
 import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
 
@@ -10,7 +9,10 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     tempDirVariable = 'AGENT_TEMPDIRECTORY'
     cacheDirVariable = 'AGENT_TOOLSDIRECTORY'
 
-    addPath = (inputPath: string): void => toolLib.prependPath(inputPath)
+    addPath(inputPath: string): void {
+        super.addPath(inputPath)
+        console.log(`##vso[task.prependpath]${inputPath}`)
+    }
 
     debug = (message: string): void => taskLib.debug(message)
 

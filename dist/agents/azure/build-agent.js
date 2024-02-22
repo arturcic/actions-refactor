@@ -1,4 +1,4 @@
-import { p as prependPath_1, t as task } from './vendor.js';
+import { t as task } from './vendor.js';
 import { B as BuildAgentBase } from '../../common/agents.js';
 
 class BuildAgent extends BuildAgentBase {
@@ -6,7 +6,10 @@ class BuildAgent extends BuildAgentBase {
   sourceDirVariable = "BUILD_SOURCESDIRECTORY";
   tempDirVariable = "AGENT_TEMPDIRECTORY";
   cacheDirVariable = "AGENT_TOOLSDIRECTORY";
-  addPath = (inputPath) => prependPath_1(inputPath);
+  addPath(inputPath) {
+    super.addPath(inputPath);
+    console.log(`##vso[task.prependpath]${inputPath}`);
+  }
   debug = (message) => task.debug(message);
   info = (message) => task.debug(message);
   warn = (message) => task.warning(message);
