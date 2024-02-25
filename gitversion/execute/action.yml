@@ -1,0 +1,99 @@
+name: gitversion-execute
+description: GitHub Action for Easy Semantic Versioning with GitVersion. Execute GitVersion to obtain version information
+author: GitTools
+branding:
+  color: gray-dark
+  icon: git-pull-request
+runs:
+  using: node20
+  main: ../../dist/github/gitversion/execute/bundle.js
+inputs:
+  targetPath:
+    description: Optionally supply the path to the working directory
+    required: false
+    default: ''
+  useConfigFile:
+    description: Whether to use a custom configuration file
+    required: false
+    default: 'false'
+  configFilePath:
+    description: Optional path to config file (defaults to GitVersion.yml)
+    required: false
+    default: 'GitVersion.yml'
+  updateAssemblyInfo:
+    description: Whether to update versions in the AssemblyInfo files
+    required: false
+    default: 'false'
+  updateAssemblyInfoFilename:
+    description: Update versions in specified file
+    required: false
+    default: ''
+  additionalArguments:
+    description: Additional arguments to send to GitVersion
+    required: false
+    default: ''
+outputs:
+  major: # id of output
+    description: 'The Major value'
+  minor:
+    description: 'The Minor value'
+  patch:
+    description: 'The Patch value'
+  preReleaseTag:
+    description: 'The PreReleaseTag value'
+  preReleaseTagWithDash:
+    description: 'The PreReleaseTagWithDash value'
+  preReleaseLabel:
+    description: 'The PreReleaseLabel value'
+  preReleaseNumber:
+    description: 'The PreReleaseNumber value'
+  weightedPreReleaseNumber:
+    description: 'The WeightedPreReleaseNumber value'
+  buildMetaData:
+    description: 'The BuildMetaData value'
+  buildMetaDataPadded:
+    description: 'The BuildMetaDataPadded value'
+  fullBuildMetaData:
+    description: 'The FullBuildMetaData value'
+  majorMinorPatch:
+    description: 'The MajorMinorPatch value'
+  semVer:
+    description: 'The SemVer value'
+  legacySemVer:
+    description: 'The LegacySemVer value'
+  legacySemVerPadded:
+    description: 'The LegacySemVerPadded value'
+  assemblySemVer:
+    description: 'The AssemblySemVer value'
+  assemblySemFileVer:
+    description: 'The AssemblySemFileVer value'
+  fullSemVer:
+    description: 'The FullSemVer value'
+  informationalVersion:
+    description: 'The InformationalVersion value'
+  branchName:
+    description: 'The BranchName value'
+  escapedBranchName:
+    description: 'The EscapedBranchName value'
+  sha:
+    description: 'The Sha value'
+  shortSha:
+    description: 'The ShortSha value'
+  nuGetVersionV2:
+    description: 'The NuGetVersionV2 value'
+  nuGetVersion:
+    description: 'The NuGetVersion value'
+  nuGetPreReleaseTagV2:
+    description: 'The NuGetPreReleaseTagV2 value'
+  nuGetPreReleaseTag:
+    description: 'The NuGetPreReleaseTag value'
+  versionSourceSha:
+    description: 'The VersionSourceSha value'
+  commitsSinceVersionSource:
+    description: 'The CommitsSinceVersionSource value'
+  commitsSinceVersionSourcePadded:
+    description: 'The CommitsSinceVersionSourcePadded value'
+  uncommittedChanges:
+    description: 'The UncommittedChanges value'
+  commitDate:
+    description: 'The CommitDate value'

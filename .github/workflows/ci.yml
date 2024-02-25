@@ -1,0 +1,31 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch all history for all tags and branches
+        run: |
+          git fetch --prune --unshallow
+      - run: |
+          npm install
+          npm run format-check
+          npm run build:agent:github
+        name: Build code
+      - name: gitversion/setup
+        uses: ./gitversion/setup
+        with:
+          versionSpec: '5.x'

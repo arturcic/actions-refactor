@@ -1,0 +1,10 @@
+name: GitTools
+description: Build tasks for easy semantic versioning for projects using Git and release management.
+author: GitTools
+branding:
+  color: gray-dark
+  icon: git-pull-request
+runs:
+  using: node20
+  main: 'dist/tools/gitversion.js --buildAgent github --command setup'
+

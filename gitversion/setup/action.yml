@@ -1,0 +1,26 @@
+name: gitversion-setup
+description: GitHub Action for Easy Semantic Versioning with GitVersion. Installs the specific version of GitVersion tool
+author: GitTools
+branding:
+  color: gray-dark
+  icon: git-pull-request
+runs:
+  using: node20
+  main: '../../tools/gitversion.js --buildAgent github --command setup'
+inputs:
+  versionSpec:
+    description: Required version in the form of 5.x or exact version like 5.0.0
+    required: true
+    default: ''
+  includePrerelease:
+    description: Include pre-release versions when matching a version
+    required: false
+    default: 'false'
+  ignoreFailedSources:
+    description: Treat package source failures as warnings.
+    required: false
+    default: 'false'
+  preferLatestVersion:
+    description: Prefer to download the latest version matching the versionSpec, even if there is a local cached version.
+    required: false
+    default: 'false'
