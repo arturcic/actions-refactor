@@ -6,7 +6,7 @@ branding:
   icon: git-pull-request
 runs:
   using: node20
-  main: '../../tools/gitversion.js --buildAgent github --command setup'
+  main: '../../dist/tools/gitversion.js'
 inputs:
   versionSpec:
     description: Required version in the form of 5.x or exact version like 5.0.0
