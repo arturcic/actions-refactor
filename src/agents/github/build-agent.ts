@@ -18,8 +18,6 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
 
     info = (message: string): void => core.info(message)
 
-    warn = (message: string): void => core.warning(message)
-
     error = (message: string): void => core.error(message)
 
     async exec(exec: string, args: string[]): Promise<IExecResult> {
@@ -33,13 +31,13 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         }
     }
 
-    setFailed = (message: string, _: boolean): void => core.setFailed(message)
-
-    setOutput = (name: string, value: string): void => core.setOutput(name, value)
-
     setSucceeded(_message: string, _done?: boolean): void {
         //
     }
+
+    setFailed = (message: string, _: boolean): void => core.setFailed(message)
+
+    setOutput = (name: string, value: string): void => core.setOutput(name, value)
 
     setVariable = (name: string, value: string): void => core.exportVariable(name, value)
 }

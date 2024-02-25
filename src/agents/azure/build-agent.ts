@@ -18,8 +18,6 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
 
     info = (message: string): void => taskLib.debug(message)
 
-    warn = (message: string): void => taskLib.warning(message)
-
     error = (message: string): void => taskLib.error(message)
 
     async exec(exec: string, args: string[]): Promise<IExecResult> {
@@ -35,11 +33,11 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         })
     }
 
+    setSucceeded = (message: string, done?: boolean): void => taskLib.setResult(taskLib.TaskResult.Succeeded, message, done)
+
     setFailed = (message: string, done?: boolean): void => taskLib.setResult(taskLib.TaskResult.Failed, message, done)
 
     setOutput = (name: string, value: string): void => taskLib.setVariable(name, value, false, true)
-
-    setSucceeded = (message: string, done?: boolean): void => taskLib.setResult(taskLib.TaskResult.Succeeded, message, done)
 
     setVariable = (name: string, value: string): void => taskLib.setVariable(name, value)
 }

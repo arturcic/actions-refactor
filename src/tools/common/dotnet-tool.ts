@@ -113,7 +113,7 @@ export abstract class DotnetTool implements IDotnetTool {
         const response = await fetch(downloadPath)
 
         if (!response || !response.ok) {
-            this.buildAgent.warn(`failed to query latest version for ${toolName} from ${downloadPath}. Status code: ${response ? response.status : 'unknown'}`)
+            this.buildAgent.info(`failed to query latest version for ${toolName} from ${downloadPath}. Status code: ${response ? response.status : 'unknown'}`)
             return null
         }
 

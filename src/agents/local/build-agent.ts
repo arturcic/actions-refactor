@@ -15,8 +15,6 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
 
     info = (message: string): void => console.log(`[info] - ${message}`)
 
-    warn = (message: string): void => console.warn(`[warn] - ${message}`)
-
     error = (message: string): void => console.error(`[error] - ${message}`)
 
     async exec(cmd: string, args: string[]): Promise<IExecResult> {
@@ -41,11 +39,11 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         }
     }
 
+    setSucceeded = (message: string, done?: boolean): void => this.info(`setSucceeded - ${message} - ${done}`)
+
     setFailed = (message: string, done?: boolean): void => this.error(`setFailed - ${message} - ${done}`)
 
     setOutput = (name: string, value: string): void => this.debug(`setOutput - ${name} - ${value}`)
-
-    setSucceeded = (message: string, done?: boolean): void => this.info(`setSucceeded - ${message} - ${done}`)
 
     setVariable(name: string, value: string): void {
         this.debug(`setVariable - ${name} - ${value}`)

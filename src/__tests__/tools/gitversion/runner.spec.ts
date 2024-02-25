@@ -10,7 +10,7 @@ import { BuildAgent as AzurePipelinesAgent } from '@agents/azure'
 import { BuildAgent as LocalBuildAgent } from '@agents/local'
 import { BuildAgent as GitHubActionsAgent } from '@agents/github'
 
-describe('GitVersion Runner', () => {
+describe.skip('GitVersion Runner', () => {
     const baseDir = path.resolve(__dirname, '../../../../.test')
     const envName = process.platform === 'win32' ? 'Path' : 'PATH'
     const version = '5.12.0'

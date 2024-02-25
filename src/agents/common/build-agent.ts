@@ -22,8 +22,6 @@ export interface IBuildAgent {
 
     info(message: string): void
 
-    warn(message: string): void
-
     error(message: string): void
 
     exec(exec: string, args: string[]): Promise<IExecResult>
@@ -44,11 +42,11 @@ export interface IBuildAgent {
 
     getListInput(input: string, required?: boolean): string[]
 
+    setSucceeded(message: string, done?: boolean): void
+
     setFailed(message: string, done?: boolean): void
 
     setOutput(name: string, value: string): void
-
-    setSucceeded(message: string, done?: boolean): void
 
     getVariable(name: string): string | undefined
 
@@ -69,17 +67,15 @@ export abstract class BuildAgentBase implements IBuildAgent {
 
     abstract info(message: string): void
 
-    abstract warn(message: string): void
-
     abstract error(message: string): void
 
     abstract exec(exec: string, args: string[]): Promise<IExecResult>
 
+    abstract setSucceeded(message: string, done?: boolean | undefined): void
+
     abstract setFailed(message: string, done?: boolean | undefined): void
 
     abstract setOutput(name: string, value: string): void
-
-    abstract setSucceeded(message: string, done?: boolean | undefined): void
 
     abstract setVariable(name: string, value: string): void
 
