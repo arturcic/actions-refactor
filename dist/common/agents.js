@@ -4,7 +4,7 @@ import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
 import * as util from 'node:util';
 import { exec } from 'node:child_process';
-import { b as semver } from './semver.js';
+import { s as semver } from './semver.js';
 
 const isFilePath = (cmd) => {
   return cmd.includes(path.sep) ? path.resolve(cmd) : void 0;
