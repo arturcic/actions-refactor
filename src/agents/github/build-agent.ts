@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
-import * as exe from '@actions/exec'
-import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
+import { BuildAgentBase, IBuildAgent } from '@agents/common'
 
 export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     agentName = 'GitHub Actions'
@@ -19,17 +18,6 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     info = (message: string): void => core.info(message)
 
     error = (message: string): void => core.error(message)
-
-    async exec(exec: string, args: string[]): Promise<IExecResult> {
-        const dotnetPath = await super.which(exec, true)
-        const { exitCode, stdout, stderr } = await exe.getExecOutput(`"${dotnetPath}"`, args)
-        return {
-            code: exitCode,
-            error: null,
-            stderr,
-            stdout
-        }
-    }
 
     setSucceeded(_message: string, _done?: boolean): void {
         //

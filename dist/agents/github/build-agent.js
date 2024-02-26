@@ -1,4 +1,4 @@
-import { c as coreExports, g as getExecOutput_1 } from './vendor.js';
+import { c as coreExports } from './vendor.js';
 import { B as BuildAgentBase } from '../../common/agents.js';
 
 class BuildAgent extends BuildAgentBase {
@@ -13,16 +13,6 @@ class BuildAgent extends BuildAgentBase {
   debug = (message) => coreExports.debug(message);
   info = (message) => coreExports.info(message);
   error = (message) => coreExports.error(message);
-  async exec(exec, args) {
-    const dotnetPath = await super.which(exec, true);
-    const { exitCode, stdout, stderr } = await getExecOutput_1(`"${dotnetPath}"`, args);
-    return {
-      code: exitCode,
-      error: null,
-      stderr,
-      stdout
-    };
-  }
   setSucceeded(_message, _done) {
   }
   setFailed = (message, _) => coreExports.setFailed(message);

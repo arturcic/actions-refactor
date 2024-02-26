@@ -2,6 +2,8 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
+import * as util from 'node:util';
+import { exec } from 'node:child_process';
 import { b as semver } from './semver.js';
 
 const isFilePath = (cmd) => {
@@ -147,6 +149,26 @@ class BuildAgentBase {
       this.info(`Found tool ${toolName}@${versionSpec} (${arch}) at ${toolPath}`);
     }
     return toolPath;
+  }
+  async exec(cmd, args) {
+    const exec$1 = util.promisify(exec);
+    try {
+      const { stdout, stderr } = await exec$1(`${cmd} ${args.join(" ")}`);
+      return {
+        code: 0,
+        error: null,
+        stderr,
+        stdout
+      };
+    } catch (e) {
+      const error = e;
+      return {
+        code: error.code,
+        error,
+        stderr: error.stderr,
+        stdout: error.stdout
+      };
+    }
   }
   async which(tool, _check) {
     this.debug(`looking for tool '${tool}' in PATH`);

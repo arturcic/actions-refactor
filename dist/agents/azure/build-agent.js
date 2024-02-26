@@ -13,17 +13,6 @@ class BuildAgent extends BuildAgentBase {
   debug = (message) => task.debug(message);
   info = (message) => task.debug(message);
   error = (message) => task.error(message);
-  async exec(exec, args) {
-    const tr = task.tool(exec);
-    tr.arg(args);
-    const result = tr.execSync();
-    return Promise.resolve({
-      code: result.code,
-      error: result.error,
-      stderr: result.stderr,
-      stdout: result.stdout
-    });
-  }
   setSucceeded = (message, done) => task.setResult(task.TaskResult.Succeeded, message, done);
   setFailed = (message, done) => task.setResult(task.TaskResult.Failed, message, done);
   setOutput = (name, value) => task.setVariable(name, value, false, true);

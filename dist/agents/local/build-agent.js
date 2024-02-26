@@ -1,6 +1,4 @@
 import * as process from 'node:process';
-import * as util from 'node:util';
-import { exec } from 'node:child_process';
 import { B as BuildAgentBase } from '../../common/agents.js';
 
 class BuildAgent extends BuildAgentBase {
@@ -11,26 +9,6 @@ class BuildAgent extends BuildAgentBase {
   debug = (message) => console.log(`[debug] ${message}`);
   info = (message) => console.log(`[info] - ${message}`);
   error = (message) => console.error(`[error] - ${message}`);
-  async exec(cmd, args) {
-    const exec$1 = util.promisify(exec);
-    try {
-      const { stdout, stderr } = await exec$1(`${cmd} ${args.join(" ")}`);
-      return {
-        code: 0,
-        error: null,
-        stderr,
-        stdout
-      };
-    } catch (e) {
-      const error = e;
-      return {
-        code: error.code,
-        error,
-        stderr: error.stderr,
-        stdout: error.stdout
-      };
-    }
-  }
   setSucceeded = (message, done) => this.info(`setSucceeded - ${message} - ${done}`);
   setFailed = (message, done) => this.error(`setFailed - ${message} - ${done}`);
   setOutput = (name, value) => this.debug(`setOutput - ${name} - ${value}`);

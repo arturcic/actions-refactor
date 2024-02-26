@@ -1,6 +1,6 @@
 import * as taskLib from 'azure-pipelines-task-lib/task'
 
-import { BuildAgentBase, IBuildAgent, IExecResult } from '@agents/common'
+import { BuildAgentBase, IBuildAgent } from '@agents/common'
 
 export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     agentName = 'Azure Pipelines'
@@ -19,19 +19,6 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     info = (message: string): void => taskLib.debug(message)
 
     error = (message: string): void => taskLib.error(message)
-
-    async exec(exec: string, args: string[]): Promise<IExecResult> {
-        const tr = taskLib.tool(exec)
-        tr.arg(args)
-
-        const result = tr.execSync()
-        return Promise.resolve({
-            code: result.code,
-            error: result.error,
-            stderr: result.stderr,
-            stdout: result.stdout
-        })
-    }
 
     setSucceeded = (message: string, done?: boolean): void => taskLib.setResult(taskLib.TaskResult.Succeeded, message, done)
 

@@ -2,6 +2,8 @@ import * as path from 'node:path';
 import 'node:process';
 import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
+import 'node:util';
+import 'node:child_process';
 import { s as semver } from './semver.js';
 import * as crypto from 'node:crypto';
 import { parseArgs } from 'util';

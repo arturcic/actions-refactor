@@ -2,6 +2,8 @@ import * as process from 'node:process'
 import * as path from 'node:path'
 import * as fs from 'node:fs/promises'
 import * as os from 'node:os'
+import * as util from 'node:util'
+import { exec as execNonPromise } from 'node:child_process'
 import * as semver from 'semver'
 import { IExecResult } from './models'
 import { lookPath } from './internal/lookPath'
@@ -68,8 +70,6 @@ export abstract class BuildAgentBase implements IBuildAgent {
     abstract info(message: string): void
 
     abstract error(message: string): void
-
-    abstract exec(exec: string, args: string[]): Promise<IExecResult>
 
     abstract setSucceeded(message: string, done?: boolean | undefined): void
 
@@ -211,6 +211,28 @@ export abstract class BuildAgentBase implements IBuildAgent {
         }
 
         return toolPath
+    }
+
+    async exec(cmd: string, args: string[]): Promise<IExecResult> {
+        const exec = util.promisify(execNonPromise)
+
+        try {
+            const { stdout, stderr } = await exec(`${cmd} ${args.join(' ')}`)
+            return {
+                code: 0,
+                error: null,
+                stderr,
+                stdout
+            }
+        } catch (e) {
+            const error = e as Error & { code: number; stderr: string; stdout: string }
+            return {
+                code: error.code,
+                error,
+                stderr: error.stderr,
+                stdout: error.stdout
+            }
+        }
     }
 
     async which(tool: string, _check?: boolean): Promise<string> {
