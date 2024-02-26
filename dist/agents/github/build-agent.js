@@ -12,7 +12,6 @@ class BuildAgent extends BuildAgentBase {
   }
   debug = (message) => coreExports.debug(message);
   info = (message) => coreExports.info(message);
-  warn = (message) => coreExports.warning(message);
   error = (message) => coreExports.error(message);
   async exec(exec, args) {
     const dotnetPath = await super.which(exec, true);
@@ -24,10 +23,10 @@ class BuildAgent extends BuildAgentBase {
       stdout
     };
   }
-  setFailed = (message, _) => coreExports.setFailed(message);
-  setOutput = (name, value) => coreExports.setOutput(name, value);
   setSucceeded(_message, _done) {
   }
+  setFailed = (message, _) => coreExports.setFailed(message);
+  setOutput = (name, value) => coreExports.setOutput(name, value);
   setVariable = (name, value) => coreExports.exportVariable(name, value);
 }
 

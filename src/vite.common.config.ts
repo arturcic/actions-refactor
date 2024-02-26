@@ -23,6 +23,7 @@ export function viteConfig(entry: { [p: string]: string }, manualChunks: (id: st
             rollupOptions: {
                 external: [...builtinModules, ...builtinModules.map(module => `node:${module}`)],
                 output: {
+                    entryFileNames: '[name].js',
                     chunkFileNames: '[name].js',
                     manualChunks
                 }
