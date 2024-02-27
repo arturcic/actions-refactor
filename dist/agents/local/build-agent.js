@@ -6,8 +6,9 @@ class BuildAgent extends BuildAgentBase {
   sourceDirVariable = "AGENT_SOURCE_DIR";
   tempDirVariable = "AGENT_TEMP_DIR";
   cacheDirVariable = "AGENT_TOOLS_DIR";
-  debug = (message) => console.log(`[debug] ${message}`);
+  debug = (message) => console.debug(`[debug] ${message}`);
   info = (message) => console.log(`[info] - ${message}`);
+  warn = (message) => console.warn(`[warn] - ${message}`);
   error = (message) => console.error(`[error] - ${message}`);
   setSucceeded = (message, done) => this.info(`setSucceeded - ${message} - ${done}`);
   setFailed = (message, done) => this.error(`setFailed - ${message} - ${done}`);

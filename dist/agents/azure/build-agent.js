@@ -1,4 +1,6 @@
+import * as process from 'node:process';
 import { B as BuildAgentBase } from '../../common/agents.js';
+import * as os from 'node:os';
 
 const CMD_PREFIX = "##vso[";
 var TaskResult = /* @__PURE__ */ ((TaskResult2) => {
@@ -9,14 +11,21 @@ var TaskResult = /* @__PURE__ */ ((TaskResult2) => {
   TaskResult2[TaskResult2["Skipped"] = 4] = "Skipped";
   return TaskResult2;
 })(TaskResult || {});
-class TaskCommand {
+function issueCommand(command, properties, message) {
+  const cmd = new Command(command, properties, message);
+  process.stdout.write(cmd.toString() + os.EOL);
+}
+class Command {
+  command;
+  message;
+  properties;
   constructor(command, properties, message) {
+    if (!command) {
+      command = "missing.command";
+    }
     this.command = command;
     this.properties = properties;
     this.message = message;
-    if (!command) {
-      this.command = "missing.command";
-    }
   }
   toString() {
     let cmdStr = CMD_PREFIX + this.command;
@@ -26,7 +35,7 @@ class TaskCommand {
         if (this.properties.hasOwnProperty(key)) {
           const val = this.properties[key];
           if (val) {
-            cmdStr += `${key}=${escape(`${val || ""}`)};`;
+            cmdStr += `${key}=${escapeProperty(`${val || ""}`)};`;
           }
         }
       }
@@ -38,10 +47,18 @@ class TaskCommand {
   }
 }
 function escapeData(s) {
-  return s.replace(/%/g, "%AZP25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+  return toCommandValue(s).replace(/%/g, "%AZP25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
 }
-function escape(s) {
-  return s.replace(/%/g, "%AZP25").replace(/\r/g, "%0D").replace(/\n/g, "%0A").replace(/]/g, "%5D").replace(/;/g, "%3B");
+function escapeProperty(s) {
+  return toCommandValue(s).replace(/%/g, "%AZP25").replace(/\r/g, "%0D").replace(/\n/g, "%0A").replace(/]/g, "%5D").replace(/;/g, "%3B");
+}
+function toCommandValue(input) {
+  if (input === null || input === void 0) {
+    return "";
+  } else if (typeof input === "string" || input instanceof String) {
+    return input;
+  }
+  return JSON.stringify(input);
 }
 
 class BuildAgent extends BuildAgentBase {
@@ -51,38 +68,34 @@ class BuildAgent extends BuildAgentBase {
   cacheDirVariable = "AGENT_TOOLSDIRECTORY";
   addPath(inputPath) {
     super.addPath(inputPath);
-    this._command("task.prependpath", null, inputPath);
+    issueCommand("task.prependpath", {}, inputPath);
   }
   info = (message) => this.debug(message);
-  debug = (message) => this._command("task.debug", null, message);
-  warning = (message) => this._command("task.issue", { type: "warning" }, message);
-  error = (message) => this._command("task.issue", { type: "error" }, message);
+  debug = (message) => issueCommand("task.debug", {}, message);
+  warn = (message) => issueCommand("task.issue", { type: "warning" }, message);
+  error = (message) => issueCommand("task.issue", { type: "error" }, message);
   setSucceeded = (message, done) => this._setResult(TaskResult.Succeeded, message, done);
   setFailed = (message, done) => this._setResult(TaskResult.Failed, message, done);
   setOutput = (name, value) => this._setVariable(name, value, true);
   setVariable = (name, value) => this._setVariable(name, value);
-  _command(command, properties, message) {
-    const taskCmd = new TaskCommand(command, properties, message);
-    console.log(taskCmd.toString());
-  }
   _setResult(result, message, done) {
     this.debug(`task result: ${TaskResult[result]}`);
     if (result === TaskResult.Failed && message) {
       this.error(message);
     } else if (result === TaskResult.SucceededWithIssues && message) {
-      this.warning(message);
+      this.warn(message);
     }
     const properties = { result: TaskResult[result] };
     if (done) {
       properties["done"] = "true";
     }
-    this._command("task.complete", properties, message);
+    issueCommand("task.complete", properties, message);
   }
   _setVariable(name, val, isOutput = false) {
     const key = this._getVariableKey(name);
     const varValue = val || "";
     process.env[key] = varValue;
-    this._command(
+    issueCommand(
       "task.setvariable",
       {
         variable: name || "",

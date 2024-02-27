@@ -24,6 +24,8 @@ export interface IBuildAgent {
 
     info(message: string): void
 
+    warn(message: string): void
+
     error(message: string): void
 
     exec(exec: string, args: string[]): Promise<IExecResult>
@@ -68,6 +70,8 @@ export abstract class BuildAgentBase implements IBuildAgent {
     abstract debug(message: string): void
 
     abstract info(message: string): void
+
+    abstract warn(message: string): void
 
     abstract error(message: string): void
 

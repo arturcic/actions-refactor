@@ -9,9 +9,11 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     tempDirVariable = 'AGENT_TEMP_DIR'
     cacheDirVariable = 'AGENT_TOOLS_DIR'
 
-    debug = (message: string): void => console.log(`[debug] ${message}`)
+    debug = (message: string): void => console.debug(`[debug] ${message}`)
 
     info = (message: string): void => console.log(`[info] - ${message}`)
+
+    warn = (message: string): void => console.warn(`[warn] - ${message}`)
 
     error = (message: string): void => console.error(`[error] - ${message}`)
 

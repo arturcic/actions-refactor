@@ -1,5 +1,6 @@
+import * as process from 'node:process'
 import { BuildAgentBase, IBuildAgent } from '@agents/common'
-import { TaskCommand, TaskResult } from './task-command'
+import { issueCommand, TaskResult } from './command'
 
 export class BuildAgent extends BuildAgentBase implements IBuildAgent {
     agentName = 'Azure Pipelines'
@@ -10,16 +11,16 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
 
     addPath(inputPath: string): void {
         super.addPath(inputPath)
-        this._command('task.prependpath', null, inputPath)
+        issueCommand('task.prependpath', {}, inputPath)
     }
 
     info = (message: string): void => this.debug(message)
 
-    debug = (message: string): void => this._command('task.debug', null, message)
+    debug = (message: string): void => issueCommand('task.debug', {}, message)
 
-    warning = (message: string): void => this._command('task.issue', { type: 'warning' }, message)
+    warn = (message: string): void => issueCommand('task.issue', { type: 'warning' }, message)
 
-    error = (message: string): void => this._command('task.issue', { type: 'error' }, message)
+    error = (message: string): void => issueCommand('task.issue', { type: 'error' }, message)
 
     setSucceeded = (message: string, done?: boolean): void => this._setResult(TaskResult.Succeeded, message, done)
 
@@ -29,25 +30,20 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
 
     setVariable = (name: string, value: string): void => this._setVariable(name, value)
 
-    private _command(command: string, properties: Record<string, string> | null, message: string): void {
-        const taskCmd = new TaskCommand(command, properties, message)
-        console.log(taskCmd.toString())
-    }
-
     private _setResult(result: TaskResult, message: string, done?: boolean): void {
         this.debug(`task result: ${TaskResult[result]}`)
         // add an error issue
         if (result === TaskResult.Failed && message) {
             this.error(message)
         } else if (result === TaskResult.SucceededWithIssues && message) {
-            this.warning(message)
+            this.warn(message)
         }
         // task.complete
         const properties: Record<string, string> = { result: TaskResult[result] }
         if (done) {
             properties['done'] = 'true'
         }
-        this._command('task.complete', properties, message)
+        issueCommand('task.complete', properties, message)
     }
 
     private _setVariable(name: string, val: string, isOutput = false): void {
@@ -55,7 +51,7 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         const varValue = val || ''
         process.env[key] = varValue
 
-        this._command(
+        issueCommand(
             'task.setvariable',
             {
                 variable: name || '',
