@@ -1,5 +1,5 @@
-import * as process from 'node:process'
 import * as os from 'node:os'
+import * as process from 'node:process'
 
 const CMD_PREFIX = '##vso['
 

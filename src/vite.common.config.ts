@@ -1,7 +1,7 @@
-import { defineConfig, UserConfig } from 'vite'
-import { resolve } from 'path'
-import tsconfigPaths from 'vite-tsconfig-paths'
+import { resolve } from 'node:path'
 import { builtinModules } from 'node:module'
+import { defineConfig, UserConfig } from 'vite'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 export function viteConfig(entry: { [p: string]: string }, manualChunks: (id: string) => string | undefined): UserConfig {
     return defineConfig({

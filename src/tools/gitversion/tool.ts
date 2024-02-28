@@ -1,9 +1,9 @@
+import * as os from 'os'
+import * as path from 'path'
 import { IExecResult } from '@agents/common'
 import { DotnetTool } from '@tools/common'
-import { GitVersionSettingsProvider, IGitVersionSettingsProvider } from './settings'
 import { GitVersionOutput, GitVersionSettings } from './models'
-import * as path from 'path'
-import * as os from 'os'
+import { GitVersionSettingsProvider, IGitVersionSettingsProvider } from './settings'
 
 export class GitVersionTool extends DotnetTool {
     get toolName(): string {

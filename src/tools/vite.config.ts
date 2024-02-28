@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { UserConfig } from 'vite'
 import { viteConfig } from '../vite.common.config'
 

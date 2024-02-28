@@ -1,3 +1,4 @@
+import * as os from 'node:os'
 import * as process from 'node:process'
 import { BuildAgentBase, IBuildAgent } from '@agents/common'
 import { issueCommand, TaskResult } from './command'
@@ -14,7 +15,9 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         issueCommand('task.prependpath', {}, inputPath)
     }
 
-    info = (message: string): void => this.debug(message)
+    info = (message: string): void => {
+        process.stdout.write(message + os.EOL)
+    }
 
     debug = (message: string): void => issueCommand('task.debug', {}, message)
 

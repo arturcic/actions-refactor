@@ -1,7 +1,6 @@
-// import * as fs from 'node:fs'
+import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
 import * as process from 'node:process'
-import * as fs from 'node:fs/promises'
 
 /**
  * Sometimes, people want to look for local executable files

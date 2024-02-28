@@ -1,6 +1,6 @@
+import * as crypto from 'node:crypto'
 import * as os from 'node:os'
 import * as fs from 'node:fs'
-import crypto from 'node:crypto'
 
 const CMD_STRING = '::'
 

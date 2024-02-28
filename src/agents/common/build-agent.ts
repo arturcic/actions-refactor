@@ -1,12 +1,12 @@
-import * as process from 'node:process'
-import * as path from 'node:path'
+import { exec as execNonPromise } from 'node:child_process'
 import * as fs from 'node:fs/promises'
 import * as os from 'node:os'
+import * as process from 'node:process'
+import * as path from 'node:path'
 import * as util from 'node:util'
-import { exec as execNonPromise } from 'node:child_process'
 import * as semver from 'semver'
+import { lookPath } from './lookPath'
 import { IExecResult } from './models'
-import { lookPath } from './internal/lookPath'
 
 export interface IBuildAgent {
     agentName: string
