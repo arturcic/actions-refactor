@@ -161,7 +161,6 @@ export abstract class DotnetTool implements IDotnetTool {
         if (result.code !== 0) {
             throw new Error(message)
         }
-        this.buildAgent.info(message)
 
         const toolPath = await this.buildAgent.cacheToolDir(tempDirectory, toolName, semverVersion)
         this.buildAgent.debug(`Cached tool path: ${toolPath}`)

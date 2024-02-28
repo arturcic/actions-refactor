@@ -125,9 +125,9 @@ export abstract class BuildAgentBase implements IBuildAgent {
     }
 
     getVariable(name: string): string {
-        this.debug(`getVariable - ${name}`)
-        const val = process.env[name] || ''
-        return val.trim()
+        const value = (process.env[name] || '').trim()
+        this.debug(`getVariable - ${name}: ${value}`)
+        return value.trim()
     }
 
     getVariableAsPath(name: string): string {
