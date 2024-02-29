@@ -211,11 +211,16 @@ class Runner {
       this.agent.debug(`Agent: '${this.agent.agentName}'`);
       this.agent.debug("Disabling telemetry");
       this.gitVersionTool.disableTelemetry();
-      this.agent.debug("Executing GitVersion");
+      this.agent.info("Executing GitVersion");
       const result = await this.gitVersionTool.run();
       if (result.code === 0) {
-        this.agent.debug("GitVersion executed successfully");
+        this.agent.info("GitVersion executed successfully");
         const { stdout } = result;
+        this.agent.info("GitVersion output:");
+        this.agent.info("-------------------");
+        this.agent.info(stdout);
+        this.agent.info("-------------------");
+        this.agent.debug("Parsing GitVersion output");
         if (stdout.lastIndexOf("{") === -1 || stdout.lastIndexOf("}") === -1) {
           this.agent.debug("GitVersion output is not valid JSON");
           this.agent.setFailed("GitVersion output is not valid JSON", true);
