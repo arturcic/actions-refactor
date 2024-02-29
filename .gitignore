@@ -25,4 +25,7 @@ dist-ssr
 
 .test/
 
-src/__tests__/.taskkey
+.taskkey
+*.vsix
+
+/dist/mock/
