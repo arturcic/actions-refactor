@@ -23,11 +23,8 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
-      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-      with:
-        token: ${{ secrets.PUSH_GITHUB_TOKEN }}
-    - uses: actions/checkout@v4
-      if: github.event_name == 'pull_request'
+      
+
     - name: Fetch all history for all tags and branches
       run: |
         git fetch --prune --unshallow
