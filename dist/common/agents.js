@@ -1,9 +1,9 @@
-import * as process from 'node:process';
-import * as path from 'node:path';
+import { exec } from 'node:child_process';
 import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
+import * as process from 'node:process';
+import * as path from 'node:path';
 import * as util from 'node:util';
-import { exec } from 'node:child_process';
 import { s as semver } from './semver.js';
 
 const isFilePath = (cmd) => {
@@ -72,9 +72,9 @@ class BuildAgentBase {
     return this.getInput(input, required).split("\n").filter((x) => x !== "");
   }
   getVariable(name) {
-    this.debug(`getVariable - ${name}`);
-    const val = process.env[name] || "";
-    return val.trim();
+    const value = (process.env[name] || "").trim();
+    this.debug(`getVariable - ${name}: ${value}`);
+    return value.trim();
   }
   getVariableAsPath(name) {
     return path.resolve(path.normalize(this.getVariable(name)));

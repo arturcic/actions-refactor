@@ -1,11 +1,11 @@
 import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs, g as getAgent } from '../common/tools.js';
-import * as path from 'path';
 import * as os from 'os';
-import 'util';
-import 'node:os';
-import 'node:fs/promises';
-import 'node:path';
+import * as path from 'path';
+import 'node:util';
 import 'node:crypto';
+import 'node:fs/promises';
+import 'node:os';
+import 'node:path';
 import '../common/semver.js';
 
 var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {

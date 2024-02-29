@@ -1,6 +1,6 @@
+import * as os from 'node:os';
 import * as process from 'node:process';
 import { B as BuildAgentBase } from '../../common/agents.js';
-import * as os from 'node:os';
 
 const CMD_PREFIX = "##vso[";
 var TaskResult = /* @__PURE__ */ ((TaskResult2) => {
@@ -70,7 +70,9 @@ class BuildAgent extends BuildAgentBase {
     super.addPath(inputPath);
     issueCommand("task.prependpath", {}, inputPath);
   }
-  info = (message) => this.debug(message);
+  info = (message) => {
+    process.stdout.write(message + os.EOL);
+  };
   debug = (message) => issueCommand("task.debug", {}, message);
   warn = (message) => issueCommand("task.issue", { type: "warning" }, message);
   error = (message) => issueCommand("task.issue", { type: "error" }, message);

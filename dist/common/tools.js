@@ -1,12 +1,11 @@
+import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import 'node:process';
-import * as fs from 'node:fs/promises';
-import * as os from 'node:os';
-import 'node:util';
 import 'node:child_process';
+import * as os from 'node:os';
+import { parseArgs } from 'node:util';
 import { s as semver } from './semver.js';
 import * as crypto from 'node:crypto';
-import { parseArgs } from 'util';
 
 async function getAgent(buildAgent) {
   const agent = `../agents/${buildAgent}/build-agent.js`;
@@ -132,7 +131,6 @@ class DotnetTool {
     if (result.code !== 0) {
       throw new Error(message);
     }
-    this.buildAgent.info(message);
     const toolPath = await this.buildAgent.cacheToolDir(tempDirectory, toolName, semverVersion);
     this.buildAgent.debug(`Cached tool path: ${toolPath}`);
     this.buildAgent.debug(`Cleaning up temp directory: ${tempDirectory}`);
