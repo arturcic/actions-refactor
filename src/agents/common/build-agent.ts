@@ -44,7 +44,7 @@ export interface IBuildAgent {
 
     getBooleanInput(input: string, required?: boolean): boolean
 
-    getListInput(input: string, required?: boolean): string[]
+    getDelimitedInput(input: string, delimiter: string, required?: boolean): string[]
 
     setSucceeded(message: string, done?: boolean): void
 
@@ -118,10 +118,14 @@ export abstract class BuildAgentBase implements IBuildAgent {
         return (inputValue || 'false').toLowerCase() === 'true'
     }
 
-    getListInput(input: string, required?: boolean): string[] {
+    getDelimitedInput(input: string, delimiter: string, required?: boolean): string[] {
         return this.getInput(input, required)
-            .split('\n')
-            .filter(x => x !== '')
+            .split(delimiter)
+            .filter(x => {
+                if (x) {
+                    return x.trim()
+                }
+            })
     }
 
     getVariable(name: string): string {
