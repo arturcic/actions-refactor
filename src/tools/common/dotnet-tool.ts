@@ -58,7 +58,7 @@ export abstract class DotnetTool implements IDotnetTool {
 
         let toolPath: string | null = null
         if (!setupSettings.preferLatestVersion) {
-            // Let's try and resolve the version spec locally first
+            // Let's try and resolve the version locally first
             toolPath = await this.buildAgent.findLocalTool(this.toolName, version)
             if (toolPath) {
                 this.buildAgent.info('--------------------------')

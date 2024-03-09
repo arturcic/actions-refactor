@@ -68,8 +68,12 @@ class BuildAgentBase {
     const inputValue = this.getInput(input, required);
     return (inputValue || "false").toLowerCase() === "true";
   }
-  getListInput(input, required) {
-    return this.getInput(input, required).split("\n").filter((x) => x !== "");
+  getDelimitedInput(input, delimiter, required) {
+    return this.getInput(input, required).split(delimiter).filter((x) => {
+      if (x) {
+        return x.trim();
+      }
+    });
   }
   getVariable(name) {
     this.debug(`getVariable - ${name}`);
