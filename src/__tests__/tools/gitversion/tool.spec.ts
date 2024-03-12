@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { IBuildAgent } from '@agents/common'
-import { GitVersionSettings, GitVersionTool } from '@tools/gitversion'
+import { GitVersionOutput, GitVersionSettings, GitVersionTool } from '@tools/gitversion'
 
 class TestGitVersionTool extends GitVersionTool {
     private _isValidInputFile = false
@@ -38,6 +38,55 @@ describe('GitVersionTool', () => {
 
     it('should have settings provider defined', () => {
         expect(tool.settingsProvider).toBeDefined()
+    })
+
+    describe('writeGitVersionToAgent', () => {
+        it('should write correct output and variables to agent', () => {
+            const outputs: Map<string, string> = new Map()
+            const variables: Map<string, string> = new Map()
+            const buildAgent = {
+                setOutput(name: string, value: string) {
+                    outputs.set(name, value)
+                },
+                setVariable(name: string, value: string) {
+                    variables.set(name, value)
+                }
+            } as IBuildAgent
+            tool = new TestGitVersionTool(buildAgent)
+
+            const output: Partial<GitVersionOutput> = {
+                Major: 1,
+                Minor: 2,
+                Patch: 3,
+                SemVer: '1.2.3-alpha.1',
+                FullSemVer: '1.2.3-alpha.1'
+            }
+            tool.writeGitVersionToAgent(output as GitVersionOutput)
+
+            expect(outputs.get('major')).toBe('1')
+            expect(outputs.get('minor')).toBe('2')
+            expect(outputs.get('patch')).toBe('3')
+            expect(outputs.get('semVer')).toBe('1.2.3-alpha.1')
+            expect(outputs.get('fullSemVer')).toBe('1.2.3-alpha.1')
+
+            expect(outputs.get('GitVersion_Major')).toBe('1')
+            expect(outputs.get('GitVersion_Minor')).toBe('2')
+            expect(outputs.get('GitVersion_Patch')).toBe('3')
+            expect(outputs.get('GitVersion_SemVer')).toBe('1.2.3-alpha.1')
+            expect(outputs.get('GitVersion_FullSemVer')).toBe('1.2.3-alpha.1')
+
+            expect(variables.get('major')).toBe('1')
+            expect(variables.get('minor')).toBe('2')
+            expect(variables.get('patch')).toBe('3')
+            expect(variables.get('semVer')).toBe('1.2.3-alpha.1')
+            expect(variables.get('fullSemVer')).toBe('1.2.3-alpha.1')
+
+            expect(variables.get('GitVersion_Major')).toBe('1')
+            expect(variables.get('GitVersion_Minor')).toBe('2')
+            expect(variables.get('GitVersion_Patch')).toBe('3')
+            expect(variables.get('GitVersion_SemVer')).toBe('1.2.3-alpha.1')
+            expect(variables.get('GitVersion_FullSemVer')).toBe('1.2.3-alpha.1')
+        })
     })
 
     describe('getRepoDir', () => {
