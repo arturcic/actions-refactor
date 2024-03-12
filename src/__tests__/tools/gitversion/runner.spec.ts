@@ -9,6 +9,7 @@ import { Runner } from '@tools/gitversion'
 import { BuildAgent as AzurePipelinesAgent } from '@agents/azure'
 import { BuildAgent as LocalBuildAgent } from '@agents/local'
 import { BuildAgent as GitHubActionsAgent } from '@agents/github'
+import { keysFn, SetupSettings } from '@tools/common'
 
 describe('GitVersion Runner', () => {
     const baseDir = path.resolve(__dirname, '../../../../.test')
@@ -24,9 +25,10 @@ describe('GitVersion Runner', () => {
         return process.env[key] || ''
     }
 
-    function setInputs(inputs: Record<string, string>): void {
-        for (const key in inputs) {
-            setEnv(`INPUT_${key}`, inputs[key])
+    function setInputs(inputs: Partial<SetupSettings>): void {
+        const keys = keysFn<Partial<SetupSettings>>(inputs)
+        for (const property of keys) {
+            setEnv(`INPUT_${property}`, inputs[property]?.toString() || '')
         }
     }
     function testOnAgent(agent: IBuildAgent): void {
@@ -37,12 +39,7 @@ describe('GitVersion Runner', () => {
             setEnv(agent.tempDirVariable, '')
             setEnv(agent.cacheDirVariable, '')
 
-            setInputs({
-                versionSpec: '',
-                includePrerelease: '',
-                ignoreFailedSources: '',
-                preferLatestVersion: ''
-            })
+            setInputs({})
         }
 
         let runner!: Runner
@@ -61,9 +58,9 @@ describe('GitVersion Runner', () => {
         it.sequential('should run setup GitVersion', async () => {
             setInputs({
                 versionSpec: '5.12.x',
-                includePrerelease: 'false',
-                ignoreFailedSources: 'false',
-                preferLatestVersion: 'false'
+                includePrerelease: false,
+                ignoreFailedSources: false,
+                preferLatestVersion: false
             })
 
             const exitCode = await runner.run('setup')
