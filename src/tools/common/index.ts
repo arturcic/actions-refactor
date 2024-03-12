@@ -13,3 +13,5 @@ export function parseCliArgs(): CliArgs {
         }
     }).values as CliArgs
 }
+
+export const keysFn = Object.keys as <T extends object>(obj: T) => (keyof T)[]

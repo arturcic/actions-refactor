@@ -1,7 +1,7 @@
 import * as os from 'os'
 import * as path from 'path'
 import { IExecResult } from '@agents/common'
-import { DotnetTool } from '@tools/common'
+import { DotnetTool, keysFn } from '@tools/common'
 import { GitVersionOutput, GitVersionSettings } from './models'
 import { GitVersionSettingsProvider, IGitVersionSettingsProvider } from './settings'
 
@@ -37,7 +37,6 @@ export class GitVersionTool extends DotnetTool {
     }
 
     writeGitVersionToAgent(output: GitVersionOutput): void {
-        const keysFn = Object.keys as <T extends object>(obj: T) => (keyof T)[]
         const keys = keysFn<GitVersionOutput>(output)
         for (const property of keys) {
             const name = this.toCamelCase(property)
