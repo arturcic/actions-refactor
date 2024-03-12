@@ -50,6 +50,11 @@ class DotnetTool {
         throw new Error(`Unable to find ${this.toolName} version '${version}'.`);
       }
     }
+    if (this.versionRange && !semver.satisfies(version, this.versionRange, { includePrerelease: setupSettings.includePrerelease })) {
+      throw new Error(
+        `Version spec '${setupSettings.versionSpec}' resolved as '${version}' does not satisfy the range '${this.versionRange}'.See https://github.com/GitTools/actions/blob/main/docs/versions.md for more information.`
+      );
+    }
     let toolPath = null;
     if (!setupSettings.preferLatestVersion) {
       toolPath = await this.buildAgent.findLocalTool(this.toolName, version);

@@ -75,6 +75,9 @@ class BuildAgentBase {
       }
     });
   }
+  getListInput(input, required) {
+    return this.getDelimitedInput(input, "\n", required);
+  }
   getVariable(name) {
     const value = (process.env[name] || "").trim();
     this.debug(`getVariable - ${name}: ${value}`);

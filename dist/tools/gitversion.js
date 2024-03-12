@@ -10,8 +10,12 @@ import '../common/semver.js';
 
 var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
   ExecuteFields2["targetPath"] = "targetPath";
+  ExecuteFields2["disableCache"] = "disableCache";
+  ExecuteFields2["disableNormalization"] = "disableNormalization";
+  ExecuteFields2["disableShallowCloneCheck"] = "disableShallowCloneCheck";
   ExecuteFields2["useConfigFile"] = "useConfigFile";
   ExecuteFields2["configFilePath"] = "configFilePath";
+  ExecuteFields2["overrideConfig"] = "overrideConfig";
   ExecuteFields2["updateAssemblyInfo"] = "updateAssemblyInfo";
   ExecuteFields2["updateAssemblyInfoFilename"] = "updateAssemblyInfoFilename";
   ExecuteFields2["additionalArguments"] = "additionalArguments";
@@ -22,16 +26,24 @@ var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
 class GitVersionSettingsProvider extends SettingsProvider {
   getGitVersionSettings() {
     const targetPath = this.buildAgent.getInput(ExecuteFields.targetPath);
+    const disableCache = this.buildAgent.getBooleanInput(ExecuteFields.disableCache);
+    const disableNormalization = this.buildAgent.getBooleanInput(ExecuteFields.disableNormalization);
+    const disableShallowCloneCheck = this.buildAgent.getBooleanInput(ExecuteFields.disableShallowCloneCheck);
     const useConfigFile = this.buildAgent.getBooleanInput(ExecuteFields.useConfigFile);
     const configFilePath = this.buildAgent.getInput(ExecuteFields.configFilePath);
+    const overrideConfig = this.buildAgent.getListInput(ExecuteFields.overrideConfig);
     const updateAssemblyInfo = this.buildAgent.getBooleanInput(ExecuteFields.updateAssemblyInfo);
     const updateAssemblyInfoFilename = this.buildAgent.getInput(ExecuteFields.updateAssemblyInfoFilename);
     const additionalArguments = this.buildAgent.getInput(ExecuteFields.additionalArguments);
     const srcDir = this.buildAgent.sourceDir?.replace(/\\/g, "/");
     return {
       targetPath,
+      disableCache,
+      disableNormalization,
+      disableShallowCloneCheck,
       useConfigFile,
       configFilePath,
+      overrideConfig,
       updateAssemblyInfo,
       updateAssemblyInfoFilename,
       additionalArguments,
@@ -44,12 +56,15 @@ class GitVersionTool extends DotnetTool {
   get toolName() {
     return "GitVersion.Tool";
   }
+  get versionRange() {
+    return ">=5.2.0 <6.1.0";
+  }
   get settingsProvider() {
     return new GitVersionSettingsProvider(this.buildAgent);
   }
   async run() {
     const settings = this.settingsProvider.getGitVersionSettings();
-    const workDir = await this.getRepoDir(settings.targetPath);
+    const workDir = await this.getRepoDir(settings);
     const args = await this.getArguments(workDir, settings);
     await this.setDotnetRoot();
     let toolPath;
@@ -78,10 +93,12 @@ class GitVersionTool extends DotnetTool {
       }
     }
   }
-  async getRepoDir(targetPath) {
+  async getRepoDir(settings) {
+    const targetPath = settings.targetPath;
+    const srcDir = settings.srcDir || ".";
     let workDir;
     if (!targetPath) {
-      workDir = this.buildAgent.sourceDir || ".";
+      workDir = srcDir;
     } else {
       if (await this.buildAgent.dirExists(targetPath)) {
         workDir = targetPath;
@@ -93,12 +110,36 @@ class GitVersionTool extends DotnetTool {
   }
   async getArguments(workDir, options) {
     let args = [workDir, "/output", "json", "/output", "buildserver"];
-    const { useConfigFile, configFilePath, updateAssemblyInfo, updateAssemblyInfoFilename, additionalArguments } = options;
+    const {
+      useConfigFile,
+      disableCache,
+      disableNormalization,
+      configFilePath,
+      overrideConfig,
+      updateAssemblyInfo,
+      updateAssemblyInfoFilename,
+      additionalArguments
+      //
+    } = options;
+    if (disableCache) {
+      args.push("/nocache");
+    }
+    if (disableNormalization) {
+      args.push("/nonormalize");
+    }
     if (useConfigFile) {
       if (await this.isValidInputFile("configFilePath", configFilePath)) {
         args.push("/config", configFilePath);
       } else {
         throw new Error(`GitVersion configuration file not found at ${configFilePath}`);
+      }
+    }
+    if (overrideConfig) {
+      for (let config of overrideConfig) {
+        config = config.trim();
+        if (config.match(/([a-zA-Z0-9]+(-[a-zA-Z]+)*=[a-zA-Z0-9\- :.']*)/)) {
+          args.push("/overrideconfig", config);
+        }
       }
     }
     if (updateAssemblyInfo) {
