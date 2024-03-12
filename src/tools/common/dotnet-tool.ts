@@ -26,6 +26,8 @@ export abstract class DotnetTool implements IDotnetTool {
 
     abstract get toolName(): string
 
+    abstract get versionRange(): string | null
+
     disableTelemetry(): void {
         this.buildAgent.info('Disable Telemetry')
         this.buildAgent.setVariable('DOTNET_CLI_TELEMETRY_OPTOUT', 'true')
@@ -54,6 +56,13 @@ export abstract class DotnetTool implements IDotnetTool {
             if (!version) {
                 throw new Error(`Unable to find ${this.toolName} version '${version}'.`)
             }
+        }
+
+        if (this.versionRange && !semver.satisfies(version, this.versionRange, { includePrerelease: setupSettings.includePrerelease })) {
+            throw new Error(
+                `Version spec '${setupSettings.versionSpec}' resolved as '${version}' does not satisfy the range '${this.versionRange}'.` +
+                    'See https://github.com/GitTools/actions/blob/main/docs/versions.md for more information.'
+            )
         }
 
         let toolPath: string | null = null
