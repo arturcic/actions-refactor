@@ -46,6 +46,8 @@ export interface IBuildAgent {
 
     getDelimitedInput(input: string, delimiter: string, required?: boolean): string[]
 
+    getListInput(input: string, required?: boolean): string[]
+
     setSucceeded(message: string, done?: boolean): void
 
     setFailed(message: string, done?: boolean): void
@@ -126,6 +128,10 @@ export abstract class BuildAgentBase implements IBuildAgent {
                     return x.trim()
                 }
             })
+    }
+
+    getListInput(input: string, required?: boolean): string[] {
+        return this.getDelimitedInput(input, '\n', required)
     }
 
     getVariable(name: string): string {

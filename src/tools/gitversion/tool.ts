@@ -10,13 +10,17 @@ export class GitVersionTool extends DotnetTool {
         return 'GitVersion.Tool'
     }
 
+    get versionRange(): string | null {
+        return '>=5.2.0 <6.1.0'
+    }
+
     get settingsProvider(): IGitVersionSettingsProvider {
         return new GitVersionSettingsProvider(this.buildAgent)
     }
 
     async run(): Promise<IExecResult> {
         const settings = this.settingsProvider.getGitVersionSettings()
-        const workDir = await this.getRepoDir(settings.targetPath)
+        const workDir = await this.getRepoDir(settings)
         const args = await this.getArguments(workDir, settings)
 
         await this.setDotnetRoot()
@@ -49,10 +53,12 @@ export class GitVersionTool extends DotnetTool {
         }
     }
 
-    protected async getRepoDir(targetPath: string): Promise<string> {
+    protected async getRepoDir(settings: GitVersionSettings): Promise<string> {
+        const targetPath = settings.targetPath
+        const srcDir = settings.srcDir || '.'
         let workDir: string
         if (!targetPath) {
-            workDir = this.buildAgent.sourceDir || '.'
+            workDir = srcDir
         } else {
             if (await this.buildAgent.dirExists(targetPath)) {
                 workDir = targetPath
@@ -66,7 +72,25 @@ export class GitVersionTool extends DotnetTool {
     protected async getArguments(workDir: string, options: GitVersionSettings): Promise<string[]> {
         let args = [workDir, '/output', 'json', '/output', 'buildserver']
 
-        const { useConfigFile, configFilePath, updateAssemblyInfo, updateAssemblyInfoFilename, additionalArguments } = options
+        const {
+            useConfigFile,
+            disableCache,
+            disableNormalization,
+            configFilePath,
+            overrideConfig,
+            updateAssemblyInfo,
+            updateAssemblyInfoFilename,
+            additionalArguments
+            //
+        } = options
+
+        if (disableCache) {
+            args.push('/nocache')
+        }
+
+        if (disableNormalization) {
+            args.push('/nonormalize')
+        }
 
         if (useConfigFile) {
             if (await this.isValidInputFile('configFilePath', configFilePath)) {
@@ -75,6 +99,16 @@ export class GitVersionTool extends DotnetTool {
                 throw new Error(`GitVersion configuration file not found at ${configFilePath}`)
             }
         }
+
+        if (overrideConfig) {
+            for (let config of overrideConfig) {
+                config = config.trim()
+                if (config.match(/([a-zA-Z0-9]+(-[a-zA-Z]+)*=[a-zA-Z0-9\- :.']*)/)) {
+                    args.push('/overrideconfig', config)
+                }
+            }
+        }
+
         if (updateAssemblyInfo) {
             args.push('/updateassemblyinfo')
 

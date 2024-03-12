@@ -13,8 +13,8 @@ class TestGitVersionTool extends GitVersionTool {
         return Promise.resolve(this._isValidInputFile)
     }
 
-    async getRepoDir(targetPath: string): Promise<string> {
-        return super.getRepoDir(targetPath)
+    async getRepoDir(settings: GitVersionSettings): Promise<string> {
+        return super.getRepoDir(settings)
     }
 
     async getArguments(workDir: string, options: GitVersionSettings): Promise<string[]> {
@@ -42,20 +42,22 @@ describe('GitVersionTool', () => {
 
     describe('getRepoDir', () => {
         it('should return correct repo dir for empty target path, takes build agent sourceDir', async () => {
-            const buildAgent = {
-                sourceDir: 'workdir'
-            } as IBuildAgent
+            const buildAgent = {} as IBuildAgent
             tool = new TestGitVersionTool(buildAgent)
-            const repoDir = await tool.getRepoDir('')
+            const repoDir = await tool.getRepoDir({
+                targetPath: '',
+                srcDir: 'workdir'
+            } as GitVersionSettings)
             expect(repoDir).toBe('workdir')
         })
 
         it('should return correct repo dir for empty target path, takes default', async () => {
-            const buildAgent = {
-                sourceDir: ''
-            } as IBuildAgent
+            const buildAgent = {} as IBuildAgent
             tool = new TestGitVersionTool(buildAgent)
-            const repoDir = await tool.getRepoDir('')
+            const repoDir = await tool.getRepoDir({
+                targetPath: '',
+                srcDir: ''
+            } as GitVersionSettings)
             expect(repoDir).toBe('.')
         })
 
@@ -66,7 +68,9 @@ describe('GitVersionTool', () => {
                 }
             } as IBuildAgent
             tool = new TestGitVersionTool(buildAgent)
-            const repoDir = await tool.getRepoDir('targetDir')
+            const repoDir = await tool.getRepoDir({
+                targetPath: 'targetDir'
+            } as GitVersionSettings)
             expect(repoDir).toBe('targetDir')
         })
 
@@ -78,7 +82,11 @@ describe('GitVersionTool', () => {
                 }
             } as IBuildAgent
             tool = new TestGitVersionTool(buildAgent)
-            await expect(tool.getRepoDir(wrongDir)).rejects.toThrowError(`Directory not found at ${wrongDir}`)
+            await expect(
+                tool.getRepoDir({
+                    targetPath: wrongDir
+                } as GitVersionSettings)
+            ).rejects.toThrowError(`Directory not found at ${wrongDir}`)
         })
     })
 
@@ -86,6 +94,20 @@ describe('GitVersionTool', () => {
         it('should return correct arguments for empty settings', async () => {
             const args = await tool.getArguments('workdir', {} as GitVersionSettings)
             expect(args).toEqual(['workdir', '/output', 'json', '/output', 'buildserver'])
+        })
+
+        it('should return correct arguments for settings with cache', async () => {
+            const args = await tool.getArguments('workdir', {
+                disableCache: true
+            } as GitVersionSettings)
+            expect(args).toEqual(['workdir', '/output', 'json', '/output', 'buildserver', '/nocache'])
+        })
+
+        it('should return correct arguments for settings with normalization', async () => {
+            const args = await tool.getArguments('workdir', {
+                disableNormalization: true
+            } as GitVersionSettings)
+            expect(args).toEqual(['workdir', '/output', 'json', '/output', 'buildserver', '/nonormalize'])
         })
 
         it('should return correct arguments for settings with config', async () => {
@@ -106,6 +128,23 @@ describe('GitVersionTool', () => {
                     configFilePath: configFile
                 } as GitVersionSettings)
             ).rejects.toThrowError(`GitVersion configuration file not found at ${configFile}`)
+        })
+
+        it('should return correct arguments for settings with override config', async () => {
+            const args = await tool.getArguments('workdir', {
+                overrideConfig: ['tag-prefix=release-', 'next-version=1.0.0']
+            } as GitVersionSettings)
+            expect(args).toEqual([
+                'workdir',
+                '/output',
+                'json',
+                '/output',
+                'buildserver',
+                '/overrideconfig',
+                'tag-prefix=release-',
+                '/overrideconfig',
+                'next-version=1.0.0'
+            ])
         })
 
         it('should return correct arguments for settings with assembly info', async () => {
