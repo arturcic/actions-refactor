@@ -187,6 +187,7 @@ function parseCliArgs() {
     }
   }).values;
 }
+const keysFn = Object.keys;
 
-export { DotnetTool as D, SettingsProvider as S, getAgent as g, parseCliArgs as p };
+export { DotnetTool as D, SettingsProvider as S, getAgent as g, keysFn as k, parseCliArgs as p };
 //# sourceMappingURL=tools.js.map

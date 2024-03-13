@@ -1,4 +1,4 @@
-import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs, g as getAgent } from '../common/tools.js';
+import { S as SettingsProvider, D as DotnetTool, k as keysFn, p as parseCliArgs, g as getAgent } from '../common/tools.js';
 import * as os from 'os';
 import * as path from 'path';
 import 'node:util';
@@ -78,7 +78,6 @@ class GitVersionTool extends DotnetTool {
     return this.execute(toolPath, args);
   }
   writeGitVersionToAgent(output) {
-    const keysFn = Object.keys;
     const keys = keysFn(output);
     for (const property of keys) {
       const name = this.toCamelCase(property);
