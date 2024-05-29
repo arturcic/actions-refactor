@@ -94,7 +94,11 @@ export abstract class DotnetTool implements IDotnetTool {
     protected async setDotnetRoot(): Promise<void> {
         if (os.platform() !== 'win32' && !this.buildAgent.getVariable('DOTNET_ROOT')) {
             let dotnetPath = await this.buildAgent.which('dotnet', true)
-            dotnetPath = (await fs.readlink(dotnetPath)) || dotnetPath
+
+            const stats = await fs.lstat(dotnetPath)
+            if (stats.isSymbolicLink()) {
+                dotnetPath = (await fs.readlink(dotnetPath)) || dotnetPath
+            }
             const dotnetRoot = path.dirname(dotnetPath)
             this.buildAgent.setVariable('DOTNET_ROOT', dotnetRoot)
         }
