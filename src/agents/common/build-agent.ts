@@ -1,6 +1,5 @@
 import { exec as execNonPromise } from 'node:child_process'
 import * as fs from 'node:fs/promises'
-import * as os from 'node:os'
 import * as process from 'node:process'
 import * as path from 'node:path'
 import * as util from 'node:util'
@@ -30,7 +29,7 @@ export interface IBuildAgent {
 
     exec(exec: string, args: string[]): Promise<ExecResult>
 
-    cacheToolDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string>
+    cacheToolDir(sourceDir: string, tool: string, version: string): Promise<string>
 
     dirExists(file: string): Promise<boolean>
 
@@ -38,7 +37,7 @@ export interface IBuildAgent {
 
     fileExists(file: string): Promise<boolean>
 
-    findLocalTool(toolName: string, versionSpec: string, arch?: string): Promise<string | null>
+    findLocalTool(toolName: string, versionSpec: string): Promise<string | null>
 
     getInput(input: string, required?: boolean): string
 
@@ -166,8 +165,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
         }
     }
 
-    async cacheToolDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string> {
-        arch = arch || os.arch()
+    async cacheToolDir(sourceDir: string, tool: string, version: string): Promise<string> {
         if (!tool) {
             throw new Error('tool is a required parameter')
         }
@@ -185,7 +183,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
         }
 
         version = semver.clean(version) || version
-        const destPath = path.join(cacheRoot, tool, version, arch)
+        const destPath = path.join(cacheRoot, tool, version)
         if (await this.dirExists(destPath)) {
             this.debug(`Destination directory ${destPath} already exists, removing`)
             await fs.rm(destPath, { recursive: true, force: true, maxRetries: 3, retryDelay: 1000 })
@@ -195,12 +193,11 @@ export abstract class BuildAgentBase implements IBuildAgent {
         await fs.mkdir(destPath, { recursive: true })
         await fs.cp(sourceDir, destPath, { recursive: true, force: true })
 
-        this.debug(`Caching ${tool}@${version} (${arch}) from ${sourceDir}`)
+        this.debug(`Caching ${tool}@${version} from ${sourceDir}`)
         return destPath
     }
 
-    async findLocalTool(toolName: string, versionSpec: string, arch?: string): Promise<string | null> {
-        arch = arch || os.arch()
+    async findLocalTool(toolName: string, versionSpec: string): Promise<string | null> {
         if (!toolName) {
             throw new Error('toolName is a required parameter')
         }
@@ -215,13 +212,13 @@ export abstract class BuildAgentBase implements IBuildAgent {
         }
 
         versionSpec = semver.clean(versionSpec) || versionSpec
-        this.info(`Looking for local tool ${toolName}@${versionSpec} (${arch})`)
-        const toolPath = path.join(cacheRoot, toolName, versionSpec, arch)
+        this.info(`Looking for local tool ${toolName}@${versionSpec}`)
+        const toolPath = path.join(cacheRoot, toolName, versionSpec)
         if (!(await this.dirExists(toolPath))) {
             this.info(`Directory ${toolPath} not found`)
             return null
         } else {
-            this.info(`Found tool ${toolName}@${versionSpec} (${arch}) at ${toolPath}`)
+            this.info(`Found tool ${toolName}@${versionSpec} at ${toolPath}`)
         }
 
         return toolPath

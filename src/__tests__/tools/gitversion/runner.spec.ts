@@ -1,7 +1,6 @@
 import * as process from 'node:process'
 import * as path from 'node:path'
 import * as fs from 'node:fs'
-import * as os from 'node:os'
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { IBuildAgent } from '@agents/common'
@@ -15,7 +14,7 @@ describe('GitVersion Runner', () => {
     const baseDir = path.resolve(__dirname, '../../../../.test')
     const envName = process.platform === 'win32' ? 'Path' : 'PATH'
     const version = '5.12.0'
-    const toolPath = path.resolve(baseDir, 'tools', 'GitVersion.Tool', version, os.arch())
+    const toolPath = path.resolve(baseDir, 'tools', 'GitVersion.Tool', version)
 
     function setEnv(key: string, value: string): void {
         process.env[key.toUpperCase()] = value
