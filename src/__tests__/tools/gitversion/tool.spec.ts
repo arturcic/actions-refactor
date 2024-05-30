@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { IBuildAgent } from '@agents/common'
-import { GitVersionOutput, GitVersionSettings, GitVersionTool } from '@tools/gitversion'
+import { type GitVersionOutput, type GitVersionSettings, GitVersionTool } from '@tools/gitversion'
 
 class TestGitVersionTool extends GitVersionTool {
     private _isValidInputFile = false

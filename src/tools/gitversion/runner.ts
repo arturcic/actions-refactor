@@ -1,5 +1,5 @@
 import { IBuildAgent } from '@agents/common'
-import { Commands, GitVersionOutput } from './models'
+import { type Commands, type GitVersionOutput } from './models'
 import { GitVersionTool } from './tool'
 
 export class Runner {

@@ -13,7 +13,7 @@ export enum ExecuteFields {
     srcDir = 'srcDir'
 }
 
-export interface GitVersionSettings {
+export type GitVersionSettings = {
     [ExecuteFields.targetPath]: string
     [ExecuteFields.disableCache]: boolean
     [ExecuteFields.disableNormalization]: boolean
@@ -27,7 +27,7 @@ export interface GitVersionSettings {
     [ExecuteFields.srcDir]: string | undefined
 }
 
-export interface GitVersionOutput {
+export type GitVersionOutput = {
     Major: number
     Minor: number
     Patch: number

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { IBuildAgent } from '@agents/common'
-import { GitVersionSettings, GitVersionSettingsProvider } from '@tools/gitversion'
+import { type GitVersionSettings, GitVersionSettingsProvider } from '@tools/gitversion'
 
 describe('GitVersion settings', () => {
     it('should return GitVersionSettings', () => {

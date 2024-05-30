@@ -1,5 +1,5 @@
 import { parseArgs } from 'node:util'
-import { CliArgs } from './models'
+import { type CliArgs } from './models'
 
 export * from './models'
 export * from './dotnet-tool'

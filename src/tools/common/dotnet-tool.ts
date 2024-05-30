@@ -4,8 +4,8 @@ import * as os from 'node:os'
 import * as path from 'node:path'
 
 import * as semver from 'semver'
-import { IBuildAgent, IExecResult } from '@agents/common'
-import { ISettingsProvider } from './models'
+import { IBuildAgent, type ExecResult } from '@agents/common'
+import { ISettingsProvider } from './settings'
 
 export interface IDotnetTool {
     get toolName(): string
@@ -34,7 +34,7 @@ export abstract class DotnetTool implements IDotnetTool {
         this.buildAgent.setVariable('DOTNET_NOLOGO', 'true')
     }
 
-    async execute(cmd: string, args: string[]): Promise<IExecResult> {
+    async execute(cmd: string, args: string[]): Promise<ExecResult> {
         this.buildAgent.info(`Command: ${cmd} ${args.join(' ')}`)
         return this.buildAgent.exec(cmd, args)
     }

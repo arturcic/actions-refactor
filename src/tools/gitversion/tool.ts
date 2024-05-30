@@ -1,8 +1,8 @@
 import * as os from 'os'
 import * as path from 'path'
-import { IExecResult } from '@agents/common'
+import { type ExecResult } from '@agents/common'
 import { DotnetTool, keysFn } from '@tools/common'
-import { GitVersionOutput, GitVersionSettings } from './models'
+import { type GitVersionOutput, type GitVersionSettings } from './models'
 import { GitVersionSettingsProvider, IGitVersionSettingsProvider } from './settings'
 
 export class GitVersionTool extends DotnetTool {
@@ -18,7 +18,7 @@ export class GitVersionTool extends DotnetTool {
         return new GitVersionSettingsProvider(this.buildAgent)
     }
 
-    async run(): Promise<IExecResult> {
+    async run(): Promise<ExecResult> {
         const settings = this.settingsProvider.getGitVersionSettings()
         const workDir = await this.getRepoDir(settings)
         const args = await this.getArguments(workDir, settings)
@@ -190,7 +190,7 @@ export class GitVersionTool extends DotnetTool {
     }
 
     private toCamelCase(input: string): string {
-        return input.replace(/^\w|[A-Z]|\b\w|\s+/g, function (match, index) {
+        return input.replace(/^\w|[A-Z]|\b\w|\s+/g, function(match, index) {
             if (+match === 0) return '' // or if (/\s+/.test(match)) for white spaces
             return index === 0 ? match.toLowerCase() : match.toUpperCase()
         })

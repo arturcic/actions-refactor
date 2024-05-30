@@ -6,7 +6,7 @@ import * as path from 'node:path'
 import * as util from 'node:util'
 import * as semver from 'semver'
 import { lookPath } from './lookPath'
-import { IExecResult } from './models'
+import { type ExecResult } from './models'
 
 export interface IBuildAgent {
     agentName: string
@@ -28,7 +28,7 @@ export interface IBuildAgent {
 
     error(message: string): void
 
-    exec(exec: string, args: string[]): Promise<IExecResult>
+    exec(exec: string, args: string[]): Promise<ExecResult>
 
     cacheToolDir(sourceDir: string, tool: string, version: string, arch?: string): Promise<string>
 
@@ -227,7 +227,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
         return toolPath
     }
 
-    async exec(cmd: string, args: string[]): Promise<IExecResult> {
+    async exec(cmd: string, args: string[]): Promise<ExecResult> {
         const exec = util.promisify(execNonPromise)
 
         try {

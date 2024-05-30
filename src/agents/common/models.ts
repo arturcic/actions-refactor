@@ -1,4 +1,4 @@
-export interface IExecResult {
+export type ExecResult = {
     stdout: string
     stderr: string
     code: number

@@ -9,7 +9,7 @@ import { Runner } from '@tools/gitversion'
 import { BuildAgent as AzurePipelinesAgent } from '@agents/azure'
 import { BuildAgent as LocalBuildAgent } from '@agents/local'
 import { BuildAgent as GitHubActionsAgent } from '@agents/github'
-import { keysFn, SetupSettings } from '@tools/common'
+import { keysFn, type SetupSettings } from '@tools/common'
 
 describe('GitVersion Runner', () => {
     const baseDir = path.resolve(__dirname, '../../../../.test')

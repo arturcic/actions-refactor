@@ -1,5 +1,5 @@
 import { IBuildAgent } from '@agents/common'
-import { Commands } from './models'
+import { type Commands } from './models'
 
 export class Runner {
     constructor(private readonly agent: IBuildAgent) {}
