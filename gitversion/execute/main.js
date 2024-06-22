@@ -1,3 +1,5 @@
-import { run } from '../gitversion.js'
+import { run, folderName } from '../tool.js'
 
-await run('github', 'execute')
+const command = folderName(import.meta.url)
+
+await run('github', command)
