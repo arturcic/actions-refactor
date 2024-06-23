@@ -30,8 +30,7 @@ const getDirsToWalkThrough = (options) => {
 };
 async function lookPath(command, opt = {}) {
   const directPath = isFilePath(command);
-  if (directPath)
-    return isExecutable(directPath, opt);
+  if (directPath) return isExecutable(directPath, opt);
   const dirs = getDirsToWalkThrough(opt);
   const bins = await Promise.all(dirs.map(async (dir) => isExecutable(path.join(dir, command), opt)));
   return bins.find((bin) => !!bin);
