@@ -2,7 +2,7 @@
 
 Find out how to use the **gitversion/execute** action using the examples below.
 
-For the GitVersion workflow to execute successfully, you must checkout your Git repository with `fetch-depth: 0` to fetch all history for all tags and branches, as follows:
+For the GitVersion workflow to execute successfully, you must check out your Git repository with `fetch-depth: 0` to fetch all history for all tags and branches, as follows:
 
 ```yaml
 steps:

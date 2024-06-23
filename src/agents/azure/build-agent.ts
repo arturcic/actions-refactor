@@ -40,6 +40,8 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
             this.error(message)
         } else if (result === TaskResult.SucceededWithIssues && message) {
             this.warn(message)
+        } else {
+            this.info(message)
         }
         // task.complete
         const properties: Record<string, string> = { result: TaskResult[result] }

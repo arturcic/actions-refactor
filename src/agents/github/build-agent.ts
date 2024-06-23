@@ -34,7 +34,7 @@ export class BuildAgent extends BuildAgentBase implements IBuildAgent {
         process.exitCode = ExitCode.Success
     }
 
-    setFailed = (message: string, _: boolean): void => {
+    setFailed = (message: string, _done?: boolean): void => {
         process.exitCode = ExitCode.Failure
         this.error(message)
     }
