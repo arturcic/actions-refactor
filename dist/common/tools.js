@@ -1,12 +1,11 @@
+import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import 'node:process';
-import * as fs from 'node:fs/promises';
-import * as os from 'node:os';
-import 'node:util';
 import 'node:child_process';
+import { parseArgs } from 'node:util';
 import { s as semver } from './semver.js';
 import * as crypto from 'node:crypto';
-import { parseArgs } from 'util';
+import * as os from 'node:os';
 
 async function getAgent(buildAgent) {
   const agent = `../agents/${buildAgent}/build-agent.js`;
@@ -26,7 +25,7 @@ class DotnetTool {
   constructor(buildAgent) {
     this.buildAgent = buildAgent;
   }
-  static nugetRoot = "https://azuresearch-usnc.nuget.org/";
+  static nugetRoot = "https://azuresearch-usnc.nuget.org/query";
   disableTelemetry() {
     this.buildAgent.info("Disable Telemetry");
     this.buildAgent.setVariable("DOTNET_CLI_TELEMETRY_OPTOUT", "true");
@@ -51,6 +50,11 @@ class DotnetTool {
         throw new Error(`Unable to find ${this.toolName} version '${version}'.`);
       }
     }
+    if (this.versionRange && !semver.satisfies(version, this.versionRange, { includePrerelease: setupSettings.includePrerelease })) {
+      throw new Error(
+        `Version spec '${setupSettings.versionSpec}' resolved as '${version}' does not satisfy the range '${this.versionRange}'.See https://github.com/GitTools/actions/blob/main/docs/versions.md for more information.`
+      );
+    }
     let toolPath = null;
     if (!setupSettings.preferLatestVersion) {
       toolPath = await this.buildAgent.findLocalTool(this.toolName, version);
@@ -73,7 +77,10 @@ class DotnetTool {
   async setDotnetRoot() {
     if (os.platform() !== "win32" && !this.buildAgent.getVariable("DOTNET_ROOT")) {
       let dotnetPath = await this.buildAgent.which("dotnet", true);
-      dotnetPath = await fs.readlink(dotnetPath) || dotnetPath;
+      const stats = await fs.lstat(dotnetPath);
+      if (stats.isSymbolicLink()) {
+        dotnetPath = await fs.readlink(dotnetPath) || dotnetPath;
+      }
       const dotnetRoot = path.dirname(dotnetPath);
       this.buildAgent.setVariable("DOTNET_ROOT", dotnetRoot);
     }
@@ -92,7 +99,7 @@ class DotnetTool {
     );
     const toolNameParam = encodeURIComponent(toolName.toLowerCase());
     const prereleaseParam = includePrerelease ? "true" : "false";
-    const downloadPath = `${DotnetTool.nugetRoot}query?q=${toolNameParam}&prerelease=${prereleaseParam}&semVerLevel=2.0.0&take=1`;
+    const downloadPath = `${DotnetTool.nugetRoot}?q=${toolNameParam}&prerelease=${prereleaseParam}&semVerLevel=2.0.0&take=1`;
     const response = await fetch(downloadPath);
     if (!response || !response.ok) {
       this.buildAgent.info(`failed to query latest version for ${toolName} from ${downloadPath}. Status code: ${response ? response.status : "unknown"}`);
@@ -132,7 +139,6 @@ class DotnetTool {
     if (result.code !== 0) {
       throw new Error(message);
     }
-    this.buildAgent.info(message);
     const toolPath = await this.buildAgent.cacheToolDir(tempDirectory, toolName, semverVersion);
     this.buildAgent.debug(`Cached tool path: ${toolPath}`);
     this.buildAgent.debug(`Cleaning up temp directory: ${tempDirectory}`);
@@ -184,6 +190,7 @@ function parseCliArgs() {
     }
   }).values;
 }
+const keysFn = Object.keys;
 
-export { DotnetTool as D, SettingsProvider as S, getAgent as g, parseCliArgs as p };
+export { DotnetTool as D, SettingsProvider as S, getAgent as g, keysFn as k, parseCliArgs as p };
 //# sourceMappingURL=tools.js.map

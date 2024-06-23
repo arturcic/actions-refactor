@@ -1,9 +1,8 @@
+import { exec } from 'node:child_process';
+import * as fs from 'node:fs/promises';
 import * as process from 'node:process';
 import * as path from 'node:path';
-import * as fs from 'node:fs/promises';
-import * as os from 'node:os';
 import * as util from 'node:util';
-import { exec } from 'node:child_process';
 import { s as semver } from './semver.js';
 
 const isFilePath = (cmd) => {
@@ -75,15 +74,18 @@ class BuildAgentBase {
       }
     });
   }
+  getListInput(input, required) {
+    return this.getDelimitedInput(input, "\n", required);
+  }
   getVariable(name) {
-    this.debug(`getVariable - ${name}`);
-    const val = process.env[name] || "";
-    return val.trim();
+    const value = (process.env[name] || "").trim();
+    this.debug(`getVariable - ${name}: ${value}`);
+    return value.trim();
   }
   getVariableAsPath(name) {
     return path.resolve(path.normalize(this.getVariable(name)));
   }
-  async dirExists(file) {
+  async directoryExists(file) {
     try {
       await fs.access(file);
       return (await fs.stat(file)).isDirectory();
@@ -102,8 +104,7 @@ class BuildAgentBase {
       return false;
     }
   }
-  async cacheToolDir(sourceDir, tool, version, arch) {
-    arch = arch || os.arch();
+  async cacheToolDir(sourceDir, tool, version) {
     if (!tool) {
       throw new Error("tool is a required parameter");
     }
@@ -119,19 +120,18 @@ class BuildAgentBase {
       return "";
     }
     version = semver.clean(version) || version;
-    const destPath = path.join(cacheRoot, tool, version, arch);
-    if (await this.dirExists(destPath)) {
+    const destPath = path.join(cacheRoot, tool, version);
+    if (await this.directoryExists(destPath)) {
       this.debug(`Destination directory ${destPath} already exists, removing`);
       await fs.rm(destPath, { recursive: true, force: true, maxRetries: 3, retryDelay: 1e3 });
     }
     this.debug(`Copying ${sourceDir} to ${destPath}`);
     await fs.mkdir(destPath, { recursive: true });
     await fs.cp(sourceDir, destPath, { recursive: true, force: true });
-    this.debug(`Caching ${tool}@${version} (${arch}) from ${sourceDir}`);
+    this.debug(`Caching ${tool}@${version} from ${sourceDir}`);
     return destPath;
   }
-  async findLocalTool(toolName, versionSpec, arch) {
-    arch = arch || os.arch();
+  async findLocalTool(toolName, versionSpec) {
     if (!toolName) {
       throw new Error("toolName is a required parameter");
     }
@@ -144,13 +144,13 @@ class BuildAgentBase {
       return null;
     }
     versionSpec = semver.clean(versionSpec) || versionSpec;
-    this.info(`Looking for local tool ${toolName}@${versionSpec} (${arch})`);
-    const toolPath = path.join(cacheRoot, toolName, versionSpec, arch);
-    if (!await this.dirExists(toolPath)) {
+    this.info(`Looking for local tool ${toolName}@${versionSpec}`);
+    const toolPath = path.join(cacheRoot, toolName, versionSpec);
+    if (!await this.directoryExists(toolPath)) {
       this.info(`Directory ${toolPath} not found`);
       return null;
     } else {
-      this.info(`Found tool ${toolName}@${versionSpec} (${arch}) at ${toolPath}`);
+      this.info(`Found tool ${toolName}@${versionSpec} at ${toolPath}`);
     }
     return toolPath;
   }

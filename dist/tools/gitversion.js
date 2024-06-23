@@ -1,17 +1,21 @@
-import { S as SettingsProvider, D as DotnetTool, p as parseCliArgs, g as getAgent } from '../common/tools.js';
-import * as path from 'path';
+import { S as SettingsProvider, D as DotnetTool, k as keysFn, p as parseCliArgs, g as getAgent } from '../common/tools.js';
 import * as os from 'os';
-import 'util';
-import 'node:os';
-import 'node:fs/promises';
-import 'node:path';
+import * as path from 'path';
+import 'node:util';
 import 'node:crypto';
+import 'node:fs/promises';
+import 'node:os';
+import 'node:path';
 import '../common/semver.js';
 
 var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
   ExecuteFields2["targetPath"] = "targetPath";
+  ExecuteFields2["disableCache"] = "disableCache";
+  ExecuteFields2["disableNormalization"] = "disableNormalization";
+  ExecuteFields2["disableShallowCloneCheck"] = "disableShallowCloneCheck";
   ExecuteFields2["useConfigFile"] = "useConfigFile";
   ExecuteFields2["configFilePath"] = "configFilePath";
+  ExecuteFields2["overrideConfig"] = "overrideConfig";
   ExecuteFields2["updateAssemblyInfo"] = "updateAssemblyInfo";
   ExecuteFields2["updateAssemblyInfoFilename"] = "updateAssemblyInfoFilename";
   ExecuteFields2["additionalArguments"] = "additionalArguments";
@@ -22,16 +26,24 @@ var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
 class GitVersionSettingsProvider extends SettingsProvider {
   getGitVersionSettings() {
     const targetPath = this.buildAgent.getInput(ExecuteFields.targetPath);
+    const disableCache = this.buildAgent.getBooleanInput(ExecuteFields.disableCache);
+    const disableNormalization = this.buildAgent.getBooleanInput(ExecuteFields.disableNormalization);
+    const disableShallowCloneCheck = this.buildAgent.getBooleanInput(ExecuteFields.disableShallowCloneCheck);
     const useConfigFile = this.buildAgent.getBooleanInput(ExecuteFields.useConfigFile);
     const configFilePath = this.buildAgent.getInput(ExecuteFields.configFilePath);
+    const overrideConfig = this.buildAgent.getListInput(ExecuteFields.overrideConfig);
     const updateAssemblyInfo = this.buildAgent.getBooleanInput(ExecuteFields.updateAssemblyInfo);
     const updateAssemblyInfoFilename = this.buildAgent.getInput(ExecuteFields.updateAssemblyInfoFilename);
     const additionalArguments = this.buildAgent.getInput(ExecuteFields.additionalArguments);
     const srcDir = this.buildAgent.sourceDir?.replace(/\\/g, "/");
     return {
       targetPath,
+      disableCache,
+      disableNormalization,
+      disableShallowCloneCheck,
       useConfigFile,
       configFilePath,
+      overrideConfig,
       updateAssemblyInfo,
       updateAssemblyInfoFilename,
       additionalArguments,
@@ -44,12 +56,15 @@ class GitVersionTool extends DotnetTool {
   get toolName() {
     return "GitVersion.Tool";
   }
+  get versionRange() {
+    return ">=5.2.0 <6.1.0";
+  }
   get settingsProvider() {
     return new GitVersionSettingsProvider(this.buildAgent);
   }
   async run() {
     const settings = this.settingsProvider.getGitVersionSettings();
-    const workDir = await this.getRepoDir(settings.targetPath);
+    const workDir = await this.getRepoDir(settings);
     const args = await this.getArguments(workDir, settings);
     await this.setDotnetRoot();
     let toolPath;
@@ -63,7 +78,6 @@ class GitVersionTool extends DotnetTool {
     return this.execute(toolPath, args);
   }
   writeGitVersionToAgent(output) {
-    const keysFn = Object.keys;
     const keys = keysFn(output);
     for (const property of keys) {
       const name = this.toCamelCase(property);
@@ -78,12 +92,14 @@ class GitVersionTool extends DotnetTool {
       }
     }
   }
-  async getRepoDir(targetPath) {
+  async getRepoDir(settings) {
+    const targetPath = settings.targetPath;
+    const srcDir = settings.srcDir || ".";
     let workDir;
     if (!targetPath) {
-      workDir = this.buildAgent.sourceDir || ".";
+      workDir = srcDir;
     } else {
-      if (await this.buildAgent.dirExists(targetPath)) {
+      if (await this.buildAgent.directoryExists(targetPath)) {
         workDir = targetPath;
       } else {
         throw new Error(`Directory not found at ${targetPath}`);
@@ -93,12 +109,36 @@ class GitVersionTool extends DotnetTool {
   }
   async getArguments(workDir, options) {
     let args = [workDir, "/output", "json", "/output", "buildserver"];
-    const { useConfigFile, configFilePath, updateAssemblyInfo, updateAssemblyInfoFilename, additionalArguments } = options;
+    const {
+      useConfigFile,
+      disableCache,
+      disableNormalization,
+      configFilePath,
+      overrideConfig,
+      updateAssemblyInfo,
+      updateAssemblyInfoFilename,
+      additionalArguments
+      //
+    } = options;
+    if (disableCache) {
+      args.push("/nocache");
+    }
+    if (disableNormalization) {
+      args.push("/nonormalize");
+    }
     if (useConfigFile) {
       if (await this.isValidInputFile("configFilePath", configFilePath)) {
         args.push("/config", configFilePath);
       } else {
         throw new Error(`GitVersion configuration file not found at ${configFilePath}`);
+      }
+    }
+    if (overrideConfig) {
+      for (let config of overrideConfig) {
+        config = config.trim();
+        if (config.match(/([a-zA-Z0-9]+(-[a-zA-Z]+)*=[a-zA-Z0-9\- :.']*)/)) {
+          args.push("/overrideconfig", config);
+        }
       }
     }
     if (updateAssemblyInfo) {
@@ -175,9 +215,9 @@ class GitVersionTool extends DotnetTool {
 }
 
 class Runner {
-  constructor(agent) {
-    this.agent = agent;
-    this.gitVersionTool = new GitVersionTool(this.agent);
+  constructor(buildAgent) {
+    this.buildAgent = buildAgent;
+    this.gitVersionTool = new GitVersionTool(this.buildAgent);
   }
   gitVersionTool;
   async run(command) {
@@ -190,59 +230,59 @@ class Runner {
   }
   async setup() {
     try {
-      this.agent.info(`Running on: '${this.agent.agentName}'`);
-      this.agent.debug("Disabling telemetry");
+      this.buildAgent.info(`Running on: '${this.buildAgent.agentName}'`);
+      this.buildAgent.debug("Disabling telemetry");
       this.gitVersionTool.disableTelemetry();
-      this.agent.debug("Installing GitVersion");
+      this.buildAgent.debug("Installing GitVersion");
       const toolPath = await this.gitVersionTool.install();
-      this.agent.info(`Set GITVERSION_PATH to ${toolPath}`);
-      this.agent.setVariable("GITVERSION_PATH", toolPath);
+      this.buildAgent.info(`Set GITVERSION_PATH to ${toolPath}`);
+      this.buildAgent.setVariable("GITVERSION_PATH", toolPath);
       return 0;
     } catch (error) {
       console.log(error);
       if (error instanceof Error) {
-        this.agent.setFailed(error?.message, true);
+        this.buildAgent.setFailed(error?.message, true);
       }
       return -1;
     }
   }
   async execute() {
     try {
-      this.agent.debug(`Agent: '${this.agent.agentName}'`);
-      this.agent.debug("Disabling telemetry");
+      this.buildAgent.debug(`Agent: '${this.buildAgent.agentName}'`);
+      this.buildAgent.debug("Disabling telemetry");
       this.gitVersionTool.disableTelemetry();
-      this.agent.info("Executing GitVersion");
+      this.buildAgent.info("Executing GitVersion");
       const result = await this.gitVersionTool.run();
       if (result.code === 0) {
-        this.agent.info("GitVersion executed successfully");
+        this.buildAgent.info("GitVersion executed successfully");
         const { stdout } = result;
-        this.agent.info("GitVersion output:");
-        this.agent.info("-------------------");
-        this.agent.info(stdout);
-        this.agent.info("-------------------");
-        this.agent.debug("Parsing GitVersion output");
+        this.buildAgent.info("GitVersion output:");
+        this.buildAgent.info("-------------------");
+        this.buildAgent.info(stdout);
+        this.buildAgent.info("-------------------");
+        this.buildAgent.debug("Parsing GitVersion output");
         if (stdout.lastIndexOf("{") === -1 || stdout.lastIndexOf("}") === -1) {
-          this.agent.debug("GitVersion output is not valid JSON");
-          this.agent.setFailed("GitVersion output is not valid JSON", true);
+          this.buildAgent.debug("GitVersion output is not valid JSON");
+          this.buildAgent.setFailed("GitVersion output is not valid JSON", true);
           return -1;
         } else {
           const jsonOutput = stdout.substring(stdout.lastIndexOf("{"), stdout.lastIndexOf("}") + 1);
           const gitVersionOutput = JSON.parse(jsonOutput);
           this.gitVersionTool.writeGitVersionToAgent(gitVersionOutput);
-          this.agent.setSucceeded("GitVersion executed successfully", true);
+          this.buildAgent.setSucceeded("GitVersion executed successfully", true);
           return 0;
         }
       } else {
-        this.agent.debug("GitVersion failed");
+        this.buildAgent.debug("GitVersion failed");
         const error = result.error;
         if (error instanceof Error) {
-          this.agent.setFailed(error?.message, true);
+          this.buildAgent.setFailed(error?.message, true);
         }
         return -1;
       }
     } catch (error) {
       if (error instanceof Error) {
-        this.agent.setFailed(error?.message, true);
+        this.buildAgent.setFailed(error?.message, true);
       }
       return -1;
     }
