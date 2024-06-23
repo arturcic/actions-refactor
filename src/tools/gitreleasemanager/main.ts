@@ -5,4 +5,4 @@ import { type Commands, Runner } from '@tools/gitreleasemanager'
 const { command, buildAgent } = parseCliArgs()
 const agent = await getAgent(buildAgent)
 const runner = new Runner(agent)
-await runner.execute(command as Commands)
+await runner.run(command as Commands)

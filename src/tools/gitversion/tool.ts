@@ -59,7 +59,7 @@ export class GitVersionTool extends DotnetTool {
         if (!targetPath) {
             workDir = srcDir
         } else {
-            if (await this.buildAgent.dirExists(targetPath)) {
+            if (await this.buildAgent.directoryExists(targetPath)) {
                 workDir = targetPath
             } else {
                 throw new Error(`Directory not found at ${targetPath}`)
@@ -190,7 +190,7 @@ export class GitVersionTool extends DotnetTool {
     }
 
     private toCamelCase(input: string): string {
-        return input.replace(/^\w|[A-Z]|\b\w|\s+/g, function(match, index) {
+        return input.replace(/^\w|[A-Z]|\b\w|\s+/g, function (match, index) {
             if (+match === 0) return '' // or if (/\s+/.test(match)) for white spaces
             return index === 0 ? match.toLowerCase() : match.toUpperCase()
         })

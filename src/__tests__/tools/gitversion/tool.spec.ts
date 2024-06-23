@@ -112,7 +112,7 @@ describe('GitVersionTool', () => {
 
         it('should return correct repo dir for existing target path', async () => {
             const buildAgent = {
-                async dirExists(_file: string): Promise<boolean> {
+                async directoryExists(_file: string): Promise<boolean> {
                     return Promise.resolve(true)
                 }
             } as IBuildAgent
@@ -126,7 +126,7 @@ describe('GitVersionTool', () => {
         it('should throw error for non-existing target path', async () => {
             const wrongDir = 'wrongdir'
             const buildAgent = {
-                async dirExists(_file: string): Promise<boolean> {
+                async directoryExists(_file: string): Promise<boolean> {
                     return Promise.resolve(false)
                 }
             } as IBuildAgent

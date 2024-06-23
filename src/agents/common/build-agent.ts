@@ -31,7 +31,7 @@ export interface IBuildAgent {
 
     cacheToolDir(sourceDir: string, tool: string, version: string): Promise<string>
 
-    dirExists(file: string): Promise<boolean>
+    directoryExists(file: string): Promise<boolean>
 
     dirRemove(file: string): void
 
@@ -143,7 +143,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
         return path.resolve(path.normalize(this.getVariable(name)))
     }
 
-    async dirExists(file: string): Promise<boolean> {
+    async directoryExists(file: string): Promise<boolean> {
         try {
             await fs.access(file)
             return (await fs.stat(file)).isDirectory()
@@ -184,7 +184,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
 
         version = semver.clean(version) || version
         const destPath = path.join(cacheRoot, tool, version)
-        if (await this.dirExists(destPath)) {
+        if (await this.directoryExists(destPath)) {
             this.debug(`Destination directory ${destPath} already exists, removing`)
             await fs.rm(destPath, { recursive: true, force: true, maxRetries: 3, retryDelay: 1000 })
         }
@@ -214,7 +214,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
         versionSpec = semver.clean(versionSpec) || versionSpec
         this.info(`Looking for local tool ${toolName}@${versionSpec}`)
         const toolPath = path.join(cacheRoot, toolName, versionSpec)
-        if (!(await this.dirExists(toolPath))) {
+        if (!(await this.directoryExists(toolPath))) {
             this.info(`Directory ${toolPath} not found`)
             return null
         } else {
