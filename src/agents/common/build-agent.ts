@@ -85,7 +85,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
     abstract setVariable(name: string, value: string): void
 
     get sourceDir(): string {
-        return this.getVariableAsPath(this.sourceDirVariable)
+        return this.getVariableAsPath(this.sourceDirVariable)?.replace(/\\/g, '/')
     }
 
     get tempDir(): string {

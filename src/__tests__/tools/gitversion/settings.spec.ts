@@ -19,7 +19,6 @@ describe('GitVersion settings', () => {
         } as GitVersionSettings
 
         const buildAgent = {
-            sourceDir: settings.srcDir,
             getInput: (input: keyof GitVersionSettings) => settings[input] as string,
             getBooleanInput: (input: keyof GitVersionSettings) => settings[input] as boolean,
             getListInput: (input: keyof GitVersionSettings) => settings[input] as string[]
@@ -39,6 +38,5 @@ describe('GitVersion settings', () => {
         expect(gitVersionSettings.updateAssemblyInfo).toBe(settings.updateAssemblyInfo)
         expect(gitVersionSettings.updateAssemblyInfoFilename).toBe(settings.updateAssemblyInfoFilename)
         expect(gitVersionSettings.additionalArguments).toBe(settings.additionalArguments)
-        expect(gitVersionSettings.srcDir).toBe(settings.srcDir)
     })
 })

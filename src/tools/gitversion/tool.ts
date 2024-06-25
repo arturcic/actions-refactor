@@ -54,7 +54,7 @@ export class GitVersionTool extends DotnetTool {
 
     protected async getRepoDir(settings: GitVersionSettings): Promise<string> {
         const targetPath = settings.targetPath
-        const srcDir = settings.srcDir || '.'
+        const srcDir = this.buildAgent.sourceDir || '.'
         let workDir: string
         if (!targetPath) {
             workDir = srcDir

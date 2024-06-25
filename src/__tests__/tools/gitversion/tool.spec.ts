@@ -95,21 +95,23 @@ describe('GitVersionTool', () => {
 
     describe('getRepoDir', () => {
         it('should return correct repo dir for empty target path, takes build agent sourceDir', async () => {
-            const buildAgent = {} as IBuildAgent
+            const buildAgent = {
+                sourceDir: 'workdir'
+            } as IBuildAgent
             tool = new TestGitVersionTool(buildAgent)
             const repoDir = await tool.getRepoDir({
-                targetPath: '',
-                srcDir: 'workdir'
+                targetPath: ''
             } as GitVersionSettings)
             expect(repoDir).toBe('workdir')
         })
 
         it('should return correct repo dir for empty target path, takes default', async () => {
-            const buildAgent = {} as IBuildAgent
+            const buildAgent = {
+                sourceDir: ''
+            } as IBuildAgent
             tool = new TestGitVersionTool(buildAgent)
             const repoDir = await tool.getRepoDir({
-                targetPath: '',
-                srcDir: ''
+                targetPath: ''
             } as GitVersionSettings)
             expect(repoDir).toBe('.')
         })
