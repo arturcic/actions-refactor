@@ -38,7 +38,7 @@ export class Runner {
             return 0
         } catch (error) {
             if (error instanceof Error) {
-                this.buildAgent.setFailed(error?.message, true)
+                this.buildAgent.setFailed(error.message, true)
             }
             return -1
         }
@@ -54,7 +54,7 @@ export class Runner {
             return 0
         } catch (error) {
             if (error instanceof Error) {
-                this.buildAgent.setFailed(error?.message, true)
+                this.buildAgent.setFailed(error.message, true)
             }
             return -1
         }
@@ -70,7 +70,7 @@ export class Runner {
             return 0
         } catch (error) {
             if (error instanceof Error) {
-                this.buildAgent.setFailed(error?.message, true)
+                this.buildAgent.setFailed(error.message, true)
             }
             return -1
         }
@@ -86,7 +86,7 @@ export class Runner {
             return 0
         } catch (error) {
             if (error instanceof Error) {
-                this.buildAgent.setFailed(error?.message, true)
+                this.buildAgent.setFailed(error.message, true)
             }
             return -1
         }
@@ -102,7 +102,7 @@ export class Runner {
             return 0
         } catch (error) {
             if (error instanceof Error) {
-                this.buildAgent.setFailed(error?.message, true)
+                this.buildAgent.setFailed(error.message, true)
             }
             return -1
         }
@@ -118,7 +118,7 @@ export class Runner {
             return 0
         } catch (error) {
             if (error instanceof Error) {
-                this.buildAgent.setFailed(error?.message, true)
+                this.buildAgent.setFailed(error.message, true)
             }
             return -1
         }
@@ -134,7 +134,7 @@ export class Runner {
             return 0
         } catch (error) {
             if (error instanceof Error) {
-                this.buildAgent.setFailed(error?.message, true)
+                this.buildAgent.setFailed(error.message, true)
             }
             return -1
         }

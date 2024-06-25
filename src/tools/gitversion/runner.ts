@@ -31,9 +31,8 @@ export class Runner {
             this.buildAgent.setVariable('GITVERSION_PATH', toolPath)
             return 0
         } catch (error) {
-            console.log(error)
             if (error instanceof Error) {
-                this.buildAgent.setFailed(error?.message, true)
+                this.buildAgent.setFailed(error.message, true)
             }
             return -1
         }
@@ -56,8 +55,8 @@ export class Runner {
                 this.buildAgent.info('-------------------')
                 this.buildAgent.info(stdout)
                 this.buildAgent.info('-------------------')
-
                 this.buildAgent.debug('Parsing GitVersion output')
+
                 if (stdout.lastIndexOf('{') === -1 || stdout.lastIndexOf('}') === -1) {
                     this.buildAgent.debug('GitVersion output is not valid JSON')
                     this.buildAgent.setFailed('GitVersion output is not valid JSON', true)
@@ -74,13 +73,13 @@ export class Runner {
                 this.buildAgent.debug('GitVersion failed')
                 const error = result.error
                 if (error instanceof Error) {
-                    this.buildAgent.setFailed(error?.message, true)
+                    this.buildAgent.setFailed(error.message, true)
                 }
                 return -1
             }
         } catch (error) {
             if (error instanceof Error) {
-                this.buildAgent.setFailed(error?.message, true)
+                this.buildAgent.setFailed(error.message, true)
             }
             return -1
         }
