@@ -38,7 +38,7 @@ async function lookPath(command, opt = {}) {
 
 class BuildAgentBase {
   get sourceDir() {
-    return this.getVariableAsPath(this.sourceDirVariable);
+    return this.getVariableAsPath(this.sourceDirVariable)?.replace(/\\/g, "/");
   }
   get tempDir() {
     return this.getVariableAsPath(this.tempDirVariable);

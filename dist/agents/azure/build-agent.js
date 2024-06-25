@@ -86,6 +86,8 @@ class BuildAgent extends BuildAgentBase {
       this.error(message);
     } else if (result === TaskResult.SucceededWithIssues && message) {
       this.warn(message);
+    } else {
+      this.info(message);
     }
     const properties = { result: TaskResult[result] };
     if (done) {

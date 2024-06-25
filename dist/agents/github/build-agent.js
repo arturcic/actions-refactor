@@ -111,7 +111,7 @@ class BuildAgent extends BuildAgentBase {
   setSucceeded(_message, _done) {
     process__default.exitCode = ExitCode.Success;
   }
-  setFailed = (message, _) => {
+  setFailed = (message, _done) => {
     process__default.exitCode = ExitCode.Failure;
     this.error(message);
   };

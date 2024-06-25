@@ -19,7 +19,6 @@ var ExecuteFields = /* @__PURE__ */ ((ExecuteFields2) => {
   ExecuteFields2["updateAssemblyInfo"] = "updateAssemblyInfo";
   ExecuteFields2["updateAssemblyInfoFilename"] = "updateAssemblyInfoFilename";
   ExecuteFields2["additionalArguments"] = "additionalArguments";
-  ExecuteFields2["srcDir"] = "srcDir";
   return ExecuteFields2;
 })(ExecuteFields || {});
 
@@ -35,7 +34,6 @@ class GitVersionSettingsProvider extends SettingsProvider {
     const updateAssemblyInfo = this.buildAgent.getBooleanInput(ExecuteFields.updateAssemblyInfo);
     const updateAssemblyInfoFilename = this.buildAgent.getInput(ExecuteFields.updateAssemblyInfoFilename);
     const additionalArguments = this.buildAgent.getInput(ExecuteFields.additionalArguments);
-    const srcDir = this.buildAgent.sourceDir?.replace(/\\/g, "/");
     return {
       targetPath,
       disableCache,
@@ -46,8 +44,7 @@ class GitVersionSettingsProvider extends SettingsProvider {
       overrideConfig,
       updateAssemblyInfo,
       updateAssemblyInfoFilename,
-      additionalArguments,
-      srcDir
+      additionalArguments
     };
   }
 }
@@ -94,7 +91,7 @@ class GitVersionTool extends DotnetTool {
   }
   async getRepoDir(settings) {
     const targetPath = settings.targetPath;
-    const srcDir = settings.srcDir || ".";
+    const srcDir = this.buildAgent.sourceDir || ".";
     let workDir;
     if (!targetPath) {
       workDir = srcDir;
@@ -238,9 +235,8 @@ class Runner {
       this.buildAgent.setVariable("GITVERSION_PATH", toolPath);
       return 0;
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) {
-        this.buildAgent.setFailed(error?.message, true);
+        this.buildAgent.setFailed(error.message, true);
       }
       return -1;
     }
@@ -275,13 +271,13 @@ class Runner {
         this.buildAgent.debug("GitVersion failed");
         const error = result.error;
         if (error instanceof Error) {
-          this.buildAgent.setFailed(error?.message, true);
+          this.buildAgent.setFailed(error.message, true);
         }
         return -1;
       }
     } catch (error) {
       if (error instanceof Error) {
-        this.buildAgent.setFailed(error?.message, true);
+        this.buildAgent.setFailed(error.message, true);
       }
       return -1;
     }
