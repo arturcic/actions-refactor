@@ -93,6 +93,20 @@ class DotnetTool {
     const repoRoot = this.buildAgent.sourceDir;
     return pathValue !== repoRoot;
   }
+  async getRepoPath(targetPath) {
+    const srcDir = this.buildAgent.sourceDir || ".";
+    let workDir;
+    if (!targetPath) {
+      workDir = srcDir;
+    } else {
+      if (await this.buildAgent.directoryExists(targetPath)) {
+        workDir = targetPath;
+      } else {
+        throw new Error(`Directory not found at ${targetPath}`);
+      }
+    }
+    return workDir.replace(/\\/g, "/");
+  }
   async queryLatestMatch(toolName, versionSpec, includePrerelease) {
     this.buildAgent.info(
       `Querying tool versions for ${toolName}${versionSpec ? `@${versionSpec}` : ""} ${includePrerelease ? "including pre-releases" : ""}`

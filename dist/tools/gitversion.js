@@ -79,7 +79,10 @@ class GitVersionTool extends DotnetTool {
     for (const property of keys) {
       const name = this.toCamelCase(property);
       try {
-        const value = output[property]?.toString();
+        let value = output[property]?.toString();
+        if (value === "0") {
+          value = "0";
+        }
         this.buildAgent.setOutput(name, value);
         this.buildAgent.setOutput(`GitVersion_${property}`, value);
         this.buildAgent.setVariable(name, value);
@@ -90,19 +93,7 @@ class GitVersionTool extends DotnetTool {
     }
   }
   async getRepoDir(settings) {
-    const targetPath = settings.targetPath;
-    const srcDir = this.buildAgent.sourceDir || ".";
-    let workDir;
-    if (!targetPath) {
-      workDir = srcDir;
-    } else {
-      if (await this.buildAgent.directoryExists(targetPath)) {
-        workDir = targetPath;
-      } else {
-        throw new Error(`Directory not found at ${targetPath}`);
-      }
-    }
-    return workDir.replace(/\\/g, "/");
+    return await super.getRepoPath(settings.targetPath);
   }
   async getArguments(workDir, options) {
     let args = [workDir, "/output", "json", "/output", "buildserver"];
@@ -226,13 +217,12 @@ class Runner {
   }
   async setup() {
     try {
-      this.buildAgent.info(`Running on: '${this.buildAgent.agentName}'`);
-      this.buildAgent.debug("Disabling telemetry");
-      this.gitVersionTool.disableTelemetry();
+      this.disableTelemetry();
       this.buildAgent.debug("Installing GitVersion");
       const toolPath = await this.gitVersionTool.install();
       this.buildAgent.info(`Set GITVERSION_PATH to ${toolPath}`);
       this.buildAgent.setVariable("GITVERSION_PATH", toolPath);
+      this.buildAgent.setSucceeded("GitVersion installed successfully", true);
       return 0;
     } catch (error) {
       if (error instanceof Error) {
@@ -243,9 +233,7 @@ class Runner {
   }
   async execute() {
     try {
-      this.buildAgent.debug(`Agent: '${this.buildAgent.agentName}'`);
-      this.buildAgent.debug("Disabling telemetry");
-      this.gitVersionTool.disableTelemetry();
+      this.disableTelemetry();
       this.buildAgent.info("Executing GitVersion");
       const result = await this.gitVersionTool.run();
       if (result.code === 0) {
@@ -281,6 +269,11 @@ class Runner {
       }
       return -1;
     }
+  }
+  disableTelemetry() {
+    this.buildAgent.info(`Running on: '${this.buildAgent.agentName}'`);
+    this.buildAgent.debug("Disabling telemetry");
+    this.gitVersionTool.disableTelemetry();
   }
 }
 

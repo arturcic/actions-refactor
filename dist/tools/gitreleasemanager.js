@@ -168,7 +168,7 @@ class GitReleaseManagerTool extends DotnetTool {
     args.push("--owner", settings.owner);
     args.push("--repository", settings.repository);
     args.push("--token", settings.token);
-    settings.targetDirectory = await this.getRepoDir(settings.targetDirectory);
+    settings.targetDirectory = await this.getRepoDir(settings);
     args.push("--targetDirectory", settings.targetDirectory);
     return args;
   }
@@ -242,19 +242,8 @@ class GitReleaseManagerTool extends DotnetTool {
     }
     return args;
   }
-  async getRepoDir(targetPath) {
-    let workDir;
-    const srcDir = this.buildAgent.sourceDir;
-    if (!targetPath) {
-      workDir = srcDir;
-    } else {
-      if (await this.buildAgent.directoryExists(targetPath)) {
-        workDir = path.join(srcDir, targetPath);
-      } else {
-        throw new Error(`Directory not found at ${targetPath}`);
-      }
-    }
-    return workDir.replace(/\\/g, "/");
+  async getRepoDir(settings) {
+    return await this.getRepoPath(settings.targetDirectory);
   }
 }
 
@@ -284,7 +273,8 @@ class Runner {
   }
   async setup() {
     try {
-      this.gitReleaseManagerTool.disableTelemetry();
+      this.disableTelemetry();
+      this.buildAgent.debug("Installing GitVersion");
       await this.gitReleaseManagerTool.install();
       this.buildAgent.setSucceeded("GitReleaseManager installed successfully", true);
       return 0;
@@ -297,7 +287,8 @@ class Runner {
   }
   async create() {
     try {
-      this.gitReleaseManagerTool.disableTelemetry();
+      this.disableTelemetry();
+      this.buildAgent.debug("Creating release");
       await this.gitReleaseManagerTool.create();
       this.buildAgent.setSucceeded("GitReleaseManager created release successfully", true);
       return 0;
@@ -310,7 +301,8 @@ class Runner {
   }
   async discard() {
     try {
-      this.gitReleaseManagerTool.disableTelemetry();
+      this.disableTelemetry();
+      this.buildAgent.debug("Discarding release");
       await this.gitReleaseManagerTool.discard();
       this.buildAgent.setSucceeded("GitReleaseManager discarded release successfully", true);
       return 0;
@@ -323,7 +315,8 @@ class Runner {
   }
   async close() {
     try {
-      this.gitReleaseManagerTool.disableTelemetry();
+      this.disableTelemetry();
+      this.buildAgent.debug("Closing release");
       await this.gitReleaseManagerTool.close();
       this.buildAgent.setSucceeded("GitReleaseManager closed release successfully", true);
       return 0;
@@ -336,7 +329,8 @@ class Runner {
   }
   async open() {
     try {
-      this.gitReleaseManagerTool.disableTelemetry();
+      this.disableTelemetry();
+      this.buildAgent.debug("Opening release");
       await this.gitReleaseManagerTool.open();
       this.buildAgent.setSucceeded("GitReleaseManager opened release successfully", true);
       return 0;
@@ -349,7 +343,8 @@ class Runner {
   }
   async publish() {
     try {
-      this.gitReleaseManagerTool.disableTelemetry();
+      this.disableTelemetry();
+      this.buildAgent.debug("Publishing release");
       await this.gitReleaseManagerTool.publish();
       this.buildAgent.setSucceeded("GitReleaseManager published release successfully", true);
       return 0;
@@ -362,7 +357,8 @@ class Runner {
   }
   async addAsset() {
     try {
-      this.gitReleaseManagerTool.disableTelemetry();
+      this.disableTelemetry();
+      this.buildAgent.debug("Adding asset to release");
       await this.gitReleaseManagerTool.addAsset();
       this.buildAgent.setSucceeded("GitReleaseManager added assets to release successfully", true);
       return 0;
@@ -372,6 +368,11 @@ class Runner {
       }
       return -1;
     }
+  }
+  disableTelemetry() {
+    this.buildAgent.info(`Running on: '${this.buildAgent.agentName}'`);
+    this.buildAgent.debug("Disabling telemetry");
+    this.gitReleaseManagerTool.disableTelemetry();
   }
 }
 
