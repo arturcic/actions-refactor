@@ -75,6 +75,7 @@ export abstract class DotnetTool implements IDotnetTool {
                 this.buildAgent.info('--------------------------')
             }
         }
+
         if (!toolPath) {
             // Download, extract, cache
             toolPath = await this.installTool(this.toolName, version, setupSettings.ignoreFailedSources)
@@ -145,7 +146,7 @@ export abstract class DotnetTool implements IDotnetTool {
             return null
         }
 
-        const { data }: NugetVersions = (await response.json()) as NugetVersions
+        const { data } = (await response.json()) as NugetVersions
 
         const versions = data[0].versions.map(x => x.version)
         if (!versions || !versions.length) {
@@ -170,7 +171,7 @@ export abstract class DotnetTool implements IDotnetTool {
             throw new Error(`Invalid version spec: ${version}`)
         }
 
-        const tempDirectory = await this.createTempDir()
+        const tempDirectory = await this.createTempDirectory()
 
         if (!tempDirectory) {
             throw new Error('Unable to create temp directory')
@@ -186,19 +187,20 @@ export abstract class DotnetTool implements IDotnetTool {
         const message = result.code === 0 ? result.stdout : result.stderr
 
         this.buildAgent.debug(`Tool install result: ${status} ${message}`)
+
         if (result.code !== 0) {
             throw new Error(message)
         }
 
-        const toolPath = await this.buildAgent.cacheToolDir(tempDirectory, toolName, semverVersion)
+        const toolPath = await this.buildAgent.cacheToolDirectory(tempDirectory, toolName, semverVersion)
         this.buildAgent.debug(`Cached tool path: ${toolPath}`)
         this.buildAgent.debug(`Cleaning up temp directory: ${tempDirectory}`)
-        this.buildAgent.dirRemove(tempDirectory)
+        await this.buildAgent.removeDirectory(tempDirectory)
 
         return toolPath
     }
 
-    async createTempDir(): Promise<string> {
+    async createTempDirectory(): Promise<string> {
         const tempRootDir = this.buildAgent.tempDir
         if (!tempRootDir) {
             throw new Error('Temp directory not set')

@@ -29,11 +29,11 @@ export interface IBuildAgent {
 
     exec(exec: string, args: string[]): Promise<ExecResult>
 
-    cacheToolDir(sourceDir: string, tool: string, version: string): Promise<string>
+    cacheToolDirectory(sourceDir: string, tool: string, version: string): Promise<string>
 
-    directoryExists(file: string): Promise<boolean>
+    directoryExists(dir: string): Promise<boolean>
 
-    dirRemove(file: string): void
+    removeDirectory(dir: string): Promise<void>
 
     fileExists(file: string): Promise<boolean>
 
@@ -143,17 +143,17 @@ export abstract class BuildAgentBase implements IBuildAgent {
         return path.resolve(path.normalize(this.getVariable(name)))
     }
 
-    async directoryExists(file: string): Promise<boolean> {
+    async directoryExists(dir: string): Promise<boolean> {
         try {
-            await fs.access(file)
-            return (await fs.stat(file)).isDirectory()
+            await fs.access(dir)
+            return (await fs.stat(dir)).isDirectory()
         } catch (e) {
             return false
         }
     }
 
-    async dirRemove(file: string): Promise<void> {
-        await fs.rm(file, { recursive: true, force: true, maxRetries: 3, retryDelay: 1000 })
+    async removeDirectory(dir: string): Promise<void> {
+        await fs.rm(dir, { recursive: true, force: true, maxRetries: 3, retryDelay: 1000 })
     }
 
     async fileExists(file: string): Promise<boolean> {
@@ -165,7 +165,7 @@ export abstract class BuildAgentBase implements IBuildAgent {
         }
     }
 
-    async cacheToolDir(sourceDir: string, tool: string, version: string): Promise<string> {
+    async cacheToolDirectory(sourceDir: string, tool: string, version: string): Promise<string> {
         if (!tool) {
             throw new Error('tool is a required parameter')
         }
