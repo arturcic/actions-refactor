@@ -1,9 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { BuildAgent } from '@agents/github'
+import { BuildAgent, prepareKeyValueMessage } from '@agents/github'
 import process from 'node:process'
 import * as fs from 'node:fs'
 import * as crypto from 'node:crypto'
-import { prepareKeyValueMessage } from '../../../agents/github/command.ts'
 
 describe('build-agent/github', () => {
     let agent: BuildAgent
@@ -34,7 +33,7 @@ describe('build-agent/github', () => {
     })
 
     it('should log debug', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.debug('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -42,7 +41,7 @@ describe('build-agent/github', () => {
     })
 
     it('should log info', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.info('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -50,7 +49,7 @@ describe('build-agent/github', () => {
     })
 
     it('should log warn', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.warn('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -58,7 +57,7 @@ describe('build-agent/github', () => {
     })
 
     it('should log error', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.error('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -71,7 +70,7 @@ describe('build-agent/github', () => {
     })
 
     it('should set failed', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.setFailed('test')
         expect(process.exitCode).toBe(1)
@@ -80,7 +79,7 @@ describe('build-agent/github', () => {
     })
 
     it('should set output', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.setOutput('name', 'value')
 
@@ -90,10 +89,10 @@ describe('build-agent/github', () => {
         vi.mock('fs')
         vi.mock('crypto')
 
-        let existsSpy = vi.spyOn(fs, 'existsSync').mockReturnValue(true)
-        let appendFileSyncSpy = vi.spyOn(fs, 'appendFileSync')
+        const existsSpy = vi.spyOn(fs, 'existsSync').mockReturnValue(true)
+        const appendFileSyncSpy = vi.spyOn(fs, 'appendFileSync')
 
-        let cryptoSpy = vi.spyOn(crypto, 'randomUUID').mockReturnValue('775ae74d-e02a-44b5-a288-52b415a7e823')
+        const cryptoSpy = vi.spyOn(crypto, 'randomUUID').mockReturnValue('775ae74d-e02a-44b5-a288-52b415a7e823')
         process.env['GITHUB_OUTPUT'] = 'test.env'
 
         agent.setOutput('name', 'value')
@@ -106,14 +105,14 @@ describe('build-agent/github', () => {
         const expected = prepareKeyValueMessage('name', 'value')
 
         expect(appendFileSyncSpy).toHaveBeenCalledTimes(1)
-        expect(appendFileSyncSpy).toHaveBeenCalledWith('test.env', expected + '\n', { encoding: 'utf8' })
+        expect(appendFileSyncSpy).toHaveBeenCalledWith('test.env', `${expected}\n`, { encoding: 'utf8' })
 
         expect(spy).toHaveBeenCalledTimes(2)
         expect(spy).toHaveBeenCalledWith('::set-output name=name::value\n')
     })
 
     it('should set variable', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.setVariable('name', 'value')
         expect(process.env['name']).toBe('value')
@@ -123,10 +122,10 @@ describe('build-agent/github', () => {
         vi.mock('fs')
         vi.mock('crypto')
 
-        let existsSpy = vi.spyOn(fs, 'existsSync').mockReturnValue(true)
-        let appendFileSyncSpy = vi.spyOn(fs, 'appendFileSync')
+        const existsSpy = vi.spyOn(fs, 'existsSync').mockReturnValue(true)
+        const appendFileSyncSpy = vi.spyOn(fs, 'appendFileSync')
 
-        let cryptoSpy = vi.spyOn(crypto, 'randomUUID').mockReturnValue('775ae74d-e02a-44b5-a288-52b415a7e823')
+        const cryptoSpy = vi.spyOn(crypto, 'randomUUID').mockReturnValue('775ae74d-e02a-44b5-a288-52b415a7e823')
         process.env['GITHUB_ENV'] = 'test.env'
 
         agent.setVariable('name', 'value')
@@ -140,7 +139,7 @@ describe('build-agent/github', () => {
         const expected = prepareKeyValueMessage('name', 'value')
 
         expect(appendFileSyncSpy).toHaveBeenCalledTimes(1)
-        expect(appendFileSyncSpy).toHaveBeenCalledWith('test.env', expected + '\n', { encoding: 'utf8' })
+        expect(appendFileSyncSpy).toHaveBeenCalledWith('test.env', `${expected}\n`, { encoding: 'utf8' })
 
         expect(spy).toHaveBeenCalledTimes(1)
         expect(spy).toHaveBeenCalledWith('::set-env name=name::value\n')

@@ -30,7 +30,7 @@ describe('build-agent/azure', () => {
     })
 
     it('should log debug', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.debug('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -38,7 +38,7 @@ describe('build-agent/azure', () => {
     })
 
     it('should log info', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.info('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -46,7 +46,7 @@ describe('build-agent/azure', () => {
     })
 
     it('should log warn', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.warn('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -54,7 +54,7 @@ describe('build-agent/azure', () => {
     })
 
     it('should log error', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.error('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -62,9 +62,9 @@ describe('build-agent/azure', () => {
     })
 
     it('should set succeeded', () => {
-        let spyInfo = vi.spyOn(agent, 'info')
-        let spyDebug = vi.spyOn(agent, 'debug')
-        let spyWrite = vi.spyOn(process.stdout, 'write')
+        const spyInfo = vi.spyOn(agent, 'info')
+        const spyDebug = vi.spyOn(agent, 'debug')
+        const spyWrite = vi.spyOn(process.stdout, 'write')
 
         agent.setSucceeded('test', true)
 
@@ -81,9 +81,9 @@ describe('build-agent/azure', () => {
     })
 
     it('should set failed', () => {
-        let spyError = vi.spyOn(agent, 'error')
-        let spyDebug = vi.spyOn(agent, 'debug')
-        let spyWrite = vi.spyOn(process.stdout, 'write')
+        const spyError = vi.spyOn(agent, 'error')
+        const spyDebug = vi.spyOn(agent, 'debug')
+        const spyWrite = vi.spyOn(process.stdout, 'write')
 
         agent.setFailed('test', true)
 
@@ -101,7 +101,7 @@ describe('build-agent/azure', () => {
     })
 
     it('should set environment variable', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.setVariable('test', 'value')
         expect(process.env['TEST']).toBe('value')
@@ -110,7 +110,7 @@ describe('build-agent/azure', () => {
     })
 
     it('should set output', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.setOutput('test', 'value')
         expect(spy).toHaveBeenCalledTimes(1)

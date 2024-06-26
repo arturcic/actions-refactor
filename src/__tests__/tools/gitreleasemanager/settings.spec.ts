@@ -7,7 +7,7 @@ import {
     type GitReleaseManagerOpenSettings,
     type GitReleaseManagerPublishSettings,
     type GitReleaseManagerAddAssetSettings,
-    GitReleaseManagerSettingsProvider,
+    GitReleaseManagerSettingsProvider
 } from '@tools/gitreleasemanager'
 
 describe('GitReleaseManager settings', () => {
@@ -57,7 +57,7 @@ describe('GitReleaseManager settings', () => {
         } as GitReleaseManagerOpenSettings
 
         const buildAgent = {
-            getInput: (input: keyof GitReleaseManagerOpenSettings) => settings[input] as string
+            getInput: (input: keyof GitReleaseManagerOpenSettings) => settings[input]
         } as IBuildAgent
 
         const settingsProvider = new GitReleaseManagerSettingsProvider(buildAgent)
@@ -81,7 +81,7 @@ describe('GitReleaseManager settings', () => {
         } as GitReleaseManagerCloseSettings
 
         const buildAgent = {
-            getInput: (input: keyof GitReleaseManagerCloseSettings) => settings[input] as string
+            getInput: (input: keyof GitReleaseManagerCloseSettings) => settings[input]
         } as IBuildAgent
 
         const settingsProvider = new GitReleaseManagerSettingsProvider(buildAgent)
@@ -105,7 +105,7 @@ describe('GitReleaseManager settings', () => {
         } as GitReleaseManagerDiscardSettings
 
         const buildAgent = {
-            getInput: (input: keyof GitReleaseManagerDiscardSettings) => settings[input] as string
+            getInput: (input: keyof GitReleaseManagerDiscardSettings) => settings[input]
         } as IBuildAgent
 
         const settingsProvider = new GitReleaseManagerSettingsProvider(buildAgent)
@@ -129,7 +129,7 @@ describe('GitReleaseManager settings', () => {
         } as GitReleaseManagerPublishSettings
 
         const buildAgent = {
-            getInput: (input: keyof GitReleaseManagerPublishSettings) => settings[input] as string
+            getInput: (input: keyof GitReleaseManagerPublishSettings) => settings[input]
         } as IBuildAgent
 
         const settingsProvider = new GitReleaseManagerSettingsProvider(buildAgent)

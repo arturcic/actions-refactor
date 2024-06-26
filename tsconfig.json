@@ -29,13 +29,13 @@
                 "./agents/common"
             ],
             "@agents/azure": [
-                "./agents/azure/build-agent"
+                "./agents/azure"
             ],
             "@agents/local": [
-                "./agents/local/build-agent"
+                "./agents/local"
             ],
             "@agents/github": [
-                "./agents/github/build-agent"
+                "./agents/github"
             ],
             "@tools/common": [
                 "./tools/common"

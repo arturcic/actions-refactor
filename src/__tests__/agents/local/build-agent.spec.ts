@@ -31,7 +31,7 @@ describe('build-agent/local', () => {
     })
 
     it('should log debug', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.debug('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -39,7 +39,7 @@ describe('build-agent/local', () => {
     })
 
     it('should log info', () => {
-        let spy = vi.spyOn(process.stdout, 'write')
+        const spy = vi.spyOn(process.stdout, 'write')
 
         agent.info('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -47,7 +47,7 @@ describe('build-agent/local', () => {
     })
 
     it('should log warn', () => {
-        let spy = vi.spyOn(process.stderr, 'write')
+        const spy = vi.spyOn(process.stderr, 'write')
 
         agent.warn('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -55,7 +55,7 @@ describe('build-agent/local', () => {
     })
 
     it('should log error', () => {
-        let spy = vi.spyOn(process.stderr, 'write')
+        const spy = vi.spyOn(process.stderr, 'write')
 
         agent.error('test')
         expect(spy).toHaveBeenCalledTimes(1)
@@ -63,7 +63,7 @@ describe('build-agent/local', () => {
     })
 
     it('should set succeeded', () => {
-        let spy = vi.spyOn(agent, 'info')
+        const spy = vi.spyOn(agent, 'info')
 
         agent.setSucceeded('test', true)
         expect(spy).toHaveBeenCalledTimes(1)
@@ -71,7 +71,7 @@ describe('build-agent/local', () => {
     })
 
     it('should set failed', () => {
-        let spy = vi.spyOn(agent, 'error')
+        const spy = vi.spyOn(agent, 'error')
 
         agent.setFailed('test', true)
         expect(spy).toHaveBeenCalledTimes(1)
@@ -84,7 +84,7 @@ describe('build-agent/local', () => {
     })
 
     it('should set output', () => {
-        let spy = vi.spyOn(agent, 'debug')
+        const spy = vi.spyOn(agent, 'debug')
 
         agent.setOutput('test', 'value')
         expect(spy).toHaveBeenCalledTimes(1)
