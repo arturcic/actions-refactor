@@ -33,6 +33,7 @@ export class Runner {
             this.disableTelemetry()
 
             this.buildAgent.debug('Installing GitVersion')
+
             await this.gitReleaseManagerTool.install()
 
             this.buildAgent.setSucceeded('GitReleaseManager installed successfully', true)
@@ -50,6 +51,7 @@ export class Runner {
             this.disableTelemetry()
 
             this.buildAgent.debug('Creating release')
+
             await this.gitReleaseManagerTool.create()
 
             this.buildAgent.setSucceeded('GitReleaseManager created release successfully', true)
@@ -67,6 +69,7 @@ export class Runner {
             this.disableTelemetry()
 
             this.buildAgent.debug('Discarding release')
+
             await this.gitReleaseManagerTool.discard()
 
             this.buildAgent.setSucceeded('GitReleaseManager discarded release successfully', true)
@@ -84,6 +87,7 @@ export class Runner {
             this.disableTelemetry()
 
             this.buildAgent.debug('Closing release')
+
             await this.gitReleaseManagerTool.close()
 
             this.buildAgent.setSucceeded('GitReleaseManager closed release successfully', true)
@@ -101,6 +105,7 @@ export class Runner {
             this.disableTelemetry()
 
             this.buildAgent.debug('Opening release')
+
             await this.gitReleaseManagerTool.open()
 
             this.buildAgent.setSucceeded('GitReleaseManager opened release successfully', true)
@@ -118,6 +123,7 @@ export class Runner {
             this.disableTelemetry()
 
             this.buildAgent.debug('Publishing release')
+
             await this.gitReleaseManagerTool.publish()
 
             this.buildAgent.setSucceeded('GitReleaseManager published release successfully', true)
@@ -135,6 +141,7 @@ export class Runner {
             this.disableTelemetry()
 
             this.buildAgent.debug('Adding asset to release')
+
             await this.gitReleaseManagerTool.addAsset()
 
             this.buildAgent.setSucceeded('GitReleaseManager added assets to release successfully', true)

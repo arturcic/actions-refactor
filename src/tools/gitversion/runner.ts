@@ -43,6 +43,7 @@ export class Runner {
             this.disableTelemetry()
 
             this.buildAgent.info('Executing GitVersion')
+
             const result = await this.gitVersionTool.run()
 
             if (result.code === 0) {
