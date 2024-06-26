@@ -114,6 +114,21 @@ export abstract class DotnetTool implements IDotnetTool {
         return pathValue !== repoRoot
     }
 
+    protected async getRepoPath(targetPath: string): Promise<string> {
+        const srcDir = this.buildAgent.sourceDir || '.'
+        let workDir: string
+        if (!targetPath) {
+            workDir = srcDir
+        } else {
+            if (await this.buildAgent.directoryExists(targetPath)) {
+                workDir = targetPath
+            } else {
+                throw new Error(`Directory not found at ${targetPath}`)
+            }
+        }
+        return workDir.replace(/\\/g, '/')
+    }
+
     private async queryLatestMatch(toolName: string, versionSpec: string, includePrerelease: boolean): Promise<string | null> {
         this.buildAgent.info(
             `Querying tool versions for ${toolName}${versionSpec ? `@${versionSpec}` : ''} ${includePrerelease ? 'including pre-releases' : ''}`

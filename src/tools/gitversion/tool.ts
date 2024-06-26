@@ -53,19 +53,7 @@ export class GitVersionTool extends DotnetTool {
     }
 
     protected async getRepoDir(settings: GitVersionSettings): Promise<string> {
-        const targetPath = settings.targetPath
-        const srcDir = this.buildAgent.sourceDir || '.'
-        let workDir: string
-        if (!targetPath) {
-            workDir = srcDir
-        } else {
-            if (await this.buildAgent.directoryExists(targetPath)) {
-                workDir = targetPath
-            } else {
-                throw new Error(`Directory not found at ${targetPath}`)
-            }
-        }
-        return workDir.replace(/\\/g, '/')
+        return await super.getRepoPath(settings.targetPath)
     }
 
     protected async getArguments(workDir: string, options: GitVersionSettings): Promise<string[]> {

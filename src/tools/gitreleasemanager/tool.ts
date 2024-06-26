@@ -73,21 +73,21 @@ export class GitReleaseManagerTool extends DotnetTool {
         return this.execute('dotnet-gitreleasemanager', args)
     }
 
-    private async getCommonArguments(settings: GitReleaseManagerSettings): Promise<string[]> {
+    protected async getCommonArguments(settings: GitReleaseManagerSettings): Promise<string[]> {
         const args: string[] = []
 
         args.push('--owner', settings.owner)
         args.push('--repository', settings.repository)
         args.push('--token', settings.token)
 
-        settings.targetDirectory = await this.getRepoDir(settings.targetDirectory)
+        settings.targetDirectory = await this.getRepoDir(settings)
 
         args.push('--targetDirectory', settings.targetDirectory)
 
         return args
     }
 
-    private async getCreateArguments(settings: GitReleaseManagerCreateSettings): Promise<string[]> {
+    protected async getCreateArguments(settings: GitReleaseManagerCreateSettings): Promise<string[]> {
         const args: string[] = ['create', ...(await this.getCommonArguments(settings))]
 
         if (settings.milestone) {
@@ -121,7 +121,7 @@ export class GitReleaseManagerTool extends DotnetTool {
         return args
     }
 
-    private async getDiscardArguments(settings: GitReleaseManagerDiscardSettings): Promise<string[]> {
+    protected async getDiscardArguments(settings: GitReleaseManagerDiscardSettings): Promise<string[]> {
         const args: string[] = ['discard', ...(await this.getCommonArguments(settings))]
 
         if (settings.milestone) {
@@ -131,7 +131,7 @@ export class GitReleaseManagerTool extends DotnetTool {
         return args
     }
 
-    private async getCloseArguments(settings: GitReleaseManagerCloseSettings): Promise<string[]> {
+    protected async getCloseArguments(settings: GitReleaseManagerCloseSettings): Promise<string[]> {
         const args: string[] = ['close', ...(await this.getCommonArguments(settings))]
 
         if (settings.milestone) {
@@ -141,7 +141,7 @@ export class GitReleaseManagerTool extends DotnetTool {
         return args
     }
 
-    private async getOpenArguments(settings: GitReleaseManagerOpenSettings): Promise<string[]> {
+    protected async getOpenArguments(settings: GitReleaseManagerOpenSettings): Promise<string[]> {
         const args: string[] = ['open', ...(await this.getCommonArguments(settings))]
 
         if (settings.milestone) {
@@ -151,7 +151,7 @@ export class GitReleaseManagerTool extends DotnetTool {
         return args
     }
 
-    private async getPublishArguments(settings: GitReleaseManagerPublishSettings): Promise<string[]> {
+    protected async getPublishArguments(settings: GitReleaseManagerPublishSettings): Promise<string[]> {
         const args: string[] = ['publish', ...(await this.getCommonArguments(settings))]
 
         if (settings.tagName) {
@@ -161,7 +161,7 @@ export class GitReleaseManagerTool extends DotnetTool {
         return args
     }
 
-    private async getAddAssetArguments(settings: GitReleaseManagerAddAssetSettings): Promise<string[]> {
+    protected async getAddAssetArguments(settings: GitReleaseManagerAddAssetSettings): Promise<string[]> {
         const args: string[] = ['addasset', ...(await this.getCommonArguments(settings))]
 
         if (settings.tagName) {
@@ -178,18 +178,7 @@ export class GitReleaseManagerTool extends DotnetTool {
         return args
     }
 
-    private async getRepoDir(targetPath: string): Promise<string> {
-        let workDir: string
-        const srcDir = this.buildAgent.sourceDir
-        if (!targetPath) {
-            workDir = srcDir
-        } else {
-            if (await this.buildAgent.directoryExists(targetPath)) {
-                workDir = path.join(srcDir, targetPath)
-            } else {
-                throw new Error(`Directory not found at ${targetPath}`)
-            }
-        }
-        return workDir.replace(/\\/g, '/')
+    protected async getRepoDir(settings: GitReleaseManagerSettings): Promise<string> {
+        return await this.getRepoPath(settings.targetDirectory)
     }
 }
