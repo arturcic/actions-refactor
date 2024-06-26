@@ -29,6 +29,8 @@ export class Runner {
 
             this.buildAgent.info(`Set GITVERSION_PATH to ${toolPath}`)
             this.buildAgent.setVariable('GITVERSION_PATH', toolPath)
+
+            this.buildAgent.setSucceeded('GitVersion installed successfully', true)
             return 0
         } catch (error) {
             if (error instanceof Error) {
