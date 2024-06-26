@@ -20,9 +20,7 @@ export class Runner {
 
     private async setup(): Promise<number> {
         try {
-            this.buildAgent.info(`Running on: '${this.buildAgent.agentName}'`)
-            this.buildAgent.debug('Disabling telemetry')
-            this.gitVersionTool.disableTelemetry()
+            this.disableTelemetry()
 
             this.buildAgent.debug('Installing GitVersion')
             const toolPath = await this.gitVersionTool.install()
@@ -42,9 +40,7 @@ export class Runner {
 
     private async execute(): Promise<number> {
         try {
-            this.buildAgent.debug(`Agent: '${this.buildAgent.agentName}'`)
-            this.buildAgent.debug('Disabling telemetry')
-            this.gitVersionTool.disableTelemetry()
+            this.disableTelemetry()
 
             this.buildAgent.info('Executing GitVersion')
             const result = await this.gitVersionTool.run()
@@ -85,5 +81,11 @@ export class Runner {
             }
             return -1
         }
+    }
+
+    private disableTelemetry(): void {
+        this.buildAgent.info(`Running on: '${this.buildAgent.agentName}'`)
+        this.buildAgent.debug('Disabling telemetry')
+        this.gitVersionTool.disableTelemetry()
     }
 }

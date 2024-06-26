@@ -30,8 +30,9 @@ export class Runner {
 
     private async setup(): Promise<number> {
         try {
-            this.gitReleaseManagerTool.disableTelemetry()
+            this.disableTelemetry()
 
+            this.buildAgent.debug('Installing GitVersion')
             await this.gitReleaseManagerTool.install()
 
             this.buildAgent.setSucceeded('GitReleaseManager installed successfully', true)
@@ -46,8 +47,9 @@ export class Runner {
 
     private async create(): Promise<number> {
         try {
-            this.gitReleaseManagerTool.disableTelemetry()
+            this.disableTelemetry()
 
+            this.buildAgent.debug('Creating release')
             await this.gitReleaseManagerTool.create()
 
             this.buildAgent.setSucceeded('GitReleaseManager created release successfully', true)
@@ -62,8 +64,9 @@ export class Runner {
 
     private async discard(): Promise<number> {
         try {
-            this.gitReleaseManagerTool.disableTelemetry()
+            this.disableTelemetry()
 
+            this.buildAgent.debug('Discarding release')
             await this.gitReleaseManagerTool.discard()
 
             this.buildAgent.setSucceeded('GitReleaseManager discarded release successfully', true)
@@ -78,8 +81,9 @@ export class Runner {
 
     private async close(): Promise<number> {
         try {
-            this.gitReleaseManagerTool.disableTelemetry()
+            this.disableTelemetry()
 
+            this.buildAgent.debug('Closing release')
             await this.gitReleaseManagerTool.close()
 
             this.buildAgent.setSucceeded('GitReleaseManager closed release successfully', true)
@@ -94,8 +98,9 @@ export class Runner {
 
     private async open(): Promise<number> {
         try {
-            this.gitReleaseManagerTool.disableTelemetry()
+            this.disableTelemetry()
 
+            this.buildAgent.debug('Opening release')
             await this.gitReleaseManagerTool.open()
 
             this.buildAgent.setSucceeded('GitReleaseManager opened release successfully', true)
@@ -110,8 +115,9 @@ export class Runner {
 
     private async publish(): Promise<number> {
         try {
-            this.gitReleaseManagerTool.disableTelemetry()
+            this.disableTelemetry()
 
+            this.buildAgent.debug('Publishing release')
             await this.gitReleaseManagerTool.publish()
 
             this.buildAgent.setSucceeded('GitReleaseManager published release successfully', true)
@@ -126,8 +132,9 @@ export class Runner {
 
     private async addAsset(): Promise<number> {
         try {
-            this.gitReleaseManagerTool.disableTelemetry()
+            this.disableTelemetry()
 
+            this.buildAgent.debug('Adding asset to release')
             await this.gitReleaseManagerTool.addAsset()
 
             this.buildAgent.setSucceeded('GitReleaseManager added assets to release successfully', true)
@@ -138,5 +145,11 @@ export class Runner {
             }
             return -1
         }
+    }
+
+    private disableTelemetry(): void {
+        this.buildAgent.info(`Running on: '${this.buildAgent.agentName}'`)
+        this.buildAgent.debug('Disabling telemetry')
+        this.gitReleaseManagerTool.disableTelemetry()
     }
 }
