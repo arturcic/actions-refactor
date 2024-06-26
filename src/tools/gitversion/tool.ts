@@ -41,7 +41,10 @@ export class GitVersionTool extends DotnetTool {
         for (const property of keys) {
             const name = this.toCamelCase(property)
             try {
-                const value = output[property]?.toString()
+                let value = output[property]?.toString()
+                if (value === '0') {
+                    value = '0'
+                }
                 this.buildAgent.setOutput(name, value)
                 this.buildAgent.setOutput(`GitVersion_${property}`, value)
                 this.buildAgent.setVariable(name, value)
