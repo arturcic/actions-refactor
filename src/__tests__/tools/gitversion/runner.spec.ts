@@ -15,6 +15,8 @@ describe('GitVersion Runner', () => {
     const envName = process.platform === 'win32' ? 'Path' : 'PATH'
     const version = '5.12.0'
     const toolPath = path.resolve(baseDir, 'tools', 'GitVersion.Tool', version)
+    const toolPathVariable = 'GITVERSION_PATH'
+    const toolName = 'dotnet-gitversion'
 
     function setEnv(key: string, value: string): void {
         process.env[key.toUpperCase()] = value
@@ -30,10 +32,11 @@ describe('GitVersion Runner', () => {
             setEnv(`INPUT_${property}`, inputs[property]?.toString() || '')
         }
     }
+
     function testOnAgent(agent: IBuildAgent): void {
         function resetEnv(): void {
             process.env.PATH = process.env[envName] // workaround for windows
-            setEnv('GITVERSION_PATH', '')
+            setEnv(toolPathVariable, '')
             setEnv(agent.sourceDirVariable, '')
             setEnv(agent.tempDirVariable, '')
             setEnv(agent.cacheDirVariable, '')
@@ -69,14 +72,14 @@ describe('GitVersion Runner', () => {
             expect(fs.existsSync(path.resolve(baseDir, 'tools'))).toBe(true)
             expect(fs.existsSync(toolPath)).toBe(true)
 
-            expect(getEnv('GITVERSION_PATH')).toBe(toolPath)
+            expect(getEnv(toolPathVariable)).toBe(toolPath)
 
-            const foundToolPath = await agent.which('dotnet-gitversion', true)
+            const foundToolPath = await agent.which(toolName, true)
             expect(foundToolPath).contain(toolPath)
         })
 
         it.sequential('should execute GitVersion', async () => {
-            setEnv('GITVERSION_PATH', toolPath)
+            setEnv(toolPathVariable, toolPath)
 
             const exitCode = await runner.run('execute')
 

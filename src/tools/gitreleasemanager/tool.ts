@@ -15,8 +15,16 @@ import {
 import { GitReleaseManagerSettingsProvider, IGitReleaseManagerSettingsProvider } from './settings'
 
 export class GitReleaseManagerTool extends DotnetTool {
-    get toolName(): string {
+    get packageName(): string {
         return 'GitReleaseManager.Tool'
+    }
+
+    get toolName(): string {
+        return 'dotnet-gitreleasemanager'
+    }
+
+    get toolPathVariable(): string {
+        return 'GITRELEASEMANAGER_PATH'
     }
 
     get versionRange(): string | null {
@@ -67,10 +75,6 @@ export class GitReleaseManagerTool extends DotnetTool {
         const args = await this.getAddAssetArguments(settings)
 
         return this.executeTool(args)
-    }
-
-    private async executeTool(args: string[]): Promise<ExecResult> {
-        return this.execute('dotnet-gitreleasemanager', args)
     }
 
     protected async getCommonArguments(settings: GitReleaseManagerSettings): Promise<string[]> {

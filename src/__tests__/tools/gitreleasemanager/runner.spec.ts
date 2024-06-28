@@ -15,9 +15,15 @@ describe('GitReleaseManager Runner', () => {
     const envName = process.platform === 'win32' ? 'Path' : 'PATH'
     const version = '0.17.0'
     const toolPath = path.resolve(baseDir, 'tools', 'GitReleaseManager.Tool', version)
+    const toolPathVariable = 'GITRELEASEMANAGER_PATH'
+    const toolName = 'dotnet-gitreleasemanager'
 
     function setEnv(key: string, value: string): void {
         process.env[key.toUpperCase()] = value
+    }
+
+    function getEnv(key: string): string {
+        return process.env[key] || ''
     }
 
     function setInputs(inputs: Partial<SetupSettings>): void {
@@ -26,9 +32,11 @@ describe('GitReleaseManager Runner', () => {
             setEnv(`INPUT_${property}`, inputs[property]?.toString() || '')
         }
     }
+
     function testOnAgent(agent: IBuildAgent): void {
         function resetEnv(): void {
             process.env.PATH = process.env[envName] // workaround for windows
+            setEnv(toolPathVariable, '')
             setEnv(agent.sourceDirVariable, '')
             setEnv(agent.tempDirVariable, '')
             setEnv(agent.cacheDirVariable, '')
@@ -64,7 +72,9 @@ describe('GitReleaseManager Runner', () => {
             expect(fs.existsSync(path.resolve(baseDir, 'tools'))).toBe(true)
             expect(fs.existsSync(toolPath)).toBe(true)
 
-            const foundToolPath = await agent.which('dotnet-gitreleasemanager', true)
+            expect(getEnv(toolPathVariable)).toBe(toolPath)
+
+            const foundToolPath = await agent.which(toolName, true)
             expect(foundToolPath).contain(toolPath)
         })
     }

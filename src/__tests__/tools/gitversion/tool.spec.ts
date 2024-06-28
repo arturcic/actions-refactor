@@ -33,7 +33,7 @@ describe('GitVersionTool', () => {
     })
 
     it('should return correct tool name', () => {
-        expect(tool.toolName).toBe('GitVersion.Tool')
+        expect(tool.packageName).toBe('GitVersion.Tool')
     })
 
     it('should return correct version range', () => {

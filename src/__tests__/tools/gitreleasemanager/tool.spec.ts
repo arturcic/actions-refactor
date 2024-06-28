@@ -67,7 +67,7 @@ describe('GitReleaseManagerTool', () => {
     })
 
     it('should return correct tool name', () => {
-        expect(tool.toolName).toBe('GitReleaseManager.Tool')
+        expect(tool.packageName).toBe('GitReleaseManager.Tool')
     })
 
     it('should return correct version range', () => {

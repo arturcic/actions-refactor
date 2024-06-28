@@ -25,8 +25,9 @@ export class Runner {
             this.buildAgent.debug('Installing GitVersion')
             const toolPath = await this.gitVersionTool.install()
 
-            this.buildAgent.info(`Set GITVERSION_PATH to ${toolPath}`)
-            this.buildAgent.setVariable('GITVERSION_PATH', toolPath)
+            const pathVariable = this.gitVersionTool.toolPathVariable
+            this.buildAgent.info(`Set ${pathVariable} to ${toolPath}`)
+            this.buildAgent.setVariable(pathVariable, toolPath)
 
             this.buildAgent.setSucceeded('GitVersion installed successfully', true)
             return 0

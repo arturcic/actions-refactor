@@ -8,8 +8,6 @@ import { IBuildAgent, type ExecResult } from '@agents/common'
 import { ISettingsProvider } from './settings'
 
 export interface IDotnetTool {
-    get toolName(): string
-
     disableTelemetry(): void
 
     install(): Promise<string>
@@ -24,7 +22,11 @@ export abstract class DotnetTool implements IDotnetTool {
 
     abstract get settingsProvider(): ISettingsProvider
 
+    abstract get packageName(): string
+
     abstract get toolName(): string
+
+    abstract get toolPathVariable(): string
 
     abstract get versionRange(): string | null
 
@@ -48,13 +50,13 @@ export abstract class DotnetTool implements IDotnetTool {
 
         let version: string | null = semver.clean(setupSettings.versionSpec) || setupSettings.versionSpec
         this.buildAgent.info('--------------------------')
-        this.buildAgent.info(`Acquiring ${this.toolName} for version spec: ${version}`)
+        this.buildAgent.info(`Acquiring ${this.packageName} for version spec: ${version}`)
         this.buildAgent.info('--------------------------')
 
         if (!this.isExplicitVersion(version)) {
-            version = await this.queryLatestMatch(this.toolName, version, setupSettings.includePrerelease)
+            version = await this.queryLatestMatch(this.packageName, version, setupSettings.includePrerelease)
             if (!version) {
-                throw new Error(`Unable to find ${this.toolName} version '${version}'.`)
+                throw new Error(`Unable to find ${this.packageName} version '${version}'.`)
             }
         }
 
@@ -68,19 +70,19 @@ export abstract class DotnetTool implements IDotnetTool {
         let toolPath: string | null = null
         if (!setupSettings.preferLatestVersion) {
             // Let's try and resolve the version locally first
-            toolPath = await this.buildAgent.findLocalTool(this.toolName, version)
+            toolPath = await this.buildAgent.findLocalTool(this.packageName, version)
             if (toolPath) {
                 this.buildAgent.info('--------------------------')
-                this.buildAgent.info(`${this.toolName} version: ${version} found in local cache at ${toolPath}.`)
+                this.buildAgent.info(`${this.packageName} version: ${version} found in local cache at ${toolPath}.`)
                 this.buildAgent.info('--------------------------')
             }
         }
 
         if (!toolPath) {
             // Download, extract, cache
-            toolPath = await this.installTool(this.toolName, version, setupSettings.ignoreFailedSources)
+            toolPath = await this.installTool(this.packageName, version, setupSettings.ignoreFailedSources)
             this.buildAgent.info('--------------------------')
-            this.buildAgent.info(`${this.toolName} version: ${version} installed.`)
+            this.buildAgent.info(`${this.packageName} version: ${version} installed.`)
             this.buildAgent.info('--------------------------')
         }
 
@@ -103,6 +105,18 @@ export abstract class DotnetTool implements IDotnetTool {
             const dotnetRoot = path.dirname(dotnetPath)
             this.buildAgent.setVariable('DOTNET_ROOT', dotnetRoot)
         }
+    }
+
+    protected async executeTool(args: string[]): Promise<ExecResult> {
+        let toolPath: string | undefined
+        const gitVersionPath = this.buildAgent.getVariableAsPath(this.toolPathVariable)
+        if (gitVersionPath) {
+            toolPath = path.join(gitVersionPath, os.platform() === 'win32' ? `${this.toolName}.exe` : this.toolName)
+        }
+        if (!toolPath) {
+            toolPath = await this.buildAgent.which(this.toolName, true)
+        }
+        return this.execute(toolPath, args)
     }
 
     protected async isValidInputFile(input: string, file: string): Promise<boolean> {

@@ -1,13 +1,19 @@
-import * as os from 'os'
-import * as path from 'path'
 import { type ExecResult } from '@agents/common'
 import { DotnetTool, keysFn } from '@tools/common'
 import { type GitVersionOutput, type GitVersionSettings } from './models'
 import { GitVersionSettingsProvider, IGitVersionSettingsProvider } from './settings'
 
 export class GitVersionTool extends DotnetTool {
-    get toolName(): string {
+    get packageName(): string {
         return 'GitVersion.Tool'
+    }
+
+    get toolName(): string {
+        return 'dotnet-gitversion'
+    }
+
+    get toolPathVariable(): string {
+        return 'GITVERSION_PATH'
     }
 
     get versionRange(): string | null {
@@ -21,19 +27,13 @@ export class GitVersionTool extends DotnetTool {
     async run(): Promise<ExecResult> {
         const settings = this.settingsProvider.getGitVersionSettings()
         const workDir = await this.getRepoDir(settings)
+
+        await this.checkShallowClone(settings, workDir)
+
         const args = await this.getArguments(workDir, settings)
 
         await this.setDotnetRoot()
-
-        let toolPath: string | undefined
-        const gitVersionPath = this.buildAgent.getVariableAsPath('GITVERSION_PATH')
-        if (gitVersionPath) {
-            toolPath = path.join(gitVersionPath, os.platform() === 'win32' ? 'dotnet-gitversion.exe' : 'dotnet-gitversion')
-        }
-        if (!toolPath) {
-            toolPath = await this.buildAgent.which('dotnet-gitversion', true)
-        }
-        return this.execute(toolPath, args)
+        return this.executeTool(args)
     }
 
     writeGitVersionToAgent(output: GitVersionOutput): void {
@@ -178,6 +178,17 @@ export class GitVersionTool extends DotnetTool {
         }
 
         return args
+    }
+
+    private async checkShallowClone(settings: GitVersionSettings, workDir: string): Promise<void> {
+        if (!settings.disableShallowCloneCheck) {
+            const isShallowResult = await this.execute('git', ['-C', workDir, 'rev-parse', '--is-shallow-repository'])
+            if (isShallowResult.code === 0 && isShallowResult.stdout.trim() === 'true') {
+                throw new Error(
+                    'The repository is shallow. Consider disabling shallow clones. See https://github.com/GitTools/actions/blob/main/docs/cloning.md for more information.'
+                )
+            }
+        }
     }
 
     private toCamelCase(input: string): string {
