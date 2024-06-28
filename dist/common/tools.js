@@ -42,12 +42,12 @@ class DotnetTool {
     const setupSettings = this.settingsProvider.getSetupSettings();
     let version = semver.clean(setupSettings.versionSpec) || setupSettings.versionSpec;
     this.buildAgent.info("--------------------------");
-    this.buildAgent.info(`Acquiring ${this.toolName} for version spec: ${version}`);
+    this.buildAgent.info(`Acquiring ${this.packageName} for version spec: ${version}`);
     this.buildAgent.info("--------------------------");
     if (!this.isExplicitVersion(version)) {
-      version = await this.queryLatestMatch(this.toolName, version, setupSettings.includePrerelease);
+      version = await this.queryLatestMatch(this.packageName, version, setupSettings.includePrerelease);
       if (!version) {
-        throw new Error(`Unable to find ${this.toolName} version '${version}'.`);
+        throw new Error(`Unable to find ${this.packageName} version '${version}'.`);
       }
     }
     if (this.versionRange && !semver.satisfies(version, this.versionRange, { includePrerelease: setupSettings.includePrerelease })) {
@@ -57,17 +57,17 @@ class DotnetTool {
     }
     let toolPath = null;
     if (!setupSettings.preferLatestVersion) {
-      toolPath = await this.buildAgent.findLocalTool(this.toolName, version);
+      toolPath = await this.buildAgent.findLocalTool(this.packageName, version);
       if (toolPath) {
         this.buildAgent.info("--------------------------");
-        this.buildAgent.info(`${this.toolName} version: ${version} found in local cache at ${toolPath}.`);
+        this.buildAgent.info(`${this.packageName} version: ${version} found in local cache at ${toolPath}.`);
         this.buildAgent.info("--------------------------");
       }
     }
     if (!toolPath) {
-      toolPath = await this.installTool(this.toolName, version, setupSettings.ignoreFailedSources);
+      toolPath = await this.installTool(this.packageName, version, setupSettings.ignoreFailedSources);
       this.buildAgent.info("--------------------------");
-      this.buildAgent.info(`${this.toolName} version: ${version} installed.`);
+      this.buildAgent.info(`${this.packageName} version: ${version} installed.`);
       this.buildAgent.info("--------------------------");
     }
     this.buildAgent.info(`Prepending ${toolPath} to PATH`);
@@ -84,6 +84,17 @@ class DotnetTool {
       const dotnetRoot = path.dirname(dotnetPath);
       this.buildAgent.setVariable("DOTNET_ROOT", dotnetRoot);
     }
+  }
+  async executeTool(args) {
+    let toolPath;
+    const gitVersionPath = this.buildAgent.getVariableAsPath(this.toolPathVariable);
+    if (gitVersionPath) {
+      toolPath = path.join(gitVersionPath, os.platform() === "win32" ? `${this.toolName}.exe` : this.toolName);
+    }
+    if (!toolPath) {
+      toolPath = await this.buildAgent.which(this.toolName, true);
+    }
+    return this.execute(toolPath, args);
   }
   async isValidInputFile(input, file) {
     return this.filePathSupplied(input) && await this.buildAgent.fileExists(file);
@@ -138,7 +149,7 @@ class DotnetTool {
     if (!semverVersion) {
       throw new Error(`Invalid version spec: ${version}`);
     }
-    const tempDirectory = await this.createTempDir();
+    const tempDirectory = await this.createTempDirectory();
     if (!tempDirectory) {
       throw new Error("Unable to create temp directory");
     }
@@ -153,13 +164,13 @@ class DotnetTool {
     if (result.code !== 0) {
       throw new Error(message);
     }
-    const toolPath = await this.buildAgent.cacheToolDir(tempDirectory, toolName, semverVersion);
+    const toolPath = await this.buildAgent.cacheToolDirectory(tempDirectory, toolName, semverVersion);
     this.buildAgent.debug(`Cached tool path: ${toolPath}`);
     this.buildAgent.debug(`Cleaning up temp directory: ${tempDirectory}`);
-    this.buildAgent.dirRemove(tempDirectory);
+    await this.buildAgent.removeDirectory(tempDirectory);
     return toolPath;
   }
-  async createTempDir() {
+  async createTempDirectory() {
     const tempRootDir = this.buildAgent.tempDir;
     if (!tempRootDir) {
       throw new Error("Temp directory not set");

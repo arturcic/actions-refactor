@@ -1,6 +1,4 @@
 import { S as SettingsProvider, D as DotnetTool, k as keysFn, p as parseCliArgs, g as getAgent } from '../common/tools.js';
-import * as os from 'os';
-import * as path from 'path';
 import 'node:util';
 import 'node:crypto';
 import 'node:fs/promises';
@@ -50,8 +48,14 @@ class GitVersionSettingsProvider extends SettingsProvider {
 }
 
 class GitVersionTool extends DotnetTool {
-  get toolName() {
+  get packageName() {
     return "GitVersion.Tool";
+  }
+  get toolName() {
+    return "dotnet-gitversion";
+  }
+  get toolPathVariable() {
+    return "GITVERSION_PATH";
   }
   get versionRange() {
     return ">=5.2.0 <6.1.0";
@@ -62,17 +66,10 @@ class GitVersionTool extends DotnetTool {
   async run() {
     const settings = this.settingsProvider.getGitVersionSettings();
     const workDir = await this.getRepoDir(settings);
+    await this.checkShallowClone(settings, workDir);
     const args = await this.getArguments(workDir, settings);
     await this.setDotnetRoot();
-    let toolPath;
-    const gitVersionPath = this.buildAgent.getVariableAsPath("GITVERSION_PATH");
-    if (gitVersionPath) {
-      toolPath = path.join(gitVersionPath, os.platform() === "win32" ? "dotnet-gitversion.exe" : "dotnet-gitversion");
-    }
-    if (!toolPath) {
-      toolPath = await this.buildAgent.which("dotnet-gitversion", true);
-    }
-    return this.execute(toolPath, args);
+    return this.executeTool(args);
   }
   writeGitVersionToAgent(output) {
     const keys = keysFn(output);
@@ -193,6 +190,16 @@ class GitVersionTool extends DotnetTool {
     }
     return args;
   }
+  async checkShallowClone(settings, workDir) {
+    if (!settings.disableShallowCloneCheck) {
+      const isShallowResult = await this.execute("git", ["-C", workDir, "rev-parse", "--is-shallow-repository"]);
+      if (isShallowResult.code === 0 && isShallowResult.stdout.trim() === "true") {
+        throw new Error(
+          "The repository is shallow. Consider disabling shallow clones. See https://github.com/GitTools/actions/blob/main/docs/cloning.md for more information."
+        );
+      }
+    }
+  }
   toCamelCase(input) {
     return input.replace(/^\w|[A-Z]|\b\w|\s+/g, function(match, index) {
       if (+match === 0) return "";
@@ -220,8 +227,9 @@ class Runner {
       this.disableTelemetry();
       this.buildAgent.debug("Installing GitVersion");
       const toolPath = await this.gitVersionTool.install();
-      this.buildAgent.info(`Set GITVERSION_PATH to ${toolPath}`);
-      this.buildAgent.setVariable("GITVERSION_PATH", toolPath);
+      const pathVariable = this.gitVersionTool.toolPathVariable;
+      this.buildAgent.info(`Set ${pathVariable} to ${toolPath}`);
+      this.buildAgent.setVariable(pathVariable, toolPath);
       this.buildAgent.setSucceeded("GitVersion installed successfully", true);
       return 0;
     } catch (error) {

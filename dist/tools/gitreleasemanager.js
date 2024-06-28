@@ -121,8 +121,14 @@ class GitReleaseManagerSettingsProvider extends SettingsProvider {
 }
 
 class GitReleaseManagerTool extends DotnetTool {
-  get toolName() {
+  get packageName() {
     return "GitReleaseManager.Tool";
+  }
+  get toolName() {
+    return "dotnet-gitreleasemanager";
+  }
+  get toolPathVariable() {
+    return "GITRELEASEMANAGER_PATH";
   }
   get versionRange() {
     return ">=0.10.0 <0.18.0";
@@ -159,9 +165,6 @@ class GitReleaseManagerTool extends DotnetTool {
     const settings = this.settingsProvider.getAddAssetSettings();
     const args = await this.getAddAssetArguments(settings);
     return this.executeTool(args);
-  }
-  async executeTool(args) {
-    return this.execute("dotnet-gitreleasemanager", args);
   }
   async getCommonArguments(settings) {
     const args = [];
@@ -274,8 +277,11 @@ class Runner {
   async setup() {
     try {
       this.disableTelemetry();
-      this.buildAgent.debug("Installing GitVersion");
-      await this.gitReleaseManagerTool.install();
+      this.buildAgent.debug("Installing GitReleaseManager");
+      const toolPath = await this.gitReleaseManagerTool.install();
+      const pathVariable = this.gitReleaseManagerTool.toolPathVariable;
+      this.buildAgent.info(`Set ${pathVariable} to ${toolPath}`);
+      this.buildAgent.setVariable(pathVariable, toolPath);
       this.buildAgent.setSucceeded("GitReleaseManager installed successfully", true);
       return 0;
     } catch (error) {

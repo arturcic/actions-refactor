@@ -84,16 +84,16 @@ class BuildAgentBase {
   getVariableAsPath(name) {
     return path.resolve(path.normalize(this.getVariable(name)));
   }
-  async directoryExists(file) {
+  async directoryExists(dir) {
     try {
-      await fs.access(file);
-      return (await fs.stat(file)).isDirectory();
+      await fs.access(dir);
+      return (await fs.stat(dir)).isDirectory();
     } catch (e) {
       return false;
     }
   }
-  async dirRemove(file) {
-    await fs.rm(file, { recursive: true, force: true, maxRetries: 3, retryDelay: 1e3 });
+  async removeDirectory(dir) {
+    await fs.rm(dir, { recursive: true, force: true, maxRetries: 3, retryDelay: 1e3 });
   }
   async fileExists(file) {
     try {
@@ -103,7 +103,7 @@ class BuildAgentBase {
       return false;
     }
   }
-  async cacheToolDir(sourceDir, tool, version) {
+  async cacheToolDirectory(sourceDir, tool, version) {
     if (!tool) {
       throw new Error("tool is a required parameter");
     }
