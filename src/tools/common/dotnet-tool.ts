@@ -20,8 +20,6 @@ export abstract class DotnetTool implements IDotnetTool {
 
     constructor(protected buildAgent: IBuildAgent) {}
 
-    abstract get settingsProvider(): ISettingsProvider
-
     abstract get packageName(): string
 
     abstract get toolName(): string
@@ -29,6 +27,8 @@ export abstract class DotnetTool implements IDotnetTool {
     abstract get toolPathVariable(): string
 
     abstract get versionRange(): string | null
+
+    abstract get settingsProvider(): ISettingsProvider
 
     disableTelemetry(): void {
         this.buildAgent.info('Disable Telemetry')

@@ -15,8 +15,8 @@
         "build": "run-p build:tools build:agents",
         "test": "run-p test:tools test:agents",
         "lint": "eslint --ext .ts src",
-        "format": "prettier src/**/*.ts --write",
-        "format-check": "prettier --check src/**/*.ts",
+        "format": "prettier --write 'src/**/*.ts'",
+        "format-check": "prettier --check 'src/**/*.ts'",
 
         "build:tools": "vite build --config src/tools/vite.config.ts",
         "build:agents": "run-p build:agent:local build:agent:azure build:agent:github",
