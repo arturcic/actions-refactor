@@ -23,12 +23,14 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
+      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
       with:
-          fetch-depth: 0
-          token: ${{ secrets.PUSH_GITHUB_TOKEN }}
-    - uses: actions/setup-node@v4
+        fetch-depth: 0
+        token: ${{ secrets.PUSH_GITHUB_TOKEN }}
+    - uses: actions/checkout@v4
+      if: github.event_name == 'pull_request'
       with:
-        node-version: '20'
+        fetch-depth: 0
     - run: |
         npm install
         npm run format-check
@@ -43,21 +45,27 @@ jobs:
     - name: gitversion/execute
       id: gitversion # step id used as reference for output values
       uses: ./gitversion/execute
+      with:
+        targetPath: './'
+        disableCache: true
+        disableNormalization: false
+        overrideConfig: |
+          update-build-number=false
     - run: |
-        echo "Major (env.major)                                           : ${{ env.major }}"
-        echo "Major (env.GitVersion_Major)                                : ${{ env.GitVersion_Major }}"
-        echo "Major (steps.gitversion.outputs.major)                      : ${{ steps.gitversion.outputs.major }}"
-        echo "Major (steps.gitversion.outputs.GitVersion_Major)           : ${{ steps.gitversion.outputs.GitVersion_Major }}"
+        echo "Major      (env.major)                                      : ${{ env.major }}"
+        echo "Major      (env.GitVersion_Major)                           : ${{ env.GitVersion_Major }}"
+        echo "Major      (steps.gitversion.outputs.major)                 : ${{ steps.gitversion.outputs.major }}"
+        echo "Major      (steps.gitversion.outputs.GitVersion_Major)      : ${{ steps.gitversion.outputs.GitVersion_Major }}"
 
-        echo "Minor (env.minor)                                           : ${{ env.minor }}"
-        echo "Minor (env.GitVersion_Minor)                                : ${{ env.GitVersion_Minor }}"
-        echo "Minor (steps.gitversion.outputs.minor)                      : ${{ steps.gitversion.outputs.minor }}"
-        echo "Minor (steps.gitversion.outputs.GitVersion_Minor)           : ${{ steps.gitversion.outputs.GitVersion_Minor }}"
+        echo "Minor      (env.minor)                                      : ${{ env.minor }}"
+        echo "Minor      (env.GitVersion_Minor)                           : ${{ env.GitVersion_Minor }}"
+        echo "Minor      (steps.gitversion.outputs.minor)                 : ${{ steps.gitversion.outputs.minor }}"
+        echo "Minor      (steps.gitversion.outputs.GitVersion_Minor)      : ${{ steps.gitversion.outputs.GitVersion_Minor }}"
 
-        echo "Patch (env.patch)                                           : ${{ env.patch }}"
-        echo "Patch (env.GitVersion_Patch)                                : ${{ env.GitVersion_Patch }}"
-        echo "Patch (steps.gitversion.outputs.patch)                      : ${{ steps.gitversion.outputs.patch }}"
-        echo "Patch (steps.gitversion.outputs.GitVersion_Patch)           : ${{ steps.gitversion.outputs.GitVersion_Patch }}"
+        echo "Patch      (env.patch)                                      : ${{ env.patch }}"
+        echo "Patch      (env.GitVersion_Patch)                           : ${{ env.GitVersion_Patch }}"
+        echo "Patch      (steps.gitversion.outputs.patch)                 : ${{ steps.gitversion.outputs.patch }}"
+        echo "Patch      (steps.gitversion.outputs.GitVersion_Patch)      : ${{ steps.gitversion.outputs.GitVersion_Patch }}"
 
         echo "FullSemVer (env.fullSemVer)                                 : ${{ env.fullSemVer }}"
         echo "FullSemVer (env.GitVersion_FullSemVer)                      : ${{ env.GitVersion_FullSemVer }}"
