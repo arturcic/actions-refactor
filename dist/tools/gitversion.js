@@ -69,7 +69,7 @@ class GitVersionTool extends DotnetTool {
     await this.checkShallowClone(settings, workDir);
     const args = await this.getArguments(workDir, settings);
     await this.setDotnetRoot();
-    return this.executeTool(args);
+    return await this.executeTool(args);
   }
   writeGitVersionToAgent(output) {
     const keys = keysFn(output);

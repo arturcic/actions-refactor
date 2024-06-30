@@ -31,10 +31,6 @@ class DotnetTool {
     this.buildAgent.setVariable("DOTNET_CLI_TELEMETRY_OPTOUT", "true");
     this.buildAgent.setVariable("DOTNET_NOLOGO", "true");
   }
-  async execute(cmd, args) {
-    this.buildAgent.info(`Command: ${cmd} ${args.join(" ")}`);
-    return this.buildAgent.exec(cmd, args);
-  }
   async install() {
     const dotnetExePath = await this.buildAgent.which("dotnet", true);
     this.buildAgent.debug(`whichPath: ${dotnetExePath}`);
@@ -74,6 +70,10 @@ class DotnetTool {
     this.buildAgent.addPath(toolPath);
     return toolPath;
   }
+  async execute(cmd, args) {
+    this.buildAgent.info(`Command: ${cmd} ${args.join(" ")}`);
+    return await this.buildAgent.exec(cmd, args);
+  }
   async setDotnetRoot() {
     if (os.platform() !== "win32" && !this.buildAgent.getVariable("DOTNET_ROOT")) {
       let dotnetPath = await this.buildAgent.which("dotnet", true);
@@ -94,7 +94,7 @@ class DotnetTool {
     if (!toolPath) {
       toolPath = await this.buildAgent.which(this.toolName, true);
     }
-    return this.execute(toolPath, args);
+    return await this.execute(toolPath, args);
   }
   async isValidInputFile(input, file) {
     return this.filePathSupplied(input) && await this.buildAgent.fileExists(file);

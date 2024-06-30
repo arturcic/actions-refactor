@@ -139,32 +139,32 @@ class GitReleaseManagerTool extends DotnetTool {
   async create() {
     const settings = this.settingsProvider.getCreateSettings();
     const args = await this.getCreateArguments(settings);
-    return this.executeTool(args);
+    return await this.executeTool(args);
   }
   async discard() {
     const settings = this.settingsProvider.getDiscardSettings();
     const args = await this.getDiscardArguments(settings);
-    return this.executeTool(args);
+    return await this.executeTool(args);
   }
   async close() {
     const settings = this.settingsProvider.getCloseSettings();
     const args = await this.getCloseArguments(settings);
-    return this.executeTool(args);
+    return await this.executeTool(args);
   }
   async open() {
     const settings = this.settingsProvider.getOpenSettings();
     const args = await this.getOpenArguments(settings);
-    return this.executeTool(args);
+    return await this.executeTool(args);
   }
   async publish() {
     const settings = this.settingsProvider.getPublishSettings();
     const args = await this.getPublishArguments(settings);
-    return this.executeTool(args);
+    return await this.executeTool(args);
   }
   async addAsset() {
     const settings = this.settingsProvider.getAddAssetSettings();
     const args = await this.getAddAssetArguments(settings);
-    return this.executeTool(args);
+    return await this.executeTool(args);
   }
   async getCommonArguments(settings) {
     const args = [];
