@@ -33,7 +33,7 @@ export class GitVersionTool extends DotnetTool {
         const args = await this.getArguments(workDir, settings)
 
         await this.setDotnetRoot()
-        return this.executeTool(args)
+        return await this.executeTool(args)
     }
 
     writeGitVersionToAgent(output: GitVersionOutput): void {

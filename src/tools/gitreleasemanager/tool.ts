@@ -39,42 +39,42 @@ export class GitReleaseManagerTool extends DotnetTool {
         const settings = this.settingsProvider.getCreateSettings()
         const args = await this.getCreateArguments(settings)
 
-        return this.executeTool(args)
+        return await this.executeTool(args)
     }
 
     async discard(): Promise<ExecResult> {
         const settings = this.settingsProvider.getDiscardSettings()
         const args = await this.getDiscardArguments(settings)
 
-        return this.executeTool(args)
+        return await this.executeTool(args)
     }
 
     async close(): Promise<ExecResult> {
         const settings = this.settingsProvider.getCloseSettings()
         const args = await this.getCloseArguments(settings)
 
-        return this.executeTool(args)
+        return await this.executeTool(args)
     }
 
     async open(): Promise<ExecResult> {
         const settings = this.settingsProvider.getOpenSettings()
         const args = await this.getOpenArguments(settings)
 
-        return this.executeTool(args)
+        return await this.executeTool(args)
     }
 
     async publish(): Promise<ExecResult> {
         const settings = this.settingsProvider.getPublishSettings()
         const args = await this.getPublishArguments(settings)
 
-        return this.executeTool(args)
+        return await this.executeTool(args)
     }
 
     async addAsset(): Promise<ExecResult> {
         const settings = this.settingsProvider.getAddAssetSettings()
         const args = await this.getAddAssetArguments(settings)
 
-        return this.executeTool(args)
+        return await this.executeTool(args)
     }
 
     protected async getCommonArguments(settings: GitReleaseManagerSettings): Promise<string[]> {

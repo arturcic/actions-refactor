@@ -36,11 +36,6 @@ export abstract class DotnetTool implements IDotnetTool {
         this.buildAgent.setVariable('DOTNET_NOLOGO', 'true')
     }
 
-    async execute(cmd: string, args: string[]): Promise<ExecResult> {
-        this.buildAgent.info(`Command: ${cmd} ${args.join(' ')}`)
-        return this.buildAgent.exec(cmd, args)
-    }
-
     async install(): Promise<string> {
         const dotnetExePath = await this.buildAgent.which('dotnet', true)
         this.buildAgent.debug(`whichPath: ${dotnetExePath}`)
@@ -94,6 +89,11 @@ export abstract class DotnetTool implements IDotnetTool {
         return toolPath
     }
 
+    protected async execute(cmd: string, args: string[]): Promise<ExecResult> {
+        this.buildAgent.info(`Command: ${cmd} ${args.join(' ')}`)
+        return await this.buildAgent.exec(cmd, args)
+    }
+
     protected async setDotnetRoot(): Promise<void> {
         if (os.platform() !== 'win32' && !this.buildAgent.getVariable('DOTNET_ROOT')) {
             let dotnetPath = await this.buildAgent.which('dotnet', true)
@@ -116,7 +116,7 @@ export abstract class DotnetTool implements IDotnetTool {
         if (!toolPath) {
             toolPath = await this.buildAgent.which(this.toolName, true)
         }
-        return this.execute(toolPath, args)
+        return await this.execute(toolPath, args)
     }
 
     protected async isValidInputFile(input: string, file: string): Promise<boolean> {
